@@ -8,10 +8,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        AbilityScoreModifier mod = new AbilityScoreModifier(Ability.STR, 3);
+        AbilityScoreModifier mod = new AbilityScoreModifier(strength, Ability.STR, 3);
 
         System.out.println(strength);
         strength.addScoreModifier(mod);
+        System.out.println(strength);
+        mod.setValue(Ability.STR, 7);
         System.out.println(strength);
     }
 }

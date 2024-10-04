@@ -5,27 +5,24 @@ import java.util.EnumMap;
 public class AbilityScoreModifier {
 
     private EnumMap<Ability, Integer> values;
+    public final AbilityScore parent;
 
-    public AbilityScoreModifier(EnumMap<Ability, Integer> modifiers_in) {
-        values = modifiers_in;
-        init();
-    }
-    public AbilityScoreModifier(Ability ability, int value) {
+    public AbilityScoreModifier(AbilityScore parent_in, Ability ability, int value) {
         values = new EnumMap <Ability, Integer> (Ability.class);
+        parent = parent_in;
         setValue(ability, value);
-        init();
-    }
-    public AbilityScoreModifier() {
-        values = new EnumMap <Ability, Integer> (Ability.class);
-        init();
+        Ability.populateAbilityMap(values);
     }
 
-    private void init() {
+    public AbilityScoreModifier(AbilityScore parent_in) {
+        values = new EnumMap <Ability, Integer> (Ability.class);
+        parent = parent_in;
         Ability.populateAbilityMap(values);
     }
 
     public void setValue (Ability ability, int value) {
         values.put(ability, value);
+        parent.reloadScoreValue();
     }
     public int getValue (Ability ability) {return values.get(ability); }
 }
