@@ -1,6 +1,7 @@
 import ability.Ability;
 import ability.AbilityScore;
 import ability.AbilityScoreModifier;
+import creature.BaseMonster;
 
 public class Main {
 
@@ -8,12 +9,12 @@ public class Main {
 
     public static void main(String[] args) {
 
-        AbilityScoreModifier mod = new AbilityScoreModifier(strength, Ability.STR, 3);
+        BaseMonster monster = new BaseMonster("Owlbear");
+        AbilityScoreModifier modifier = new AbilityScoreModifier(monster);
+        modifier.setValue(Ability.STR, 8);
+        modifier.setValue(Ability.CHA, -4);
+        monster.setBaseAbilityScore(Ability.STR, 16);
 
-        System.out.println(strength);
-        strength.addScoreModifier(mod);
-        System.out.println(strength);
-        mod.setValue(Ability.STR, 7);
-        System.out.println(strength);
+        System.out.println(monster);
     }
 }

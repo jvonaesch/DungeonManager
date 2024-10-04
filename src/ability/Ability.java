@@ -1,18 +1,22 @@
 package ability;
 
 import java.util.EnumMap;
+import java.util.function.Consumer;
 
 public enum Ability {
-    STR("STR"),
-    CON("CON"),
-    DEX("DEX"),
-    INT("INT"),
-    WIS("WIS"),
-    CHA("CHA");
+    STR("STR", "strength"),
+    CON("CON", "constitution"),
+    DEX("DEX", "dexterity"),
+    INT("INT", "intelligence"),
+    WIS("WIS", "wisdom"),
+    CHA("CHA", "charisma");
 
+    final String id;
     final String name;
-    Ability(String name_in) {
-        name = name_in;
+
+    Ability(String id, String name) {
+        this.id = id;
+        this.name = name;
     }
 
     public static void populateAbilityMap(EnumMap <Ability, Integer> map, int default_value) {
@@ -22,8 +26,21 @@ public enum Ability {
             }
         }
     }
-
     public static void populateAbilityMap(EnumMap <Ability, Integer> map) {
         populateAbilityMap(map, 0);
+    }
+
+    public static void forEach(Consumer<Ability> consumer) {
+        for (Ability ability: Ability.values()) {
+            consumer.accept(ability);
+        }
+    }
+
+    public static EnumMap<Ability, AbilityScore> getNewDefaultScores () {
+        EnumMap<Ability, AbilityScore> scores = new EnumMap<Ability, AbilityScore> (Ability.class);
+        for (Ability ability: Ability.values()) {
+            scores.put(ability, new AbilityScore(ability));
+        }
+        return scores;
     }
 }
