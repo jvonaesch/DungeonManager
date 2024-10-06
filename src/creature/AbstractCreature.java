@@ -5,14 +5,17 @@ import ability.AbilityScore;
 import ability.AbilityScoreModifier;
 
 import java.util.EnumMap;
+import java.util.HashMap;
 
 public abstract class AbstractCreature {
 
     private final EnumMap<Ability, AbilityScore> abilities;
+    private final HashMap<String, Integer> proficiencies;
     String name;
 
     public AbstractCreature() {
         abilities = Ability.getNewDefaultScores();
+        proficiencies = new HashMap<String, Integer> ();
     }
 
     public void setBaseAbilityScore(Ability ability, int value) {

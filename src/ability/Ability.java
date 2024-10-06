@@ -43,4 +43,9 @@ public enum Ability {
         }
         return scores;
     }
+
+    @Override
+    public String toString() {
+        return this.id;
+    }
 }

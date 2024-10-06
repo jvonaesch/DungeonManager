@@ -1,39 +1,50 @@
 package ability;
 
 import creature.AbstractCreature;
+import util.IDestroyable;
 
+import java.util.ArrayList;
 import java.util.EnumMap;
 
-public class AbilityScoreModifier {
+public class AbilityScoreModifier implements IDestroyable {
 
     private EnumMap<Ability, Integer> values;
-    public final AbstractCreature parent;
+    public final ArrayList<AbstractCreature> targets;
 
-    public AbilityScoreModifier(AbstractCreature parent_in, Ability ability, int value) {
+    public AbilityScoreModifier(Ability ability, int value) {
         values = new EnumMap <Ability, Integer> (Ability.class);
-        parent = parent_in;
+        targets = new ArrayList<AbstractCreature> ();
         setValue(ability, value);
         init();
     }
 
-    public AbilityScoreModifier(AbstractCreature parent_in) {
+    public AbilityScoreModifier() {
         values = new EnumMap <Ability, Integer> (Ability.class);
-        parent = parent_in;
+        targets = new ArrayList<AbstractCreature> ();
         init();
+    }
+
+    public AbilityScoreModifier addTo(AbstractCreature target) {
+        target.addScoreModifier(this);
+        targets.add(target);
+        return this;
     }
 
     public void init() {
         Ability.populateAbilityMap(values);
-        parent.addScoreModifier(this);
     }
 
     public void destroy () {
-        parent.removeScoreModifier(this);
+        for (AbstractCreature target: targets) {
+            target.removeScoreModifier(this);
+        }
     }
 
     public void setValue (Ability ability, int value) {
         values.put(ability, value);
-        parent.reloadScoreValues();
+        for (AbstractCreature target: targets) {
+            target.reloadScoreValues();
+        }
     }
     public int getValue (Ability ability) {return values.get(ability); }
 }
