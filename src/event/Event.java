@@ -1,13 +1,10 @@
 package event;
 
-import java.util.ArrayList;
-
 public class Event {
 
-    public final ArrayList<String> type_ids;
+    public final BaseEventType type;
 
-    public Event() {
-        type_ids = new ArrayList<String> ();
-        type_ids.add("event");
+    public Event(BaseEventType type) {
+        this.type = type;
     }
 }

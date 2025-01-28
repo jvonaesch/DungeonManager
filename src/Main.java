@@ -1,7 +1,5 @@
-import ability.Ability;
-import ability.AbilityScoreModifier;
-import creature.Creature;
 import event.EventListener;
+import event.BaseEventType;
 import event.ProficiencySetModifierUpdateEvent;
 
 import java.io.File;
@@ -23,7 +21,8 @@ public class Main {
 
         System.out.println(monster);*/
 
-        EventListener.addHandler(ProficiencySetModifierUpdateEvent.class, (event) -> {
+        EventListener.addHandler(BaseEventType.PROFICIENCY_SET_MODIFIER_UPDATE, (e) -> {
+            ProficiencySetModifierUpdateEvent event = (ProficiencySetModifierUpdateEvent) e;
 
         });
     }

@@ -1,7 +1,13 @@
 package event;
 
-public class ProficiencySetModifierUpdateEvent extends Event{
-    public ProficiencySetModifierUpdateEvent() {
-        this.name = "proficience_set_update_event";
+import ability.proficiency.ProficiencySetModifier;
+
+public class ProficiencySetModifierUpdateEvent extends Event {
+
+    public final ProficiencySetModifier modifier;
+
+    public ProficiencySetModifierUpdateEvent(ProficiencySetModifier modifier) {
+        super(BaseEventType.PROFICIENCY_SET_MODIFIER_UPDATE);
+        this.modifier = modifier;
     }
 }

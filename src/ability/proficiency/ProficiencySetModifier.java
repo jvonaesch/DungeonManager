@@ -1,6 +1,5 @@
 package ability.proficiency;
 
-import ability.Ability;
 import creature.AbstractCreature;
 
 import java.util.ArrayList;
@@ -34,5 +33,5 @@ public class ProficiencySetModifier {
         values.remove(prof_id);
     }
 
-    public int getValue (Ability ability) {return values.get(ability); }
+    public int getValue (AbilityOld ability) {return values.get(ability); }
 }
