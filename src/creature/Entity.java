@@ -35,7 +35,7 @@ public class Entity implements HasAbilitySet {
     }
 
     @Override
-    public AbilitySet getAbilitySet() {
+    public ModifiableAbilitySet getAbilitySet() {
         return abilities;
     }
 }

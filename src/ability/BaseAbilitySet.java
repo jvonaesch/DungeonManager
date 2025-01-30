@@ -11,9 +11,10 @@ public class BaseAbilitySet implements ModifiableAbilitySet {
 
     public BaseAbilitySet(Map<Ability, Integer> base_abilities) {
         this.modifiers = new HashSet<AbilityModifier> ();
-        this.base_scores = new HashMap<Ability, Integer> (base_abilities);
-        this.modifier_values = new HashMap<Ability, Integer> ();
-        this.scores = new HashMap<Ability, Integer> ();
+        this.base_scores = new TreeMap<Ability, Integer> (Abilities.getDefaultComparator());
+        base_scores.putAll(base_abilities);
+        this.modifier_values = new TreeMap<Ability, Integer> (Abilities.getDefaultComparator());
+        this.scores = new TreeMap<Ability, Integer> (Abilities.getDefaultComparator());
     }
 
     public BaseAbilitySet() {
@@ -59,6 +60,11 @@ public class BaseAbilitySet implements ModifiableAbilitySet {
     public void removeBaseScore(Ability ability) {
         base_scores.remove(ability);
         this.reloadScores();
+    }
+
+    @Override
+    public void resetBaseScore(Ability ability) {
+        setBaseScore(ability, getDefaultScore());
     }
 
     @Override

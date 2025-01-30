@@ -9,6 +9,7 @@ public interface ModifiableAbilitySet extends AbilitySet {
 
     public void addModifier(AbilityModifier modifier);
     public boolean removeModifier(AbilityModifier modifier);
+    public void resetBaseScore(Ability ability);
     public int getModifierTotal(Ability ability);
     public void reloadScores();
 }
