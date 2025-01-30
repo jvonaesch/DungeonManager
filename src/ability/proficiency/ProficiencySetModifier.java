@@ -1,6 +1,6 @@
 package ability.proficiency;
 
-import creature.AbstractCreature;
+import ability.Ability;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -8,18 +8,13 @@ import java.util.HashMap;
 public class ProficiencySetModifier {
 
     private final HashMap<String, Integer> values;
-    private final ArrayList<AbstractCreature> targets;
     private int defaultBonus;
 
     public ProficiencySetModifier() {
         values = new HashMap <String, Integer> ();
-        targets = new ArrayList<AbstractCreature> ();
         defaultBonus = 2;
     }
 
-    public ProficiencySetModifier addTo(AbstractCreature target) {
-        return this;
-    }
     public ProficiencySetModifier setDefaultBonus(int value) {
         this.defaultBonus = value;
         return this;
@@ -33,5 +28,5 @@ public class ProficiencySetModifier {
         values.remove(prof_id);
     }
 
-    public int getValue (AbilityOld ability) {return values.get(ability); }
+    public int getValue (Ability ability) {return values.get(ability); }
 }

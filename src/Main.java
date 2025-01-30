@@ -1,6 +1,7 @@
-import event.EventListener;
-import event.BaseEventType;
-import event.ProficiencySetModifierUpdateEvent;
+import ability.AbilityModifier;
+import ability.StandardAbility;
+import creature.Entity;
+import creature.IntegratedEntityType;
 
 import java.io.File;
 
@@ -13,18 +14,16 @@ public class Main {
 
         loadLibrary();
 
-        /*Creature monster = new Creature("Owlbear");
-        AbilityScoreModifier modifier = new AbilityScoreModifier().addTo(monster);
-        modifier.setValue(Ability.STR, 8);
-        modifier.setValue(Ability.CHA, -4);
-        monster.setBaseAbilityScore(Ability.STR, 16);
+        Entity monster = new Entity(IntegratedEntityType.OWLBEAR,"Bert, the Owlbear");
+        AbilityModifier modifier = new AbilityModifier();
 
-        System.out.println(monster);*/
+        monster.addScoreModifier(modifier);
 
-        EventListener.addHandler(BaseEventType.PROFICIENCY_SET_MODIFIER_UPDATE, (e) -> {
-            ProficiencySetModifierUpdateEvent event = (ProficiencySetModifierUpdateEvent) e;
+        modifier.setValue(StandardAbility.STR, 8);
+        modifier.setValue(StandardAbility.CHA, -4);
+        monster.setBaseAbilityScore(StandardAbility.STR, 16);
 
-        });
+        System.out.println(monster);
     }
 
     public static void loadLibrary() {
