@@ -1,7 +1,9 @@
 import ability.AbilityModifier;
+import ability.AbilitySets;
 import ability.StandardAbility;
 import creature.Entity;
 import creature.IntegratedEntityType;
+import session.Session;
 
 import java.io.File;
 
@@ -14,9 +16,11 @@ public class Main {
 
         loadLibrary();
 
-        Entity monster = new Entity(IntegratedEntityType.OWLBEAR,"Bert, the Owlbear");
-        AbilityModifier modifier = new AbilityModifier();
+        Session session = new Session();
 
+        Entity monster = new Entity(IntegratedEntityType.OWLBEAR,"Bert, the Owlbear");
+
+        AbilityModifier modifier = new AbilityModifier();
         monster.addScoreModifier(modifier);
 
         modifier.setValue(StandardAbility.STR, 8);
@@ -24,7 +28,7 @@ public class Main {
         monster.setBaseAbilityScore(StandardAbility.STR, 16);
 
         System.out.println(monster);
-    }
+     }
 
     public static void loadLibrary() {
         File lib_dir = new File(LIB_PATH);

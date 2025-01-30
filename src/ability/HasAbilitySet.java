@@ -1,6 +1,6 @@
 package ability;
 
-public interface HasAbilities {
+public interface HasAbilitySet {
 
     public AbilitySet getAbilitySet();
 

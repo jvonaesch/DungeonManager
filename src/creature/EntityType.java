@@ -1,8 +1,8 @@
 package creature;
 
-import ability.HasAbilities;
+import ability.HasAbilitySet;
 
-public interface EntityType extends HasAbilities {
+public interface EntityType extends HasAbilitySet {
 
     public String getID ();
     public String getName ();

@@ -2,9 +2,7 @@ package creature;
 
 import ability.*;
 
-import java.util.Set;
-
-public class Entity implements HasAbilities {
+public class Entity implements HasAbilitySet {
 
     private ModifiableAbilitySet abilities;
     private EntityType type;
@@ -13,7 +11,6 @@ public class Entity implements HasAbilities {
     public Entity(EntityType type, String name) {
         this.type = type;
         this.abilities = new DefaultedAbilitySet(type);
-        // this.proficiencies = new ProficiencySet();
         this.name = name;
     }
 
@@ -34,7 +31,7 @@ public class Entity implements HasAbilities {
     }
 
     public String toString() {
-        return "Creature \"" + name + "\"\n "+abilities;
+        return "Creature \"" + name + "\"\n "+AbilitySets.toString(abilities);
     }
 
     @Override

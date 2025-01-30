@@ -6,7 +6,7 @@ public enum StandardAbility implements Ability {
     DEX("standard:ability:dexterity", "DEX", "dexterity"),
     INT("standard:ability:intelligence", "INT", "intelligence"),
     WIS("standard:ability:wisdom", "WIS", "wisdom"),
-    CHA("standard:ability:strength", "CHA", "charisma");
+    CHA("standard:ability:charisma", "CHA", "charisma");
 
     private String name;
     private String short_name;

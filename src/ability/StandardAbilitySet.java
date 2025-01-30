@@ -1,32 +1,40 @@
 package ability;
 
-import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
+import java.util.TreeSet;
 
-public enum StandardAbilitySet implements AbilitySet {
-    DEFAULT(10, Set.of(StandardAbility.values()));
+public class StandardAbilitySet implements AbilitySet {
 
-    private Set<Ability> specified;
-    private int default_score;
+    protected Set<Ability> specified;
+    protected int defaultScore;
+    private static StandardAbilitySet defaultInstance;
 
-    private StandardAbilitySet(int default_score, Set<Ability> specified) {
+    public StandardAbilitySet(int default_score, Set<Ability> specified) {
         this.specified = specified;
-        this.default_score = default_score;
+        this.defaultScore = default_score;
+    }
+
+    public static StandardAbilitySet DEFAULT () {
+        if (defaultInstance == null) {
+            defaultInstance = new StandardAbilitySet(10, Set.of(StandardAbility.values()));
+        }
+        return defaultInstance;
     }
 
     @Override
     public int getScore(Ability ability) {
-        return default_score;
+        return defaultScore;
     }
 
     @Override
     public int getDefaultScore() {
-        return default_score;
+        return defaultScore;
     }
 
     @Override
     public Set<Ability> getSpecified() {
+        Set<Ability> specified = new TreeSet<Ability> (Abilities.getDefaultComparator());
+        specified.addAll(this.specified);
         return specified;
     }
 }

@@ -1,20 +1,18 @@
 package creature;
 
-import ability.AbilitySet;
-import ability.BaseAbilitySet;
-import ability.DefaultedAbilitySet;
+import ability.*;
 
 public enum IntegratedEntityType implements EntityType {
-    DEFAULT()
     OWLBEAR("base:creature:owlbear", "owlbear");
-
 
     private String id;
     private String name;
+    private ModifiableAbilitySet abilitySet;
 
     private IntegratedEntityType(String id, String name) {
         this.id = id;
         this.name = name;
+        this.abilitySet = new DefaultedAbilitySet(StandardAbilitySet.DEFAULT());
     }
 
     @Override
@@ -29,8 +27,6 @@ public enum IntegratedEntityType implements EntityType {
 
     @Override
     public AbilitySet getAbilitySet() {
-
-        //TODO: Implement base score set for entity type
-        return new DefaultedAbilitySet();
+        return abilitySet;
     }
 }

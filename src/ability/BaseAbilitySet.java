@@ -51,7 +51,8 @@ public class BaseAbilitySet implements ModifiableAbilitySet {
 
     @Override
     public int getModifierTotal(Ability ability) {
-        return modifier_values.get(ability);
+        Integer value = modifier_values.get(ability);
+        return (value == null) ? 0 : value;
     }
 
     @Override
