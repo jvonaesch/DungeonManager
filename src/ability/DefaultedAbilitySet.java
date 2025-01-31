@@ -20,19 +20,28 @@ public class DefaultedAbilitySet extends BaseAbilitySet {
     }
 
     @Override
+    public void setBaseScore(Ability ability, Integer value) {
+        if (value == null) this.removeBaseScore(ability);
+        else super.setBaseScore(ability, value);
+        this.removed.remove(ability);
+        this.reloadScores();
+    }
+
+    @Override
     public void removeBaseScore(Ability ability) {
         super.removeBaseScore(ability);
         base_scores.remove(ability);
         modifier_values.remove(ability);
         scores.remove(ability);
         removed.add(ability);
-        reloadScores();
+        this.reloadScores();
     }
 
     @Override
     public void resetBaseScore(Ability ability) {
         this.removed.remove(ability);
-        super.reloadScores();
+        this.base_scores.remove(ability);
+        this.reloadScores();
     }
 
     @Override
@@ -66,6 +75,7 @@ public class DefaultedAbilitySet extends BaseAbilitySet {
     @Override
     public void reloadScores() {
         if (parent != null && parent.getAbilitySet() != parentSet) parentSet = parent.getAbilitySet();
+        // System.out.println(getSpecified());
         super.reloadScores();
     }
 }

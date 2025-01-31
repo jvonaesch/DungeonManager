@@ -109,7 +109,7 @@ public class BaseAbilitySet implements ModifiableAbilitySet {
 
     public String toString() {
         String string = "Ability set: ";
-        for (Ability ability: base_scores.keySet()) {
+        for (Ability ability: getSpecified()) {
             string += "\n > "+ability.getShortName()+": "+getScore(ability)+"";
         }
         return string;

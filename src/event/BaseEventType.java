@@ -14,7 +14,7 @@ public enum BaseEventType implements EventType {
     }
 
     @Override
-    public String getId() {
+    public String getID() {
         return id;
     }
 }

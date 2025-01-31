@@ -2,5 +2,5 @@ package event;
 
 public interface EventType {
 
-    public String getId();
+    public String getID();
 }

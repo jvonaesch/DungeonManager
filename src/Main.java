@@ -1,6 +1,7 @@
 import ability.*;
 import creature.Entity;
 import creature.IntegratedEntityType;
+import registry.ContentRegistry;
 import session.Session;
 
 import java.io.File;
@@ -13,14 +14,17 @@ public class Main {
     public static void main(String[] args) {
 
         loadLibrary();
+        ContentRegistry registry = ContentRegistry.getInstance();
 
         Session session = new Session();
         Ability cosmicAwareness = new CustomAbility(
                 "custom:ability:cosmic_awareness",
                 "cosmic awareness",
                 "COS");
+        registry.register(cosmicAwareness);
 
         Entity monster = new Entity(IntegratedEntityType.OWLBEAR,"Bert, the Owlbear");
+
         monster.getAbilitySet().removeBaseScore(StandardAbility.INT);
         monster.getAbilitySet().setBaseScore(cosmicAwareness, 20);
 
@@ -28,14 +32,15 @@ public class Main {
         monster.addScoreModifier(modifier);
 
         modifier.setValue(StandardAbility.STR, 8);
-        modifier.setValue(StandardAbility.CHA, -4);
-        modifier.setValue(StandardAbility.INT, -6);
-        monster.setBaseAbilityScore(StandardAbility.STR, 16);
+        modifier.setValue(StandardAbility.CHA, 1);
+        modifier.setValue(StandardAbility.INT, 4);
 
         System.out.println(monster);
 
-        monster.getAbilitySet().resetBaseScore(StandardAbility.INT);
+        monster.setBaseAbilityScore(StandardAbility.INT, 5);
+        System.out.println(monster);
 
+        monster.getAbilitySet().resetBaseScore(StandardAbility.INT);
         System.out.println(monster);
      }
 
