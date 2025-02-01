@@ -18,7 +18,7 @@ public class Session {
 
     public class Settings {
         public static int DEFAULT_ABILITY_SCORE = 10;
-        public static Set<Ability> STANDARD_ABILITIES = new HashSet<Ability>();
+        public static Set<Ability> STANDARD_ABILITIES = new HashSet<>();
     }
 
     public class SessionDefaultAbilitySet implements AbilitySet {
@@ -35,7 +35,7 @@ public class Session {
 
         @Override
         public Set<Ability> getSpecified() {
-            return new HashSet<Ability> (Settings.STANDARD_ABILITIES);
+            return new HashSet<>(Settings.STANDARD_ABILITIES);
         }
     }
 }

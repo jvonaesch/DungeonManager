@@ -7,7 +7,7 @@ public class DefaultedAbilitySet extends BaseAbilitySet {
 
     private HasAbilitySet parent;
     private AbilitySet parentSet;
-    private Set<Ability> removed;
+    private final Set<Ability> removed;
 
     public DefaultedAbilitySet(HasAbilitySet parent) {
         this(parent.getAbilitySet());
@@ -16,7 +16,7 @@ public class DefaultedAbilitySet extends BaseAbilitySet {
 
     public DefaultedAbilitySet(AbilitySet parentSet) {
         this.parentSet = parentSet;
-        this.removed = new TreeSet<Ability> (Abilities.getDefaultComparator());
+        this.removed = new TreeSet<> (Abilities.getDefaultComparator());
     }
 
     @Override
@@ -65,7 +65,7 @@ public class DefaultedAbilitySet extends BaseAbilitySet {
 
     @Override
     public Set<Ability> getSpecified() {
-        Set<Ability> a = new TreeSet<Ability>(Abilities.getDefaultComparator());
+        Set<Ability> a = new TreeSet<>(Abilities.getDefaultComparator());
         a.addAll(parentSet.getSpecified());
         a.addAll(super.getSpecified());
         a.removeAll(removed);

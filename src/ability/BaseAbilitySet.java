@@ -10,20 +10,20 @@ public class BaseAbilitySet implements ModifiableAbilitySet {
     public Map<Ability, Integer> scores;
 
     public BaseAbilitySet(Map<Ability, Integer> base_abilities) {
-        this.modifiers = new HashSet<AbilityModifier> ();
-        this.base_scores = new TreeMap<Ability, Integer> (Abilities.getDefaultComparator());
+        this.modifiers = new HashSet<>();
+        this.base_scores = new TreeMap<>(Abilities.getDefaultComparator());
         base_scores.putAll(base_abilities);
-        this.modifier_values = new TreeMap<Ability, Integer> (Abilities.getDefaultComparator());
-        this.scores = new TreeMap<Ability, Integer> (Abilities.getDefaultComparator());
+        this.modifier_values = new TreeMap<>(Abilities.getDefaultComparator());
+        this.scores = new TreeMap<>(Abilities.getDefaultComparator());
     }
 
     public BaseAbilitySet() {
-        this(new HashMap<Ability, Integer> ());
+        this(new HashMap<>());
     }
 
     public BaseAbilitySet(Set<Ability> base_abilities, Integer base_value) {
         this();
-        for (Ability ability: base_abilities) this.base_scores.put(ability, base_value.intValue());
+        for (Ability ability: base_abilities) this.base_scores.put(ability, base_value);
     }
 
     public BaseAbilitySet(Set<Ability> base_abilities) {
@@ -108,10 +108,10 @@ public class BaseAbilitySet implements ModifiableAbilitySet {
     }
 
     public String toString() {
-        String string = "Ability set: ";
+        StringBuilder string = new StringBuilder("Ability set: ");
         for (Ability ability: getSpecified()) {
-            string += "\n > "+ability.getShortName()+": "+getScore(ability)+"";
+            string.append("\n > ").append(ability.getShortName()).append(": ").append(getScore(ability));
         }
-        return string;
+        return string.toString();
     }
 }
