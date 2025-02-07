@@ -3,17 +3,17 @@ package registry;
 import ability.Ability;
 import creature.EntityType;
 
-public class ContentRegistry {
+public class Registries {
 
-    private static final ContentRegistry instance = new ContentRegistry();
-    public static ContentRegistry getInstance() { return instance; }
+    private static final Registries instance = new Registries();
+    public static Registries getInstance() { return instance; }
 
-    public final Register<Ability> abilities;
-    public final Register<EntityType> entityTypes;
+    public final LazyRegistry<Ability> abilities;
+    public final LazyRegistry<EntityType> entityTypes;
 
-    private ContentRegistry() {
-        this.abilities = new Register<Ability> ();
-        this.entityTypes = new Register<EntityType> ();
+    private Registries() {
+        this.abilities = new LazyRegistry<Ability>();
+        this.entityTypes = new LazyRegistry<EntityType>();
     }
 
     public void register(Object element) throws IllegalArgumentException {

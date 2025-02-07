@@ -1,7 +1,7 @@
 import ability.*;
 import creature.Entity;
 import creature.IntegratedEntityType;
-import registry.ContentRegistry;
+import registry.Registries;
 import session.Session;
 
 import java.io.File;
@@ -11,7 +11,7 @@ public class DungeonManagerApp {
     static final String USER_DIR = System.getProperty("user.home");
     static final String LIB_PATH = USER_DIR + "/DungeonManagerLibrary/";
 
-    private ContentRegistry registry;
+    private Registries registry;
     private Session session;
 
     public static void main(String[] args) {
@@ -22,7 +22,7 @@ public class DungeonManagerApp {
 
     public DungeonManagerApp() {
         loadLibrary();
-        registry = ContentRegistry.getInstance();
+        registry = Registries.getInstance();
     }
 
     public void initialize() {
