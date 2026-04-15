@@ -25,9 +25,10 @@ public class AbilityModifier {
         return values.get(ability);
     }
 
-    public void setValue (Ability ability, int value) {
+    public AbilityModifier setValue (Ability ability, int value) {
         if (value == 0) values.remove(ability);
         else values.put(ability, value);
+        return this;
     }
 
     public HashMap<Ability, Integer> getValues () {

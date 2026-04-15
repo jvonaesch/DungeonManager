@@ -2,7 +2,7 @@ package dungeonmanager.creature;
 
 import dungeonmanager.ability.*;
 
-public enum IntegratedEntityType implements EntityType {
+public enum IntegratedCreatureType implements CreatureType {
     DEFAULT("base:dungeonmanager.creature:default", "default"),
     OWLBEAR("base:dungeonmanager.creature:owlbear", "owlbear", 20, 12, 17, 3, 12, 7);
 
@@ -10,13 +10,13 @@ public enum IntegratedEntityType implements EntityType {
     private String name;
     private ModifiableAbilitySet abilitySet;
 
-    private IntegratedEntityType(String id, String name) {
+    private IntegratedCreatureType(String id, String name) {
         this.id = id;
         this.name = name;
         this.abilitySet = new DefaultedAbilitySet(StandardAbilitySet.DEFAULT());
     }
 
-    private IntegratedEntityType(String id, String name, int STR, int DEX, int CON, int INT, int WIS, int CHA) {
+    private IntegratedCreatureType(String id, String name, int STR, int DEX, int CON, int INT, int WIS, int CHA) {
         this(id, name);
         this.abilitySet.setBaseScore(StandardAbility.STR, STR);
         this.abilitySet.setBaseScore(StandardAbility.DEX, DEX);
