@@ -5,7 +5,7 @@ import java.util.Comparator;
 public class Abilities {
 
     public static String toString(Ability ability) {
-        return ability.getShortName();
+        return ability.getID();
     }
 
     public enum AbilityComparator implements Comparator<Ability> {

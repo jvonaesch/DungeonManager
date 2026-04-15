@@ -1,5 +1,7 @@
 package dungeonmanager;
 
+import dungeonmanager.ability.Ability;
+import dungeonmanager.ability.StandardAbility;
 import dungeonmanager.command.*;
 import dungeonmanager.command.commands.RollCommand;
 import dungeonmanager.command.commands.StopCommand;
@@ -7,6 +9,7 @@ import dungeonmanager.registry.Registries;
 import dungeonmanager.session.Session;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Scanner;
 
 public class DungeonManagerApp {
@@ -31,7 +34,11 @@ public class DungeonManagerApp {
     }
 
     public DungeonManagerApp() {
-        loadLibrary();
+        try {
+            loadLibrary();
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         registry = Registries.get();
     }
 
@@ -42,6 +49,10 @@ public class DungeonManagerApp {
         console_in = new Scanner(System.in);
         command_line = new CommandLine(new CommandContext(this, console_in, registry));
 
+        for (Ability ability: StandardAbility.values()) {
+            registry.ability.register(ability.getID(), () -> ability);
+        }
+
         registry.command.register("roll", () -> new RollCommand());
         registry.command.register("r", () -> registry.command.get("roll"));
         registry.command.register("stop", () -> new StopCommand());
@@ -49,7 +60,7 @@ public class DungeonManagerApp {
 
     public void run() {
 
-        /* INITIAL DEBUG CODE GOES HERE */
+        // INITIAL DEBUG CODE
         //Tests.test1();
         Tests.test2();
 
@@ -61,10 +72,10 @@ public class DungeonManagerApp {
         }*/
     }
 
-    public static void loadLibrary() {
+    public static void loadLibrary() throws FileNotFoundException {
         File lib_dir = new File(LIB_PATH);
         if (!lib_dir.exists()) {
-            lib_dir.mkdirs();
+            if (!lib_dir.mkdirs()) throw new FileNotFoundException("Path to library could not be created");
         }
     }
 

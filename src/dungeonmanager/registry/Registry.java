@@ -1,7 +1,11 @@
 package dungeonmanager.registry;
 
-public interface Registry <T> {
+import java.util.function.Supplier;
 
-    public void register(String ID, T element);
-    public T get(String ID);
+public interface Registry<T> {
+    void register(String ID, T element);
+
+    void register(String ID, Supplier<T> supplier);
+
+    T get(String ID);
 }

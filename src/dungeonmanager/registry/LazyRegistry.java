@@ -5,7 +5,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
 
-public class LazyRegistry<T> {
+public class LazyRegistry<T> implements Registry<T> {
 
     private final Map<String, LazyRegistryObject> registerMap;
 
@@ -14,16 +14,19 @@ public class LazyRegistry<T> {
         this.registerMap = new ConcurrentHashMap<String, LazyRegistryObject>();
     }
 
+    @Override
     public void register(String ID, T element) {
         LazyRegistryObject regObj = new LazyRegistryObject(ID, element);
         this.registerMap.put(ID, regObj);
     }
 
+    @Override
     public void register(String ID, Supplier<T> supplier) {
         LazyRegistryObject regObj = new LazyRegistryObject(ID, supplier);
         this.registerMap.put(ID, regObj);
     }
 
+    @Override
     public T get(String ID) {
         LazyRegistryObject item = registerMap.get(ID);
         if (item == null) throw new IllegalArgumentException("item \"%s\" not found".formatted(ID));

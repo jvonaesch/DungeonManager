@@ -2,14 +2,14 @@ package dungeonmanager.ability;
 
 public class CustomAbility implements Ability {
 
-    private String ID;
+    private String originIdentifier;
     private String name;
-    private String shortName;
+    private String id;
 
-    public CustomAbility (String ID, String name, String shortName) {
-        this.ID = ID;
+    public CustomAbility (String id, String name, String originIdentifier) {
+        this.originIdentifier = originIdentifier;
         this.name = name;
-        this.shortName = shortName;
+        this.id = id;
     }
 
     @Override
@@ -18,12 +18,12 @@ public class CustomAbility implements Ability {
     }
 
     @Override
-    public String getShortName() {
-        return shortName;
+    public String getID() {
+        return id;
     }
 
     @Override
-    public String getID() {
-        return ID;
+    public String getOriginIdentifier() {
+        return originIdentifier;
     }
 }

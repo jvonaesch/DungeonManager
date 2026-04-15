@@ -1,5 +1,7 @@
 package dungeonmanager.ability;
 
+import dungeonmanager.registry.Registries;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -25,10 +27,20 @@ public class AbilityModifier {
         return values.get(ability);
     }
 
+    public int getValue (String ability_id) {
+        Ability ability = Registries.get().ability.get(ability_id);
+        return values.get(ability);
+    }
+
     public AbilityModifier setValue (Ability ability, int value) {
         if (value == 0) values.remove(ability);
         else values.put(ability, value);
         return this;
+    }
+
+    public AbilityModifier setValue (String ability_id, int value) {
+        Ability ability = Registries.get().ability.get(ability_id);
+        return setValue(ability, value);
     }
 
     public HashMap<Ability, Integer> getValues () {

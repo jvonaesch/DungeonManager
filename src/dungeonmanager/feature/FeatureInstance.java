@@ -2,12 +2,16 @@ package dungeonmanager.feature;
 
 import dungeonmanager.creature.Creature;
 
+
 public class FeatureInstance {
+
     private final Creature creature;
     private final Feature feature;
+    public String ID;
 
-    public FeatureInstance(Creature creature, Feature feature) {
+    public FeatureInstance(String ID, Creature creature, Feature feature) {
         this.creature = creature;
         this.feature = feature;
+        this.ID = ID;
     }
 }

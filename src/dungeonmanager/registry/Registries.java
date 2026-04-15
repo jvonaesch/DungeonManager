@@ -10,15 +10,15 @@ public class Registries {
     private static final Registries instance = new Registries();
     public static Registries get() { return instance; }
 
-    public final LazyRegistry<Ability> ability;
-    public final LazyRegistry<Command> command;
-    public final LazyRegistry<CreatureType> entityType;
-    public final LazyRegistry<Feature> feature;
+    public final Registry<Ability> ability;
+    public final Registry<Command<?>> command;
+    public final Registry<CreatureType> entityType;
+    public final Registry<Feature> feature;
 
     private Registries() {
-        this.ability = new LazyRegistry<Ability>();
-        this.command = new LazyRegistry<Command>();
-        this.entityType = new LazyRegistry<CreatureType>();
-        this.feature = new LazyRegistry<Feature>();
+        this.ability = new TreeRegistry<>();
+        this.command = new LazyRegistry<>();
+        this.entityType = new LazyRegistry<>();
+        this.feature = new LazyRegistry<>();
     }
 }

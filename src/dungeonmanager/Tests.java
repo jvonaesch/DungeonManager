@@ -13,9 +13,8 @@ public class Tests {
 
     public static void test1() {
         Ability cosmicAwareness = new CustomAbility(
-                "custom:dungeonmanager.ability:cosmic_awareness",
-                "cosmic awareness",
-                "COS");
+                "COS", "cosmic awareness", "custom:dungeonmanager.ability:cosmic_awareness"
+        );
         registry.ability.register(cosmicAwareness.getID(), cosmicAwareness);
 
         Creature monster = new Creature("Bert, the Owlbear", IntegratedCreatureType.OWLBEAR);
@@ -42,8 +41,8 @@ public class Tests {
     public static void test2() {
         Creature olaf = new Creature("Olaf");
         
-        AbilityModifier modifier = new AbilityModifier();
-        modifier.setValue(StandardAbility.STR, 3)
+        AbilityModifier modifier = new AbilityModifier()
+                .setValue("STR", 3)
                 .setValue(StandardAbility.CHA, 1)
                 .setValue(StandardAbility.INT, 4);
 

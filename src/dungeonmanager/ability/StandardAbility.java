@@ -1,21 +1,21 @@
 package dungeonmanager.ability;
 
 public enum StandardAbility implements Ability {
-    STR("standard:dungeonmanager.ability:strength", "STR", "strength"),
-    CON("standard:dungeonmanager.ability:constitution", "CON", "constitution"),
-    DEX("standard:dungeonmanager.ability:dexterity", "DEX", "dexterity"),
-    INT("standard:dungeonmanager.ability:intelligence", "INT", "intelligence"),
-    WIS("standard:dungeonmanager.ability:wisdom", "WIS", "wisdom"),
-    CHA("standard:dungeonmanager.ability:charisma", "CHA", "charisma");
+    STR("STR", "strength", "standard:dungeonmanager.ability:strength"),
+    CON("CON", "constitution", "standard:dungeonmanager.ability:constitution"),
+    DEX("DEX", "dexterity", "standard:dungeonmanager.ability:dexterity"),
+    INT("INT", "intelligence", "standard:dungeonmanager.ability:intelligence"),
+    WIS("WIS", "wisdom", "standard:dungeonmanager.ability:wisdom"),
+    CHA("CHA", "charisma", "standard:dungeonmanager.ability:charisma");
 
     private String name;
-    private String short_name;
     private String id;
+    private String origin_identifier;
 
-    private StandardAbility(String id, String short_name, String name) {
-        this.id = id;
+    private StandardAbility(String id, String name, String origin_identifier) {
+        this.origin_identifier = origin_identifier;
         this.name = name;
-        this.short_name = short_name;
+        this.id = id;
     }
 
     @Override
@@ -24,8 +24,8 @@ public enum StandardAbility implements Ability {
     }
 
     @Override
-    public String getShortName() {
-        return short_name;
+    public String getOriginIdentifier() {
+        return origin_identifier;
     }
 
     @Override
