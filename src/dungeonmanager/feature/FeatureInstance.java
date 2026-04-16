@@ -1,6 +1,6 @@
 package dungeonmanager.feature;
 
-import dungeonmanager.stat.StatModifier;
+import dungeonmanager.stats.StatModifier;
 
 import java.util.Collection;
 

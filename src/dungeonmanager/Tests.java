@@ -1,9 +1,9 @@
 package dungeonmanager;
 
-import dungeonmanager.stat.Stat;
-import dungeonmanager.stat.StatModifier;
-import dungeonmanager.stat.CustomStat;
-import dungeonmanager.stat.StandardStat;
+import dungeonmanager.stats.Stat;
+import dungeonmanager.stats.StatModifier;
+import dungeonmanager.stats.CustomStat;
+import dungeonmanager.stats.StandardStat;
 import dungeonmanager.creature.Creature;
 import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
@@ -17,7 +17,7 @@ public class Tests {
 
     public static void test1() {
         Stat cosmicAwareness = new CustomStat(
-                "COS", "cosmic awareness", "custom:dungeonmanager.stat:cosmic_awareness"
+                "COS", "cosmic awareness", "custom:dungeonmanager.stats:cosmic_awareness"
         );
         registry.ability.register(cosmicAwareness.getID(), cosmicAwareness);
 
@@ -54,7 +54,7 @@ public class Tests {
         System.out.println(olaf);
         System.out.println(olaf.feature.getAllFeatures());
 
-        FeatureInstance feat = olaf.feature.addFeature(
+        FeatureInstance appealing_feat = olaf.feature.addFeature(
                 "feat:appealing",
                 new Feature(
                         "feat:appealing",
@@ -64,11 +64,22 @@ public class Tests {
                         })
                 )
         );
+        FeatureInstance sturdy_feat = olaf.feature.addFeature(
+                "feat:sturdy",
+                new Feature(
+                        "feat:sturdy",
+                        "You are a battlefield heavyweight",
+                        List.of(new StatModifier[] {new StatModifier()
+                                .setValue("CON", 2)
+                                //.setValue("HP", 10)
+                        })
+                )
+        );
 
         System.out.println(olaf);
         System.out.println(olaf.feature.getAllFeatures());
 
-        olaf.feature.removeFeature("feat:appealing");
+        olaf.feature.removeFeature(appealing_feat);
 
         System.out.println(olaf);
         System.out.println(olaf.feature.getAllFeatures());

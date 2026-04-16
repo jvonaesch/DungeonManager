@@ -1,6 +1,6 @@
 package dungeonmanager.registry;
 
-import dungeonmanager.stat.Stat;
+import dungeonmanager.stats.Stat;
 import dungeonmanager.command.Command;
 import dungeonmanager.creature.CreatureType;
 import dungeonmanager.feature.Feature;

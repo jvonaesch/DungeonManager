@@ -1,6 +1,6 @@
 package dungeonmanager.event;
 
-import dungeonmanager.stat.proficiency.ProficiencySetModifier;
+import dungeonmanager.stats.proficiency.ProficiencySetModifier;
 
 public class ProficiencySetModifierUpdateEvent extends Event {
 

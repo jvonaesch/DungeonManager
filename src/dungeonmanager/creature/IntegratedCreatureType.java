@@ -1,6 +1,6 @@
 package dungeonmanager.creature;
 
-import dungeonmanager.stat.*;
+import dungeonmanager.stats.*;
 
 public enum IntegratedCreatureType implements CreatureType {
     DEFAULT("base:dungeonmanager.creature:default", "default"),

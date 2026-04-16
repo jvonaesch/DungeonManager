@@ -1,4 +1,4 @@
-package dungeonmanager.stat;
+package dungeonmanager.stats;
 
 public class StatSets {
     public static String toString(StatSet set) {

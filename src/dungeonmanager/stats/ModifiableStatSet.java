@@ -1,4 +1,4 @@
-package dungeonmanager.stat;
+package dungeonmanager.stats;
 
 public interface ModifiableStatSet extends StatSet {
     public void setBaseScore(Stat ability, Integer value);

@@ -1,4 +1,4 @@
-package dungeonmanager.stat;
+package dungeonmanager.stats;
 
 import dungeonmanager.registry.Registries;
 
@@ -53,6 +53,6 @@ public class StatModifier {
 
     @Override
     public String toString() {
-        return "AbilityModifier" + values;
+        return "Modifier %s".formatted(values);
     }
 }

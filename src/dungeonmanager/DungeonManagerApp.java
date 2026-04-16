@@ -1,7 +1,7 @@
 package dungeonmanager;
 
-import dungeonmanager.stat.Stat;
-import dungeonmanager.stat.StandardStat;
+import dungeonmanager.stats.Stat;
+import dungeonmanager.stats.StandardStat;
 import dungeonmanager.command.*;
 import dungeonmanager.command.commands.RollCommand;
 import dungeonmanager.command.commands.StopCommand;

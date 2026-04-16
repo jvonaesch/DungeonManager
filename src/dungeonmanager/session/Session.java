@@ -1,8 +1,8 @@
 package dungeonmanager.session;
 
-import dungeonmanager.stat.Stat;
-import dungeonmanager.stat.StatSet;
-import dungeonmanager.stat.StandardStat;
+import dungeonmanager.stats.Stat;
+import dungeonmanager.stats.StatSet;
+import dungeonmanager.stats.StandardStat;
 
 import java.util.HashSet;
 import java.util.Set;

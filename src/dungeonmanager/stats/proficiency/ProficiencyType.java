@@ -1,4 +1,4 @@
-package dungeonmanager.stat.proficiency;
+package dungeonmanager.stats.proficiency;
 
 public interface ProficiencyType {
 

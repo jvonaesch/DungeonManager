@@ -1,7 +1,7 @@
 package dungeonmanager.feature;
 
-import dungeonmanager.stat.StatModifier;
-import dungeonmanager.stat.ModifiableStatSet;
+import dungeonmanager.stats.StatModifier;
+import dungeonmanager.stats.ModifiableStatSet;
 
 import java.util.*;
 
@@ -33,6 +33,12 @@ public class FeatureSet {
         }
     }
 
+    public void enableFeature(String ID) {
+        if (features.containsKey(ID)) {
+            features.get(ID).active = true;
+        }
+    }
+
     public FeatureInstance removeFeature(String ID) {
         if (!features.containsKey(ID)) return null;
         FeatureInstance instance = features.get(ID);
@@ -41,7 +47,8 @@ public class FeatureSet {
     }
 
     public boolean removeFeature(FeatureInstance instance) {
-        if (!features.containsKey(instance.ID)) return false;
+        String ID = instance.ID;
+        if (!features.containsKey(ID) || features.get(ID) != instance) return false;
         for (StatModifier modifier: instance.getStatModifiers()) {
             stat_context.removeModifier(modifier);
         }

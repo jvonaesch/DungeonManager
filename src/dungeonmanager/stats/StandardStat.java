@@ -1,12 +1,12 @@
-package dungeonmanager.stat;
+package dungeonmanager.stats;
 
 public enum StandardStat implements Stat {
-    STR("STR", "strength", "standard:dungeonmanager.stat:strength"),
-    CON("CON", "constitution", "standard:dungeonmanager.stat:constitution"),
-    DEX("DEX", "dexterity", "standard:dungeonmanager.stat:dexterity"),
-    INT("INT", "intelligence", "standard:dungeonmanager.stat:intelligence"),
-    WIS("WIS", "wisdom", "standard:dungeonmanager.stat:wisdom"),
-    CHA("CHA", "charisma", "standard:dungeonmanager.stat:charisma");
+    STR("STR", "strength", "standard:dungeonmanager.stats:strength"),
+    CON("CON", "constitution", "standard:dungeonmanager.stats:constitution"),
+    DEX("DEX", "dexterity", "standard:dungeonmanager.stats:dexterity"),
+    INT("INT", "intelligence", "standard:dungeonmanager.stats:intelligence"),
+    WIS("WIS", "wisdom", "standard:dungeonmanager.stats:wisdom"),
+    CHA("CHA", "charisma", "standard:dungeonmanager.stats:charisma");
 
     private String name;
     private String id;
