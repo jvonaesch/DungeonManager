@@ -1,6 +1,6 @@
-package dungeonmanager.ability;
+package dungeonmanager.stat;
 
-public interface Ability {
+public interface Stat {
 
     public String getName();
     public String getID();

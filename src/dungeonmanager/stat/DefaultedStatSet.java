@@ -1,26 +1,26 @@
-package dungeonmanager.ability;
+package dungeonmanager.stat;
 
 import java.util.Set;
 import java.util.TreeSet;
 
-public class DefaultedAbilitySet extends BaseAbilitySet {
+public class DefaultedStatSet extends BaseStatSet {
 
-    private HasAbilitySet parent;
-    private AbilitySet parentSet;
-    private final Set<Ability> removed;
+    private HasStatSet parent;
+    private StatSet parentSet;
+    private final Set<Stat> removed;
 
-    public DefaultedAbilitySet(HasAbilitySet parent) {
-        this(parent.getAbilitySet());
+    public DefaultedStatSet(HasStatSet parent) {
+        this(parent.getStatSet());
         this.parent = parent;
     }
 
-    public DefaultedAbilitySet(AbilitySet parentSet) {
+    public DefaultedStatSet(StatSet parentSet) {
         this.parentSet = parentSet;
-        this.removed = new TreeSet<> (Abilities.getDefaultComparator());
+        this.removed = new TreeSet<> (Stats.getDefaultComparator());
     }
 
     @Override
-    public void setBaseScore(Ability ability, Integer value) {
+    public void setBaseScore(Stat ability, Integer value) {
         if (value == null) this.removeBaseScore(ability);
         else super.setBaseScore(ability, value);
         this.removed.remove(ability);
@@ -28,7 +28,7 @@ public class DefaultedAbilitySet extends BaseAbilitySet {
     }
 
     @Override
-    public void removeBaseScore(Ability ability) {
+    public void removeBaseScore(Stat ability) {
         super.removeBaseScore(ability);
         base_scores.remove(ability);
         modifier_values.remove(ability);
@@ -38,21 +38,21 @@ public class DefaultedAbilitySet extends BaseAbilitySet {
     }
 
     @Override
-    public void resetBaseScore(Ability ability) {
+    public void resetBaseScore(Stat ability) {
         this.removed.remove(ability);
         this.base_scores.remove(ability);
         this.reloadScores();
     }
 
     @Override
-    public int getBaseScore(Ability ability) {
+    public int getBaseScore(Stat ability) {
         if (removed.contains(ability)) return getDefaultScore();
         else if (base_scores.containsKey(ability)) return base_scores.get(ability);
         return (parentSet.getScore(ability));
     }
 
     @Override
-    public int getScore(Ability ability) {
+    public int getScore(Stat ability) {
         if (removed.contains(ability)) return getDefaultScore();
         if (base_scores.containsKey(ability)) return scores.get(ability);
         else return (parentSet.getScore(ability) + this.getModifierTotal(ability));
@@ -64,8 +64,8 @@ public class DefaultedAbilitySet extends BaseAbilitySet {
     }
 
     @Override
-    public Set<Ability> getSpecified() {
-        Set<Ability> a = new TreeSet<>(Abilities.getDefaultComparator());
+    public Set<Stat> getSpecified() {
+        Set<Stat> a = new TreeSet<>(Stats.getDefaultComparator());
         a.addAll(parentSet.getSpecified());
         a.addAll(super.getSpecified());
         a.removeAll(removed);
@@ -74,7 +74,7 @@ public class DefaultedAbilitySet extends BaseAbilitySet {
 
     @Override
     public void reloadScores() {
-        if (parent != null && parent.getAbilitySet() != parentSet) parentSet = parent.getAbilitySet();
+        if (parent != null && parent.getStatSet() != parentSet) parentSet = parent.getStatSet();
         // System.out.println(getSpecified());
         super.reloadScores();
     }

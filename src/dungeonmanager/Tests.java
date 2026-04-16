@@ -1,9 +1,9 @@
 package dungeonmanager;
 
-import dungeonmanager.ability.Ability;
-import dungeonmanager.ability.AbilityModifier;
-import dungeonmanager.ability.CustomAbility;
-import dungeonmanager.ability.StandardAbility;
+import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.StatModifier;
+import dungeonmanager.stat.CustomStat;
+import dungeonmanager.stat.StandardStat;
 import dungeonmanager.creature.Creature;
 import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
@@ -16,40 +16,40 @@ public class Tests {
     static Registries registry = Registries.get();
 
     public static void test1() {
-        Ability cosmicAwareness = new CustomAbility(
-                "COS", "cosmic awareness", "custom:dungeonmanager.ability:cosmic_awareness"
+        Stat cosmicAwareness = new CustomStat(
+                "COS", "cosmic awareness", "custom:dungeonmanager.stat:cosmic_awareness"
         );
         registry.ability.register(cosmicAwareness.getID(), cosmicAwareness);
 
         Creature monster = new Creature("Bert, the Owlbear", IntegratedCreatureType.OWLBEAR);
 
-        monster.getAbilitySet().removeBaseScore(StandardAbility.INT);
-        monster.getAbilitySet().setBaseScore(cosmicAwareness, 20);
+        monster.getStatSet().removeBaseScore(StandardStat.INT);
+        monster.getStatSet().setBaseScore(cosmicAwareness, 20);
 
-        AbilityModifier modifier = new AbilityModifier();
-        monster.ability.addModifier(modifier);
+        StatModifier modifier = new StatModifier();
+        monster.stats.addModifier(modifier);
 
-        modifier.setValue(StandardAbility.STR, 8)
-                .setValue(StandardAbility.CHA, 1)
-                .setValue(StandardAbility.INT, 4);
+        modifier.setValue(StandardStat.STR, 8)
+                .setValue(StandardStat.CHA, 1)
+                .setValue(StandardStat.INT, 4);
 
         System.out.println(monster);
 
-        monster.ability.setBaseScore(StandardAbility.INT, 5);
+        monster.stats.setBaseScore(StandardStat.INT, 5);
         System.out.println(monster);
 
-        monster.getAbilitySet().resetBaseScore(StandardAbility.INT);
+        monster.getStatSet().resetBaseScore(StandardStat.INT);
         System.out.println(monster);
     }
 
     public static void test2() {
         Creature olaf = new Creature("Olaf");
         
-        AbilityModifier modifier = new AbilityModifier()
+        StatModifier modifier = new StatModifier()
                 .setValue("STR", 3)
                 .setValue("DEX", 1)
-                .setValue(StandardAbility.INT, 2);
-        olaf.ability.addModifier(modifier);
+                .setValue(StandardStat.INT, 2);
+        olaf.stats.addModifier(modifier);
 
         System.out.println(olaf);
         System.out.println(olaf.feature.getAllFeatures());
@@ -59,7 +59,7 @@ public class Tests {
                 new Feature(
                         "feat:appealing",
                         "Increase your Charisma score by 2",
-                        List.of(new AbilityModifier[] {new AbilityModifier()
+                        List.of(new StatModifier[] {new StatModifier()
                                 .setValue("CHA", 1)
                         })
                 )

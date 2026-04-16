@@ -1,6 +1,6 @@
 package dungeonmanager.feature;
 
-import dungeonmanager.ability.AbilityModifier;
+import dungeonmanager.stat.StatModifier;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -13,11 +13,11 @@ public class Feature {
     public final String ID;
 
     private String description;
-    private ArrayList<AbilityModifier> stat_modifiers;
+    private ArrayList<StatModifier> stat_modifiers;
     private boolean is_major_feature;
     //public final LinkedList<String> prerequisites;
 
-    public Feature(String id, String description, Collection<AbilityModifier> stat_modifiers, boolean is_major_feature) {
+    public Feature(String id, String description, Collection<StatModifier> stat_modifiers, boolean is_major_feature) {
         this.ID = id;
         this.description = description;
         this.is_major_feature = is_major_feature;
@@ -29,7 +29,7 @@ public class Feature {
         this(id, description, new ArrayList<>(), is_major_feature);
     }
 
-    public Feature(String id, String description, Collection<AbilityModifier> stat_modifiers) {
+    public Feature(String id, String description, Collection<StatModifier> stat_modifiers) {
         this(id, description, stat_modifiers, true);
     }
 
@@ -45,7 +45,7 @@ public class Feature {
         return is_major_feature;
     }
 
-    public Collection<AbilityModifier> getStatModifiers() {
+    public Collection<StatModifier> getStatModifiers() {
         return this.stat_modifiers;
     }
 }

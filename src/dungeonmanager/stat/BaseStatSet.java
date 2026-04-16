@@ -1,94 +1,94 @@
-package dungeonmanager.ability;
+package dungeonmanager.stat;
 
 import java.util.*;
 
-public class BaseAbilitySet implements ModifiableAbilitySet {
+public class BaseStatSet implements ModifiableStatSet {
 
-    public Set<AbilityModifier> modifiers;
-    public Map<Ability, Integer> base_scores;
-    public Map<Ability, Integer> modifier_values;
-    public Map<Ability, Integer> scores;
+    public Set<StatModifier> modifiers;
+    public Map<Stat, Integer> base_scores;
+    public Map<Stat, Integer> modifier_values;
+    public Map<Stat, Integer> scores;
 
-    public BaseAbilitySet(Map<Ability, Integer> base_abilities) {
+    public BaseStatSet(Map<Stat, Integer> base_abilities) {
         this.modifiers = new HashSet<>();
-        this.base_scores = new TreeMap<>(Abilities.getDefaultComparator());
+        this.base_scores = new TreeMap<>(Stats.getDefaultComparator());
         base_scores.putAll(base_abilities);
-        this.modifier_values = new TreeMap<>(Abilities.getDefaultComparator());
-        this.scores = new TreeMap<>(Abilities.getDefaultComparator());
+        this.modifier_values = new TreeMap<>(Stats.getDefaultComparator());
+        this.scores = new TreeMap<>(Stats.getDefaultComparator());
     }
 
-    public BaseAbilitySet() {
+    public BaseStatSet() {
         this(new HashMap<>());
     }
 
-    public BaseAbilitySet(Set<Ability> base_abilities, Integer base_value) {
+    public BaseStatSet(Set<Stat> base_abilities, Integer base_value) {
         this();
-        for (Ability ability: base_abilities) this.base_scores.put(ability, base_value);
+        for (Stat ability: base_abilities) this.base_scores.put(ability, base_value);
     }
 
-    public BaseAbilitySet(Set<Ability> base_abilities) {
+    public BaseStatSet(Set<Stat> base_abilities) {
         this(base_abilities, 10);
     }
 
 
     @Override
-    public void setBaseScore(Ability ability, Integer value) {
+    public void setBaseScore(Stat ability, Integer value) {
         if (value == null) this.base_scores.remove(ability);
         else this.base_scores.put(ability, value);
         this.reloadScores();
     }
 
     @Override
-    public int getBaseScore(Ability ability) {
+    public int getBaseScore(Stat ability) {
         if (base_scores.containsKey(ability)) return base_scores.get(ability);
         return getDefaultScore();
     }
 
     @Override
-    public int getScore(Ability ability) {
+    public int getScore(Stat ability) {
         if (scores.containsKey(ability)) return scores.get(ability);
         return getDefaultScore();
     }
 
     @Override
-    public int getModifierTotal(Ability ability) {
+    public int getModifierTotal(Stat ability) {
         Integer value = modifier_values.get(ability);
         return (value == null) ? 0 : value;
     }
 
     @Override
-    public void removeBaseScore(Ability ability) {
+    public void removeBaseScore(Stat ability) {
         base_scores.remove(ability);
         this.reloadScores();
     }
 
     @Override
-    public void resetBaseScore(Ability ability) {
+    public void resetBaseScore(Stat ability) {
         setBaseScore(ability, getDefaultScore());
     }
 
     @Override
-    public Set<Ability> getSpecified() {
+    public Set<Stat> getSpecified() {
         return base_scores.keySet();
     }
 
     @Override
     public void reloadScores() {
         modifier_values.clear();
-        for (AbilityModifier modifier: this.modifiers) {
-            for (Ability ability: modifier.getAbilities()) {
+        for (StatModifier modifier: this.modifiers) {
+            for (Stat ability: modifier.getAbilities()) {
                 modifier_values.put(
                         ability,
                         modifier.getValue(ability) + modifier_values.getOrDefault(ability, 0));
             }
         }
-        for (Ability ability: getSpecified()) {
+        for (Stat ability: getSpecified()) {
             scores.put(ability, getBaseScore(ability) + getModifierTotal(ability));
         }
     }
 
     @Override
-    public void addModifier(AbilityModifier modifier) {
+    public void addModifier(StatModifier modifier) {
         if (!modifiers.contains(modifier)) {
             modifiers.add(modifier);
             this.reloadScores();
@@ -96,7 +96,7 @@ public class BaseAbilitySet implements ModifiableAbilitySet {
     }
 
     @Override
-    public boolean removeModifier(AbilityModifier modifier) {
+    public boolean removeModifier(StatModifier modifier) {
         boolean found = modifiers.remove(modifier);
         this.reloadScores();
         return found;
@@ -109,8 +109,8 @@ public class BaseAbilitySet implements ModifiableAbilitySet {
 
     public String toString() {
         StringBuilder string = new StringBuilder("Ability set: ");
-        for (Ability ability: getSpecified()) {
-            string.append("\n > ").append(ability.getID()).append(": ").append(getScore(ability));
+        for (Stat stat : getSpecified()) {
+            string.append("\n > ").append(stat.getID()).append(": ").append(getScore(stat));
         }
         return string.toString();
     }

@@ -1,6 +1,6 @@
 package dungeonmanager.registry;
 
-import dungeonmanager.ability.Ability;
+import dungeonmanager.stat.Stat;
 import dungeonmanager.command.Command;
 import dungeonmanager.creature.CreatureType;
 import dungeonmanager.feature.Feature;
@@ -10,7 +10,7 @@ public class Registries {
     private static final Registries instance = new Registries();
     public static Registries get() { return instance; }
 
-    public final Registry<Ability> ability;
+    public final Registry<Stat> ability;
     public final Registry<Command<?>> command;
     public final Registry<CreatureType> entityType;
     public final Registry<Feature> feature;

@@ -1,7 +1,6 @@
 package dungeonmanager.feature;
 
-import dungeonmanager.ability.AbilityModifier;
-import dungeonmanager.creature.Creature;
+import dungeonmanager.stat.StatModifier;
 
 import java.util.Collection;
 
@@ -35,7 +34,7 @@ public class FeatureInstance {
         );
     }
 
-    public Collection<AbilityModifier> getStatModifiers() {
+    public Collection<StatModifier> getStatModifiers() {
         // TODO: choices
         return feature.getStatModifiers();
     }

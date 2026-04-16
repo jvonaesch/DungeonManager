@@ -1,30 +1,30 @@
 package dungeonmanager.session;
 
-import dungeonmanager.ability.Ability;
-import dungeonmanager.ability.AbilitySet;
-import dungeonmanager.ability.StandardAbility;
+import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.StatSet;
+import dungeonmanager.stat.StandardStat;
 
 import java.util.HashSet;
 import java.util.Set;
 
 public class Session {
 
-    public final SessionDefaultAbilitySet defaultAbilitySet;
+    public final SessionDefaultStatSet defaultAbilitySet;
 
     public Session () {
-        Settings.STANDARD_ABILITIES.addAll(Set.of(StandardAbility.values()));
-        this.defaultAbilitySet = new SessionDefaultAbilitySet();
+        Settings.STANDARD_ABILITIES.addAll(Set.of(StandardStat.values()));
+        this.defaultAbilitySet = new SessionDefaultStatSet();
     }
 
     public class Settings {
         public static int DEFAULT_ABILITY_SCORE = 10;
-        public static Set<Ability> STANDARD_ABILITIES = new HashSet<>();
+        public static Set<Stat> STANDARD_ABILITIES = new HashSet<>();
     }
 
-    public class SessionDefaultAbilitySet implements AbilitySet {
+    public class SessionDefaultStatSet implements StatSet {
 
         @Override
-        public int getScore(Ability ability) {
+        public int getScore(Stat stat) {
             return Settings.DEFAULT_ABILITY_SCORE;
         }
 
@@ -34,7 +34,7 @@ public class Session {
         }
 
         @Override
-        public Set<Ability> getSpecified() {
+        public Set<Stat> getSpecified() {
             return new HashSet<>(Settings.STANDARD_ABILITIES);
         }
     }

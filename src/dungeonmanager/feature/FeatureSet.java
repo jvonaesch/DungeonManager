@@ -1,17 +1,16 @@
 package dungeonmanager.feature;
 
-import dungeonmanager.ability.AbilityModifier;
-import dungeonmanager.ability.AbilitySet;
-import dungeonmanager.ability.ModifiableAbilitySet;
+import dungeonmanager.stat.StatModifier;
+import dungeonmanager.stat.ModifiableStatSet;
 
 import java.util.*;
 
 public class FeatureSet {
 
     private final Map<String, FeatureInstance> features;
-    private final ModifiableAbilitySet stat_context;
+    private final ModifiableStatSet stat_context;
 
-    public FeatureSet(ModifiableAbilitySet stat_context) {
+    public FeatureSet(ModifiableStatSet stat_context) {
         features = new TreeMap<>();
         this.stat_context = stat_context;
     }
@@ -20,7 +19,7 @@ public class FeatureSet {
         if (!features.containsKey(ID)) {
             FeatureInstance instance = new FeatureInstance(ID, feature);
             features.put(instance.ID, instance);
-            for (AbilityModifier modifier: instance.getStatModifiers()) {
+            for (StatModifier modifier: instance.getStatModifiers()) {
                 stat_context.addModifier(modifier);
             }
             return instance;
@@ -43,7 +42,7 @@ public class FeatureSet {
 
     public boolean removeFeature(FeatureInstance instance) {
         if (!features.containsKey(instance.ID)) return false;
-        for (AbilityModifier modifier: instance.getStatModifiers()) {
+        for (StatModifier modifier: instance.getStatModifiers()) {
             stat_context.removeModifier(modifier);
         }
         return features.remove(instance.ID, instance);

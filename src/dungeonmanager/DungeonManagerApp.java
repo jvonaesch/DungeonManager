@@ -1,7 +1,7 @@
 package dungeonmanager;
 
-import dungeonmanager.ability.Ability;
-import dungeonmanager.ability.StandardAbility;
+import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.StandardStat;
 import dungeonmanager.command.*;
 import dungeonmanager.command.commands.RollCommand;
 import dungeonmanager.command.commands.StopCommand;
@@ -49,8 +49,8 @@ public class DungeonManagerApp {
         console_in = new Scanner(System.in);
         command_line = new CommandLine(new CommandContext(this, console_in, registry));
 
-        for (Ability ability: StandardAbility.values()) {
-            registry.ability.register(ability.getID(), () -> ability);
+        for (Stat stat : StandardStat.values()) {
+            registry.ability.register(stat.getID(), () -> stat);
         }
 
         registry.command.register("roll", () -> new RollCommand());

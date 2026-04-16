@@ -1,12 +1,12 @@
-package dungeonmanager.ability;
+package dungeonmanager.stat;
 
-public class CustomAbility implements Ability {
+public class CustomStat implements Stat {
 
     private String originIdentifier;
     private String name;
     private String id;
 
-    public CustomAbility (String id, String name, String originIdentifier) {
+    public CustomStat(String id, String name, String originIdentifier) {
         this.originIdentifier = originIdentifier;
         this.name = name;
         this.id = id;

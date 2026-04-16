@@ -1,20 +1,20 @@
 package dungeonmanager.creature;
 
-import dungeonmanager.ability.*;
+import dungeonmanager.stat.*;
 import dungeonmanager.feature.FeatureSet;
 
-public class Creature implements HasAbilitySet {
+public class Creature implements HasStatSet {
 
     private String name;
     private CreatureType type;
-    public final ModifiableAbilitySet ability;
+    public final ModifiableStatSet stats;
     public final FeatureSet feature;
 
     public Creature(String name, CreatureType type) {
         this.name = name;
         this.type = type;
-        this.ability = new DefaultedAbilitySet(type);
-        this.feature = new FeatureSet(this.ability);
+        this.stats = new DefaultedStatSet(type);
+        this.feature = new FeatureSet(this.stats);
     }
 
     public Creature(String name) {
@@ -22,11 +22,11 @@ public class Creature implements HasAbilitySet {
     }
 
     public String toString() {
-        return "\"" + name + "\"\n "+AbilitySets.toString(ability);
+        return "\"" + name + "\"\n "+ StatSets.toString(stats);
     }
 
     @Override
-    public ModifiableAbilitySet getAbilitySet() {
-        return ability;
+    public ModifiableStatSet getStatSet() {
+        return stats;
     }
 }

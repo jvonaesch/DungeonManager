@@ -1,6 +1,6 @@
 package dungeonmanager.creature;
 
-import dungeonmanager.ability.*;
+import dungeonmanager.stat.*;
 
 public enum IntegratedCreatureType implements CreatureType {
     DEFAULT("base:dungeonmanager.creature:default", "default"),
@@ -8,22 +8,22 @@ public enum IntegratedCreatureType implements CreatureType {
 
     private String id;
     private String name;
-    private ModifiableAbilitySet abilitySet;
+    private ModifiableStatSet abilitySet;
 
     private IntegratedCreatureType(String id, String name) {
         this.id = id;
         this.name = name;
-        this.abilitySet = new DefaultedAbilitySet(StandardAbilitySet.DEFAULT());
+        this.abilitySet = new DefaultedStatSet(StandardStatSet.DEFAULT());
     }
 
     private IntegratedCreatureType(String id, String name, int STR, int DEX, int CON, int INT, int WIS, int CHA) {
         this(id, name);
-        this.abilitySet.setBaseScore(StandardAbility.STR, STR);
-        this.abilitySet.setBaseScore(StandardAbility.DEX, DEX);
-        this.abilitySet.setBaseScore(StandardAbility.CON, CON);
-        this.abilitySet.setBaseScore(StandardAbility.INT, INT);
-        this.abilitySet.setBaseScore(StandardAbility.WIS, WIS);
-        this.abilitySet.setBaseScore(StandardAbility.CHA, CHA);
+        this.abilitySet.setBaseScore(StandardStat.STR, STR);
+        this.abilitySet.setBaseScore(StandardStat.DEX, DEX);
+        this.abilitySet.setBaseScore(StandardStat.CON, CON);
+        this.abilitySet.setBaseScore(StandardStat.INT, INT);
+        this.abilitySet.setBaseScore(StandardStat.WIS, WIS);
+        this.abilitySet.setBaseScore(StandardStat.CHA, CHA);
     }
 
     @Override
@@ -37,7 +37,7 @@ public enum IntegratedCreatureType implements CreatureType {
     }
 
     @Override
-    public AbilitySet getAbilitySet() {
+    public StatSet getStatSet() {
         return abilitySet;
     }
 }
