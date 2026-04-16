@@ -15,9 +15,9 @@ public class FeatureSet {
         this.stat_context = stat_context;
     }
 
-    public FeatureInstance addFeature(String ID, Feature feature) {
+    public FeatureInstance addFeature(String ID, String name, Feature feature) {
         if (!features.containsKey(ID)) {
-            FeatureInstance instance = new FeatureInstance(ID, feature);
+            FeatureInstance instance = new FeatureInstance(ID, name, feature);
             features.put(instance.ID, instance);
             for (StatModifier modifier: instance.getStatModifiers()) {
                 stat_context.addModifier(modifier);

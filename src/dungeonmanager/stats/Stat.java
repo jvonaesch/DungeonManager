@@ -2,7 +2,9 @@ package dungeonmanager.stats;
 
 public interface Stat {
 
-    public String getName();
-    public String getID();
-    public String getOriginIdentifier();
+    String getName();
+    String getID();
+    String getOriginIdentifier();
+    String getType();
+    int getDefaultValue();
 }

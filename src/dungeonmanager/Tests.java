@@ -17,14 +17,14 @@ public class Tests {
 
     public static void test1() {
         Stat cosmicAwareness = new CustomStat(
-                "COS", "cosmic awareness", "custom:dungeonmanager.stats:cosmic_awareness"
+                "COS", "cosmic awareness", "ability", 10
         );
-        registry.ability.register(cosmicAwareness.getID(), cosmicAwareness);
+        registry.stats.register(cosmicAwareness.getID(), cosmicAwareness);
 
         Creature monster = new Creature("Bert, the Owlbear", IntegratedCreatureType.OWLBEAR);
 
-        monster.getStatSet().removeBaseScore(StandardStat.INT);
-        monster.getStatSet().setBaseScore(cosmicAwareness, 20);
+        monster.getStatSet().removeBaseValue(StandardStat.INT);
+        monster.getStatSet().setBaseValue(cosmicAwareness, 20);
 
         StatModifier modifier = new StatModifier();
         monster.stats.addModifier(modifier);
@@ -35,10 +35,10 @@ public class Tests {
 
         System.out.println(monster);
 
-        monster.stats.setBaseScore(StandardStat.INT, 5);
+        monster.stats.setBaseValue(StandardStat.INT, 5);
         System.out.println(monster);
 
-        monster.getStatSet().resetBaseScore(StandardStat.INT);
+        monster.getStatSet().resetBaseValue(StandardStat.INT);
         System.out.println(monster);
     }
 
@@ -52,12 +52,11 @@ public class Tests {
         olaf.stats.addModifier(modifier);
 
         System.out.println(olaf);
-        System.out.println(olaf.feature.getAllFeatures());
 
         FeatureInstance appealing_feat = olaf.feature.addFeature(
-                "feat:appealing",
+                "feat:appealing", "Appealing",
                 new Feature(
-                        "feat:appealing",
+                        "feat:appealing", "Appealing",
                         "Increase your Charisma score by 2",
                         List.of(new StatModifier[] {new StatModifier()
                                 .setValue("CHA", 1)
@@ -65,23 +64,21 @@ public class Tests {
                 )
         );
         FeatureInstance sturdy_feat = olaf.feature.addFeature(
-                "feat:sturdy",
+                "feat:sturdy", "Sturdy",
                 new Feature(
-                        "feat:sturdy",
+                        "feat:sturdy", "Sturdy",
                         "You are a battlefield heavyweight",
                         List.of(new StatModifier[] {new StatModifier()
                                 .setValue("CON", 2)
-                                //.setValue("HP", 10)
+                                .setValue("MAX_HP", 10)
                         })
                 )
         );
 
         System.out.println(olaf);
-        System.out.println(olaf.feature.getAllFeatures());
 
         olaf.feature.removeFeature(appealing_feat);
 
         System.out.println(olaf);
-        System.out.println(olaf.feature.getAllFeatures());
     }
 }

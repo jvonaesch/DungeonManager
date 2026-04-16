@@ -9,14 +9,16 @@ public class FeatureInstance {
 
     //private final Creature creature;
     private final Feature feature;
-    public String ID;
+    public final String ID;
+    private String name;
     protected boolean active;
 
-    protected FeatureInstance(String ID, Feature feature) {
+    protected FeatureInstance(String ID, String name, Feature feature) {
         //this.creature = creature;
         this.feature = feature;
         this.ID = ID;
         this.active = false;
+        this.name = name;
     }
 
     @Override
@@ -37,5 +39,13 @@ public class FeatureInstance {
     public Collection<StatModifier> getStatModifiers() {
         // TODO: choices
         return feature.getStatModifiers();
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return feature.getDescription();
     }
 }

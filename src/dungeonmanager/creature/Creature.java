@@ -1,5 +1,6 @@
 package dungeonmanager.creature;
 
+import dungeonmanager.feature.Features;
 import dungeonmanager.stats.*;
 import dungeonmanager.feature.FeatureSet;
 
@@ -22,7 +23,11 @@ public class Creature implements HasStatSet {
     }
 
     public String toString() {
-        return "\"" + name + "\"\n "+ StatSets.toString(stats);
+        return "\n\"%s\":\n %s%s".formatted(
+                name,
+                StatSets.toString(stats, 1),
+                Features.toString(feature, 1)
+        );
     }
 
     @Override

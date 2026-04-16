@@ -6,7 +6,6 @@ import dungeonmanager.command.*;
 import dungeonmanager.command.commands.RollCommand;
 import dungeonmanager.command.commands.StopCommand;
 import dungeonmanager.registry.Registries;
-import dungeonmanager.session.Session;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -18,7 +17,7 @@ public class DungeonManagerApp {
     static final String LIB_PATH = USER_DIR + "/DungeonManagerLibrary/";
 
     private Registries registry;
-    private Session session;
+    // private Session session;
 
     private Scanner console_in;
     private CommandLine command_line;
@@ -45,12 +44,12 @@ public class DungeonManagerApp {
     public void initialize() {
         alive = true;
 
-        session = new Session();
+        // session = new Session();
         console_in = new Scanner(System.in);
         command_line = new CommandLine(new CommandContext(this, console_in, registry));
 
         for (Stat stat : StandardStat.values()) {
-            registry.ability.register(stat.getID(), () -> stat);
+            registry.stats.register(stat.getID(), () -> stat);
         }
 
         registry.command.register("roll", () -> new RollCommand());
@@ -61,7 +60,7 @@ public class DungeonManagerApp {
     public void run() {
 
         // INITIAL DEBUG CODE
-        //Tests.test1();
+        Tests.test1();
         Tests.test2();
 
         // COMMAND PROMPT

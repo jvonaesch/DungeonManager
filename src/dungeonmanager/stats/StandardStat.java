@@ -1,21 +1,43 @@
 package dungeonmanager.stats;
 
 public enum StandardStat implements Stat {
-    STR("STR", "strength", "standard:dungeonmanager.stats:strength"),
-    CON("CON", "constitution", "standard:dungeonmanager.stats:constitution"),
-    DEX("DEX", "dexterity", "standard:dungeonmanager.stats:dexterity"),
-    INT("INT", "intelligence", "standard:dungeonmanager.stats:intelligence"),
-    WIS("WIS", "wisdom", "standard:dungeonmanager.stats:wisdom"),
-    CHA("CHA", "charisma", "standard:dungeonmanager.stats:charisma");
+    STR("STR", "strength", "ability"),
+    CON("CON", "constitution", "ability"),
+    DEX("DEX", "dexterity", "ability"),
+    INT("INT", "intelligence", "ability"),
+    WIS("WIS", "wisdom", "ability"),
+    CHA("CHA", "charisma", "ability"),
+
+    MAX_HP("MAX_HP", "maximum health points");
 
     private String name;
-    private String id;
+    private String ID;
     private String origin_identifier;
+    private String type;
+    private int default_value;
 
-    private StandardStat(String id, String name, String origin_identifier) {
+    private StandardStat(String ID, String name, String type, int default_value, String origin_identifier) {
         this.origin_identifier = origin_identifier;
         this.name = name;
-        this.id = id;
+        this.ID = ID;
+        this.type = type;
+        this.default_value = default_value;
+    }
+
+    private StandardStat(String ID, String name, String type, int default_value) {
+        this(ID, name, type, default_value, "standard:dungeonmanager.stats." + type + ':' + ID);
+    }
+
+    private StandardStat(String ID, String name, String type) {
+        this(ID, name, type, type.equals("ability") ? 10 : 0);
+    }
+
+    private StandardStat(String ID, String name, int default_value) {
+        this(ID, name, "base_stat", default_value);
+    }
+
+    private StandardStat(String ID, String name) {
+        this(ID, name, "base_stat");
     }
 
     @Override
@@ -29,7 +51,17 @@ public enum StandardStat implements Stat {
     }
 
     @Override
+    public String getType() {
+        return type;
+    }
+
+    @Override
+    public int getDefaultValue() {
+        return default_value;
+    }
+
+    @Override
     public String getID() {
-        return id;
+        return ID;
     }
 }

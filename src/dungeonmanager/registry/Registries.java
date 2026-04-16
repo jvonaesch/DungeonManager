@@ -10,13 +10,13 @@ public class Registries {
     private static final Registries instance = new Registries();
     public static Registries get() { return instance; }
 
-    public final Registry<Stat> ability;
+    public final Registry<Stat> stats;
     public final Registry<Command<?>> command;
     public final Registry<CreatureType> entityType;
     public final Registry<Feature> feature;
 
     private Registries() {
-        this.ability = new TreeRegistry<>();
+        this.stats = new TreeRegistry<>();
         this.command = new LazyRegistry<>();
         this.entityType = new LazyRegistry<>();
         this.feature = new LazyRegistry<>();

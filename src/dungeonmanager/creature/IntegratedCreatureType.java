@@ -13,17 +13,17 @@ public enum IntegratedCreatureType implements CreatureType {
     private IntegratedCreatureType(String id, String name) {
         this.id = id;
         this.name = name;
-        this.abilitySet = new DefaultedStatSet(StandardStatSet.DEFAULT());
+        this.abilitySet = new DefaultedStatSet(DefaultStatSet.get());
     }
 
     private IntegratedCreatureType(String id, String name, int STR, int DEX, int CON, int INT, int WIS, int CHA) {
         this(id, name);
-        this.abilitySet.setBaseScore(StandardStat.STR, STR);
-        this.abilitySet.setBaseScore(StandardStat.DEX, DEX);
-        this.abilitySet.setBaseScore(StandardStat.CON, CON);
-        this.abilitySet.setBaseScore(StandardStat.INT, INT);
-        this.abilitySet.setBaseScore(StandardStat.WIS, WIS);
-        this.abilitySet.setBaseScore(StandardStat.CHA, CHA);
+        this.abilitySet.setBaseValue(StandardStat.STR, STR);
+        this.abilitySet.setBaseValue(StandardStat.DEX, DEX);
+        this.abilitySet.setBaseValue(StandardStat.CON, CON);
+        this.abilitySet.setBaseValue(StandardStat.INT, INT);
+        this.abilitySet.setBaseValue(StandardStat.WIS, WIS);
+        this.abilitySet.setBaseValue(StandardStat.CHA, CHA);
     }
 
     @Override

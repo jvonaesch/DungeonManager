@@ -28,7 +28,7 @@ public class StatModifier {
     }
 
     public int getValue (String ability_id) {
-        Stat ability = Registries.get().ability.get(ability_id);
+        Stat ability = Registries.get().stats.get(ability_id);
         return values.get(ability);
     }
 
@@ -39,7 +39,7 @@ public class StatModifier {
     }
 
     public StatModifier setValue (String ability_id, int value) {
-        Stat ability = Registries.get().ability.get(ability_id);
+        Stat ability = Registries.get().stats.get(ability_id);
         return setValue(ability, value);
     }
 

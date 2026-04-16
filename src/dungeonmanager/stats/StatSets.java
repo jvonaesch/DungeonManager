@@ -1,11 +1,56 @@
 package dungeonmanager.stats;
 
+import java.util.Map;
+import java.util.TreeMap;
+
 public class StatSets {
-    public static String toString(StatSet set) {
-        String string = "Stat set: ";
-        for (Stat ability: set.getSpecified()) {
-            string += "\n > "+ability.getID()+": "+set.getScore(ability)+"";
+
+    /**
+     * Brings a stat set into a readable format sorted by <i>stat type</i>.
+     * <br>
+     * relies on the implementation's {@link  StatSet#getSpecifiedStats()} method.
+     *
+     * @param set stat set for which to get the map <b>M</b>
+     * @return map <b>M</b> from <i>stat types</i> (ability, base_stat, ...) to maps <b>M_type</b>,
+     * which each map <i>stat IDs</i> of stats with their <i>type</i> to their respective stat <i>value</i>
+     * in the set.
+     */
+    public static Map<String, Map<Stat, Integer>> getByType(StatSet set) {
+        TreeMap<String, Map<Stat, Integer>> map = new TreeMap<>();
+        for (Stat stat: set.getSpecifiedStats()) {
+            String type = stat.getType();
+            if (!map.containsKey(stat.getType())) map.put(stat.getType(), new TreeMap<> (Stats.getDefaultComparator()));
+            map.get(stat.getType()).put(stat, set.getValue(stat));
         }
-        return string;
+        return map;
+    }
+
+    public static String mapString(Map<?, Integer> map, int indent) {
+        String space = "\t".repeat(indent);
+        StringBuilder string = new StringBuilder();
+        for (Object key: map.keySet()) {
+            string.append("\n%s> %s: %d".formatted(space, key, map.get(key)));
+        }
+        return string.toString();
+    }
+
+    public static String toString(StatSet set, int indent) {
+        String space = "\t".repeat(indent);
+        StringBuilder string = new StringBuilder();
+        Map<String, Map<Stat, Integer>> type_map = getByType(set);
+        string.append("%sAbilities:".formatted(space));
+        string.append(mapString(type_map.remove("ability"), indent + 1));
+        string.append("\n%sBase stats:".formatted(space));
+        string.append(mapString(type_map.remove("base_stat"), indent + 1));
+        for (String stat_type: type_map.keySet()) {
+            string.append("\n%s\"%s\":".formatted(space, stat_type));
+            Map<Stat, Integer> sub_map = type_map.get(stat_type);
+            string.append(mapString(sub_map, indent+1));
+        }
+        return string.toString();
+    }
+
+    public static String toString(StatSet set) {
+        return toString(set, 0);
     }
 }
