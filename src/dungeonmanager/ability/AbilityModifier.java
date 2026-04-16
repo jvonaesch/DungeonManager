@@ -50,4 +50,9 @@ public class AbilityModifier {
     public Set<Ability> getAbilities () {
         return values.keySet();
     }
+
+    @Override
+    public String toString() {
+        return "AbilityModifier" + values;
+    }
 }

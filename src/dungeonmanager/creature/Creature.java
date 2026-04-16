@@ -14,7 +14,7 @@ public class Creature implements HasAbilitySet {
         this.name = name;
         this.type = type;
         this.ability = new DefaultedAbilitySet(type);
-        this.feature = new FeatureSet();
+        this.feature = new FeatureSet(this.ability);
     }
 
     public Creature(String name) {

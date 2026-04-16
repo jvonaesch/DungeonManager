@@ -6,7 +6,11 @@ import dungeonmanager.ability.CustomAbility;
 import dungeonmanager.ability.StandardAbility;
 import dungeonmanager.creature.Creature;
 import dungeonmanager.creature.IntegratedCreatureType;
+import dungeonmanager.feature.Feature;
+import dungeonmanager.feature.FeatureInstance;
 import dungeonmanager.registry.Registries;
+
+import java.util.List;
 
 public class Tests {
     static Registries registry = Registries.get();
@@ -43,10 +47,30 @@ public class Tests {
         
         AbilityModifier modifier = new AbilityModifier()
                 .setValue("STR", 3)
-                .setValue(StandardAbility.CHA, 1)
-                .setValue(StandardAbility.INT, 4);
-
+                .setValue("DEX", 1)
+                .setValue(StandardAbility.INT, 2);
         olaf.ability.addModifier(modifier);
+
         System.out.println(olaf);
+        System.out.println(olaf.feature.getAllFeatures());
+
+        FeatureInstance feat = olaf.feature.addFeature(
+                "feat:appealing",
+                new Feature(
+                        "feat:appealing",
+                        "Increase your Charisma score by 2",
+                        List.of(new AbilityModifier[] {new AbilityModifier()
+                                .setValue("CHA", 1)
+                        })
+                )
+        );
+
+        System.out.println(olaf);
+        System.out.println(olaf.feature.getAllFeatures());
+
+        olaf.feature.removeFeature("feat:appealing");
+
+        System.out.println(olaf);
+        System.out.println(olaf.feature.getAllFeatures());
     }
 }
