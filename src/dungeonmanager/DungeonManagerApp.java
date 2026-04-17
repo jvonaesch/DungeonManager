@@ -60,8 +60,9 @@ public class DungeonManagerApp {
     public void run() {
 
         // INITIAL DEBUG CODE
-        Tests.test1();
+        //Tests.test1();
         Tests.test2();
+        Tests.test3();
 
         // COMMAND PROMPT
         /*while (this.alive) {

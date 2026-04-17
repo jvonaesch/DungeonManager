@@ -1,5 +1,6 @@
 package dungeonmanager;
 
+import dungeonmanager.feature.FeatureSection;
 import dungeonmanager.stats.Stat;
 import dungeonmanager.stats.StatModifier;
 import dungeonmanager.stats.CustomStat;
@@ -8,6 +9,7 @@ import dungeonmanager.creature.Creature;
 import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.FeatureInstance;
+import dungeonmanager.feature.ScoreModifierSection;
 import dungeonmanager.registry.Registries;
 
 import java.util.List;
@@ -73,4 +75,50 @@ public class Tests {
         olaf.feature.removeFeature(appealing_feat);
         System.out.println(olaf);
     }
+
+	public static void test3() {
+		Creature warrior = new Creature("Thorgrim the Dwarf", IntegratedCreatureType.DEFAULT);
+
+		// Create a feature with base modifiers
+		Feature battleHardenedFeat = new Feature(
+				"feat:battle_hardened",
+				"Battle Hardened",
+				"Years of combat have strengthened your resolve",
+				List.of(new StatModifier().setValue(StandardStat.CON, 1))
+		);
+
+		// Add feature to creature and get the instance
+		FeatureInstance instance = warrior.feature.addFeature(battleHardenedFeat);
+
+		// Add a visible section with a single modifier that adjusts multiple stats
+		ScoreModifierSection combatBonusSection = new ScoreModifierSection(
+				"Combat Bonuses",
+				"Additional bonuses granted by battle experience: STR +1",
+				new StatModifier().setValue(StandardStat.STR, 1)
+		);
+		instance.addSection(combatBonusSection);
+
+		// Add another visible section with its own modifier
+		ScoreModifierSection survivalSection = new ScoreModifierSection(
+				"Survival Skills",
+				"Improved resilience in harsh conditions: MAX_HP +5",
+				new StatModifier().setValue(StandardStat.MAX_HP, 5)
+		);
+		instance.addSection(survivalSection);
+
+		// Add an invisible section with a modifier
+		ScoreModifierSection internalNotesSection = new ScoreModifierSection(
+				"Internal Notes",
+				"[DM Only] Hidden mechanics: WIS +2",
+				new StatModifier().setValue(StandardStat.WIS, 2),
+				false
+		);
+		instance.addSection(internalNotesSection);
+
+		System.out.println(warrior);
+		System.out.println("\nFeature Sections: " + instance.getSectionCount());
+		for (FeatureSection section : instance.getSections()) {
+			System.out.println(" - " + section.getName() + " (visible: " + section.isVisible() + ", type: " + section.getType() + ")");
+		}
+	}
 }

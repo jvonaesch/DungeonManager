@@ -3,15 +3,16 @@ package dungeonmanager.creature;
 import dungeonmanager.stats.*;
 
 public enum IntegratedCreatureType implements CreatureType {
-    DEFAULT("base:dungeonmanager.creature:default", "default"),
-    OWLBEAR("base:dungeonmanager.creature:owlbear", "owlbear", 20, 12, 17, 3, 12, 7);
+    DEFAULT("default", "Default"),
+    OWLBEAR("owlbear", "Owlbear", 20, 12, 17, 3, 12, 7),
+    DWARF("dwarf", "Dwarf", 10, 10, 14, 10, 10, 10);
 
     private String id;
     private String name;
     private ModifiableStatSet abilitySet;
 
     private IntegratedCreatureType(String id, String name) {
-        this.id = id;
+        this.id = "base:dungeonmanager.creature:" + id;
         this.name = name;
         this.abilitySet = new DefaultedStatSet(DefaultStatSet.get());
     }

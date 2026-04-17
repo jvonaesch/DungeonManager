@@ -26,6 +26,14 @@ public class Features {
         for (StatModifier modifier: instance.getStatModifiers()) {
             string.append("\n%s>\t\"%s\"".formatted(space, instance.getDescription()));
         }
+        
+        for (FeatureSection section : instance.getSections()) {
+            if (section.isVisible()) {
+                string.append("\n%s## %s".formatted(space, section.getName()));
+                string.append("\n%s%s".formatted(space, section.getDescription()));
+            }
+        }
+        
         return string.toString();
     }
 
