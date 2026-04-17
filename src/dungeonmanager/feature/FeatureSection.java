@@ -10,6 +10,11 @@ import dungeonmanager.stats.ModifiableStatSet;
 public interface FeatureSection {
 
     /**
+     * @return the unique identifier for this section
+     */
+    String getID();
+
+    /**
      * @return the title/name of this section
      */
     String getName();
@@ -45,5 +50,14 @@ public interface FeatureSection {
      */
     default void onRemove(ModifiableStatSet statSet) {
         // Default implementation does nothing
+    }
+
+    /**
+     * Called when this section is loaded into a FeatureInstance.
+     * Implementations should add themselves and any child sections to the instance.
+     * @param instance the FeatureInstance to load into
+     */
+    default void loadToInstance(FeatureInstance instance) {
+        instance.addSection(this);
     }
 }

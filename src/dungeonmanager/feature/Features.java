@@ -23,9 +23,7 @@ public class Features {
     public static String toString(FeatureInstance instance, int indent) {
         String space = "\t".repeat(indent);
         StringBuilder string = new StringBuilder("\n%s%s".formatted(space, instance.getName()));
-        for (StatModifier modifier: instance.getStatModifiers()) {
-            string.append("\n%s>\t\"%s\"".formatted(space, instance.getDescription()));
-        }
+        string.append("\n%s>\t\"%s\"".formatted(space, instance.getDescription()));
         
         for (FeatureSection section : instance.getSections()) {
             if (section.isVisible()) {

@@ -118,10 +118,10 @@ public class ModifiableStatSet implements StatSet {
     public void reloadValues() {
         modifier_values.clear();
         for (StatModifier modifier: this.modifiers) {
-            for (Stat ability: modifier.getAbilities()) {
+            for (Stat stat: modifier.getStats()) {
                 modifier_values.put(
-                        ability,
-                        modifier.getValue(ability) + modifier_values.getOrDefault(ability, 0));
+                        stat,
+                        modifier.getValue(stat) + modifier_values.getOrDefault(stat, 0));
             }
         }
         for (Stat ability: getSpecifiedStats()) {

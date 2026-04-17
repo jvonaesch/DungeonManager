@@ -6,26 +6,33 @@ import dungeonmanager.stats.ModifiableStatSet;
 /**
  * A FeatureSection that contains a score modifier.
  */
-public class ScoreModifierSection implements FeatureSection {
+public class StatModifierSection implements FeatureSection {
 
+    private String id;
     private String name;
     private String description;
     private StatModifier modifier;
     private boolean visible;
 
-    public ScoreModifierSection(String name, String description, StatModifier modifier) {
-        this(name, description, modifier, true);
+    public StatModifierSection(String id, String name, String description, StatModifier modifier) {
+        this(id, name, description, modifier, true);
     }
 
-    public ScoreModifierSection(String name, String description, StatModifier modifier, boolean visible) {
+    public StatModifierSection(String id, String name, String description, StatModifier modifier, boolean visible) {
+        this.id = id;
         this.name = name;
         this.description = description;
         this.modifier = modifier;
         this.visible = visible;
     }
 
-    public ScoreModifierSection(String name, String description) {
-        this(name, description, new StatModifier(), true);
+    public StatModifierSection(String id, String name, String description) {
+        this(id, name, description, new StatModifier(), true);
+    }
+
+    @Override
+    public String getID() {
+        return id;
     }
 
     @Override

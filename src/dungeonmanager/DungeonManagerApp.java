@@ -6,6 +6,7 @@ import dungeonmanager.command.*;
 import dungeonmanager.command.commands.RollCommand;
 import dungeonmanager.command.commands.StopCommand;
 import dungeonmanager.registry.Registries;
+import test.FeatureTest;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -61,8 +62,7 @@ public class DungeonManagerApp {
 
         // INITIAL DEBUG CODE
         // Tests.test1();
-        // Tests.test2();
-        Tests.test3();
+        FeatureTest.test_all();
 
         // COMMAND PROMPT
         /*while (this.alive) {

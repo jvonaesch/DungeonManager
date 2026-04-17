@@ -62,8 +62,7 @@ public class StatModifier {
      * @return this StatModifier for method chaining
      */
     public StatModifier setValue (Stat ability, int value) {
-        if (value == 0) values.remove(ability);
-        else values.put(ability, value);
+        values.put(ability, value);
         return this;
     }
 
@@ -76,6 +75,7 @@ public class StatModifier {
      */
     public StatModifier setValue (String ability_id, int value) {
         Stat ability = Registries.get().stats.get(ability_id);
+        if (ability == null) throw new IllegalArgumentException("No stat found with ID: " + ability_id);
         return setValue(ability, value);
     }
 
@@ -89,7 +89,7 @@ public class StatModifier {
     /**
      * @return set of stats with modifications
      */
-    public Set<Stat> getAbilities () {
+    public Set<Stat> getStats() {
         return values.keySet();
     }
 
