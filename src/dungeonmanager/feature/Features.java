@@ -2,6 +2,9 @@ package dungeonmanager.feature;
 
 import dungeonmanager.stats.StatModifier;
 
+/**
+ * Utility class for converting features and feature sets to strings for display purposes.
+ */
 public class Features {
 
     public static String toString(FeatureSet set, int indent) {
@@ -21,7 +24,7 @@ public class Features {
         String space = "\t".repeat(indent);
         StringBuilder string = new StringBuilder("\n%s%s".formatted(space, instance.getName()));
         for (StatModifier modifier: instance.getStatModifiers()) {
-            string.append("\n%s\t\"%s\"".formatted(space, instance.getDescription()));
+            string.append("\n%s>\t\"%s\"".formatted(space, instance.getDescription()));
         }
         return string.toString();
     }

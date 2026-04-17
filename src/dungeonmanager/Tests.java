@@ -53,32 +53,24 @@ public class Tests {
 
         System.out.println(olaf);
 
-        FeatureInstance appealing_feat = olaf.feature.addFeature(
+        FeatureInstance appealing_feat = olaf.feature.addFeature(new Feature(
                 "feat:appealing", "Appealing",
-                new Feature(
-                        "feat:appealing", "Appealing",
-                        "Increase your Charisma score by 2",
-                        List.of(new StatModifier[] {new StatModifier()
-                                .setValue("CHA", 1)
-                        })
-                )
-        );
-        FeatureInstance sturdy_feat = olaf.feature.addFeature(
+                "Increase your Charisma score by 2",
+                List.of(new StatModifier[] {new StatModifier()
+                        .setValue("CHA", 1)
+                })
+        ));
+        FeatureInstance sturdy_feat = olaf.feature.addFeature(new Feature(
                 "feat:sturdy", "Sturdy",
-                new Feature(
-                        "feat:sturdy", "Sturdy",
-                        "You are a battlefield heavyweight",
-                        List.of(new StatModifier[] {new StatModifier()
-                                .setValue("CON", 2)
-                                .setValue("MAX_HP", 10)
-                        })
-                )
-        );
+                "You are a battlefield heavyweight",
+                List.of(new StatModifier[] {new StatModifier()
+                        .setValue("CON", 2)
+                        .setValue("MAX_HP", 10)
+                })
+        ));
 
         System.out.println(olaf);
-
         olaf.feature.removeFeature(appealing_feat);
-
         System.out.println(olaf);
     }
 }
