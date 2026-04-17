@@ -4,6 +4,7 @@ import dungeonmanager.stats.StatModifier;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Feature {
 
@@ -15,6 +16,7 @@ public class Feature {
     private String description;
     private ArrayList<StatModifier> stat_modifiers;
     private boolean is_major_feature;
+    private List<FeatureSection> sections;
     //public final LinkedList<String> prerequisites;
 
     public Feature(String id, String name, String description, Collection<StatModifier> stat_modifiers, boolean is_major_feature) {
@@ -23,6 +25,7 @@ public class Feature {
         this.is_major_feature = is_major_feature;
         this.stat_modifiers = new ArrayList<>(stat_modifiers);
         this.name = name;
+        this.sections = new ArrayList<>();
         //this.prerequisites = new LinkedList<>(prerequisites);
     }
 
@@ -52,5 +55,19 @@ public class Feature {
 
     public Collection<StatModifier> getStatModifiers() {
         return this.stat_modifiers;
+    }
+
+    public void addSection(FeatureSection section) {
+        if (section != null) {
+            sections.add(section);
+        }
+    }
+
+    public List<FeatureSection> getSections() {
+        return new ArrayList<>(sections);
+    }
+
+    public int getSectionCount() {
+        return sections.size();
     }
 }

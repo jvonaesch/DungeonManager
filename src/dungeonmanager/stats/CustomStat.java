@@ -1,5 +1,12 @@
 package dungeonmanager.stats;
 
+/**
+ * User-defined stat implementation for custom attributes.
+ * Allows creation of stats not covered by the standard set.
+ * Custom stats are registered with the global stat registry for lookup by ID.
+ * 
+ * @see dungeonmanager.stats.StandardStat for predefined stats
+ */
 public class CustomStat implements Stat {
 
     private String originIdentifier;

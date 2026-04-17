@@ -27,6 +27,8 @@ public class FeatureInstance {
         this.active = false;
         this.sections = new ArrayList<>();
         this.stat_context = stat_context;
+        
+        loadSections();
     }
 
     @Override
@@ -45,26 +47,26 @@ public class FeatureInstance {
     public String getDescription() {
         return feature.getDescription();
     }
+    
+    public void reloadSections() {
+        sections.clear();
+        loadSections();
+    }
 
-    /**
-     * Add a section to this feature instance.
-     * The section's onAdd method is called to perform any necessary setup.
-     * @param section the section to add
-     */
-    public void addSection(FeatureSection section) {
+    private void loadSections() {
+        for (FeatureSection section : feature.getSections()) {
+            addSection(section);
+        }
+    }
+
+    protected void addSection(FeatureSection section) {
         if (section != null) {
             sections.add(section);
             section.onAdd(stat_context);
         }
     }
 
-    /**
-     * Remove a section from this feature instance by index.
-     * The section's onRemove method is called to perform any necessary cleanup.
-     * @param index the index of the section to remove
-     * @return the removed section, or null if index is out of bounds
-     */
-    public FeatureSection removeSection(int index) {
+    protected FeatureSection removeSection(int index) {
         if (index >= 0 && index < sections.size()) {
             FeatureSection removed = sections.remove(index);
             removed.onRemove(stat_context);
@@ -73,18 +75,10 @@ public class FeatureInstance {
         return null;
     }
 
-    /**
-     * Get all sections in this feature instance.
-     * @return an unmodifiable list of sections
-     */
     public List<FeatureSection> getSections() {
         return new ArrayList<>(sections);
     }
 
-    /**
-     * Get the number of sections in this feature instance.
-     * @return the section count
-     */
     public int getSectionCount() {
         return sections.size();
     }

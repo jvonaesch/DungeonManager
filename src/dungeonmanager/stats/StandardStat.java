@@ -1,5 +1,13 @@
 package dungeonmanager.stats;
 
+/**
+ * Enumeration of standard stats provided by the system.
+ * Provides predefined stats with standard names, IDs, and default values.
+ * All standard stats are automatically registered with the global stat registry.
+ * 
+ * @see dungeonmanager.stats.CustomStat for user-defined stats
+ * @see dungeonmanager.DungeonManagerApp#initialize() for registration
+ */
 public enum StandardStat implements Stat {
     STR("STR", "strength", "ability"),
     CON("CON", "constitution", "ability"),

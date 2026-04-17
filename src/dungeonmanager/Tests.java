@@ -77,9 +77,9 @@ public class Tests {
     }
 
 	public static void test3() {
-		Creature warrior = new Creature("Thorgrim the Dwarf", IntegratedCreatureType.DEFAULT);
+		Creature creature = new Creature("Thorgrim the Dwarf", IntegratedCreatureType.DEFAULT);
 
-		// Create a feature with base modifiers
+		// Create a feature with base modifiers and default sections
 		Feature battleHardenedFeat = new Feature(
 				"feat:battle_hardened",
 				"Battle Hardened",
@@ -87,35 +87,24 @@ public class Tests {
 				List.of(new StatModifier().setValue(StandardStat.CON, 1))
 		);
 
-		// Add feature to creature and get the instance
-		FeatureInstance instance = warrior.feature.addFeature(battleHardenedFeat);
-
-		// Add a visible section with a single modifier that adjusts multiple stats
+		// Add sections to the feature template - all instances will inherit these
 		ScoreModifierSection combatBonusSection = new ScoreModifierSection(
 				"Combat Bonuses",
 				"Additional bonuses granted by battle experience: STR +1",
 				new StatModifier().setValue(StandardStat.STR, 1)
 		);
-		instance.addSection(combatBonusSection);
+		battleHardenedFeat.addSection(combatBonusSection);
 
-		// Add another visible section with its own modifier
 		ScoreModifierSection survivalSection = new ScoreModifierSection(
 				"Survival Skills",
 				"Improved resilience in harsh conditions: MAX_HP +5",
 				new StatModifier().setValue(StandardStat.MAX_HP, 5)
 		);
-		instance.addSection(survivalSection);
+		battleHardenedFeat.addSection(survivalSection);
 
-		// Add an invisible section with a modifier
-		ScoreModifierSection internalNotesSection = new ScoreModifierSection(
-				"Internal Notes",
-				"[DM Only] Hidden mechanics: WIS +2",
-				new StatModifier().setValue(StandardStat.WIS, 2),
-				false
-		);
-		instance.addSection(internalNotesSection);
+		FeatureInstance instance = creature.feature.addFeature(battleHardenedFeat);
 
-		System.out.println(warrior);
+		System.out.println(creature);
 		System.out.println("\nFeature Sections: " + instance.getSectionCount());
 		for (FeatureSection section : instance.getSections()) {
 			System.out.println(" - " + section.getName() + " (visible: " + section.isVisible() + ", type: " + section.getType() + ")");
