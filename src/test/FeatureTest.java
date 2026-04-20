@@ -18,51 +18,47 @@ public class FeatureTest {
     public static void test_stat_modifiers_1() {
         Creature olaf = new Creature("Olaf");
 
-        StatModifier modifier = new StatModifier()
-                .setValue("STR", 3)
-                .setValue("DEX", 1)
-                .setValue(StandardStat.INT, 2);
-        olaf.stats.addModifier(modifier);
-
         System.out.println(olaf);
 
-        Feature appealingFeat = new Feature("feat:appealing", "Appealing",
-                "Increase your Charisma score by 2");
-        appealingFeat.addSection(new StatModifierSection(
-                "bonus_charisma",
-                "Bonus Charisma",
-                "CHA +2",
-                new StatModifier().setValue("CHA", 2),
-                false
-        ));
-        FeatureInstance appealing_feat = olaf.feature.addFeature(appealingFeat);
+        Feature appealing_feat = new Feature("feat:appealing", "Appealing",
+                "Increase your Charisma score by 2")
+                .addSection(new StatModifierSection(
+                        "bonus_charisma",
+                        "Bonus Charisma",
+                        "CHA +2",
+                        new StatModifier()
+                                .setValue("CHA", 2),
+                        false
+                ));
+        FeatureInstance appealing_instance = olaf.feature.addFeature(appealing_feat);
 
-        Feature sturdyFeat = new Feature("feat:sturdy", "Sturdy",
-                "You are a battlefield heavyweight");
-        sturdyFeat.addSection(new StatModifierSection(
-                "constitution_boost",
-                "Constitution Boost",
-                "CON +2, MAX_HP +10",
-                new StatModifier().setValue("CON", 2).setValue("MAX_HP", 10),
-                false
-        ));
-        olaf.feature.addFeature(sturdyFeat);
+        Feature sturdy_feat = new Feature("feat:sturdy", "Sturdy",
+                "You are a battlefield heavyweight")
+                .addSection(new StatModifierSection(
+                        "constitution_boost",
+                        "Constitution Boost",
+                        "CON +2, MAX_HP +10",
+                        new StatModifier()
+                                .setValue("CON", 2)
+                                .setValue("MAX_HP", 10),
+                        false
+                ));
 
+        olaf.feature.addFeature(sturdy_feat);
         System.out.println(olaf);
-        olaf.feature.removeFeature(appealing_feat);
+
+        olaf.feature.removeFeature(appealing_instance);
         System.out.println(olaf);
     }
     public static void test_stat_modifiers_2() {
 		Creature creature = new Creature("Thorgrim the Dwarf", IntegratedCreatureType.DEFAULT);
 
-		// Create a feature with sections that add modifiers
 		Feature battleHardenedFeat = new Feature(
 				"feat:battle_hardened",
 				"Battle Hardened",
 				"Years of combat have strengthened your resolve"
 		);
 
-		// Add sections to the feature template - all instances will inherit these
 		StatModifierSection combatBonusSection = new StatModifierSection(
 				"combat_bonuses",
 				"Combat Bonuses",
@@ -80,12 +76,11 @@ public class FeatureTest {
 		battleHardenedFeat.addSection(survivalSection);
 
 		FeatureInstance instance = creature.feature.addFeature(battleHardenedFeat);
-
 		System.out.println(creature);
-		System.out.println("\nFeature Sections: " + instance.getSectionCount());
-		for (FeatureSection section : instance.getSections()) {
-			System.out.println(" - " + section.getName() + " (visible: " + section.isVisible() + ", type: " + section.getType() + ")");
-		}
+
+        battleHardenedFeat.removeSection(combatBonusSection);
+        instance.reload();
+        System.out.println(creature);
 	}
     public static void test_stat_modifiers_3() {
         String unknownStatID = "ARC";
@@ -161,7 +156,7 @@ public class FeatureTest {
 
         FeatureInstance instance = creature.feature.addFeature(feat);
         ((Set<String>)instance.getSelection("spellcast_selection")).add("intelligence");
-        instance.reloadSections();
+        instance.reload();
         System.out.println(selection.getConfiguration());
         System.out.println(instance.getSelection("elemental_affinity_selection"));
 
@@ -183,12 +178,10 @@ public class FeatureTest {
          System.out.println("\n=== Test Stat Modifiers 3 ===");
         test_stat_modifiers_3();
     }
-
     public static void test_sections() {
         System.out.println("=== Test Selection Section ===");
         test_sections_1();
     }
-
     public static void test_all() {
         test_modifiers();
         test_sections();

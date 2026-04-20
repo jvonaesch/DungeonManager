@@ -47,6 +47,10 @@ public class Feature {
         return this;
     }
 
+    public void removeSection(FeatureSection section) {
+        sections.remove(section);
+    }
+
     public List<FeatureSection> getSections() {
         return new ArrayList<>(sections);
     }

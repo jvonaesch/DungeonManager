@@ -25,6 +25,7 @@ public class FeatureInstance {
     private final List<FeatureSection> sections;
     private final ModifiableStatSet stat_context;
     private final Map<String, Object> config;
+    private final Set<StatModifier> modifiers = new HashSet<>();
     
     protected FeatureInstance(String ID, Feature feature, ModifiableStatSet stat_context) {
         this.feature = feature;
@@ -33,7 +34,7 @@ public class FeatureInstance {
         this.sections = new ArrayList<>();
         this.stat_context = stat_context;
         this.config = new HashMap<>();
-        loadSections();
+        this.reload();
     }
 
     @Override
@@ -55,32 +56,22 @@ public class FeatureInstance {
      * @return collection of all stat modifiers from this feature's sections
      */
     public Collection<StatModifier> getStatModifiers() {
-        Set<StatModifier> modifiers = new HashSet<>();
-        collectModifiers(sections, modifiers);
-        return modifiers;
+        return new HashSet<>(modifiers);
     }
 
-    /**
-     * Recursively collects stat modifiers from a list of sections.
-     * @param sectionsToCheck sections to check for modifiers
-     * @param collectedModifiers set to add found modifiers to
-     */
-    private void collectModifiers(List<FeatureSection> sectionsToCheck, Set<StatModifier> collectedModifiers) {
-        for (FeatureSection section : sectionsToCheck) {
-            if (section instanceof StatModifierSection) {
-                collectedModifiers.add(((StatModifierSection) section).getModifier());
-            }
+    public void reload() {
+        for (StatModifier modifier: modifiers) {
+            stat_context.removeModifier(modifier);
         }
-    }
-
-    public void reloadSections() {
         sections.clear();
-        loadSections();
-    }
-
-    private void loadSections() {
         for (FeatureSection section : feature.getSections()) {
             section.loadToInstance(this);
+        }
+        modifiers.clear();
+        for (FeatureSection section : sections) {
+            if (section instanceof StatModifierSection) {
+                modifiers.add(((StatModifierSection) section).getModifier());
+            }
         }
     }
 

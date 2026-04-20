@@ -59,4 +59,10 @@ public class FeatureSet {
     public Collection<FeatureInstance> getAllFeatures() {
         return features.values();
     }
+
+    public void reload() {
+        for (FeatureInstance instance: features.values()) {
+            instance.reload();
+        }
+    }
 }
