@@ -23,7 +23,7 @@ public class StatSetTest {
         monster.getStatSet().setBaseValue(cosmicAwareness, 20);
 
         StatModifier modifier = new StatModifier();
-        monster.stats.addModifier(modifier);
+        monster.getStatSet().addModifier(modifier);
 
         modifier.setValue(StandardStat.STR, 8)
                 .setValue(StandardStat.CHA, 1)
@@ -31,7 +31,7 @@ public class StatSetTest {
 
         System.out.println(monster);
 
-        monster.stats.setBaseValue(StandardStat.INT, 5);
+        monster.getStatSet().setBaseValue(StandardStat.INT, 5);
         System.out.println(monster);
 
         monster.getStatSet().resetBaseValue(StandardStat.INT);

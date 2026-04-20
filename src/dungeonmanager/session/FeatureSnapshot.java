@@ -10,13 +10,22 @@ import java.util.Map;
 
 public class FeatureSnapshot {
     private final String instanceId;
+    private final String featureId;
     private final String name;
     private final String description;
     private final int sectionCount;
     private final Map<String, Integer> statModifiers;
 
-    FeatureSnapshot(String instanceId, String name, String description, int sectionCount, Map<String, Integer> statModifiers) {
+    FeatureSnapshot(
+            String instanceId,
+            String featureId,
+            String name,
+            String description,
+            int sectionCount,
+            Map<String, Integer> statModifiers
+    ) {
         this.instanceId = instanceId;
+        this.featureId = featureId;
         this.name = name;
         this.description = description;
         this.sectionCount = sectionCount;
@@ -33,6 +42,7 @@ public class FeatureSnapshot {
         }
         return new FeatureSnapshot(
                 instance.ID,
+                instance.getFeatureId(),
                 instance.getName(),
                 instance.getDescription(),
                 instance.getSectionCount(),
@@ -42,6 +52,10 @@ public class FeatureSnapshot {
 
     public String getInstanceId() {
         return instanceId;
+    }
+
+    public String getFeatureId() {
+        return featureId;
     }
 
     public String getName() {

@@ -5,6 +5,8 @@ import dungeonmanager.creature.CreatureType;
 import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.FeatureInstance;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;
@@ -14,19 +16,23 @@ import java.util.Objects;
 
 /**
  * Session owner for the current party.
- *
  * The session keeps live creature objects private and exposes immutable snapshots
  * for UI and future persistence layers.
  */
 public class Session {
 
+    private static final Logger LOG = LoggerFactory.getLogger(Session.class);
+
     private final Map<String, CreatureEntry> creatures;
+    private final Map<String, FeatureEntry> features;
     private String selectedCreatureId;
     private long nextCreatureNumber;
 
     public Session() {
         this.creatures = new LinkedHashMap<>();
+        this.features = new LinkedHashMap<>();
         this.nextCreatureNumber = 1L;
+        LOG.debug("Session initialized");
     }
 
     public synchronized CreatureSnapshot createCreature(String name) {
@@ -48,15 +54,19 @@ public class Session {
             applyBaseStats(creature, baseStats);
         }
 
+        LOG.info("Created creature {} named '{}' as type {}", creatureId, creature.getName(), creature.getType().getID());
+
         return snapshotCreature(creatureId);
     }
 
     public synchronized boolean selectCreature(String creatureId) {
         String normalizedId = SessionValidation.normalizeId(creatureId);
         if (!creatures.containsKey(normalizedId)) {
+            LOG.debug("Selection ignored for unknown creature {}", normalizedId);
             return false;
         }
         selectedCreatureId = normalizedId;
+        LOG.debug("Selected creature {}", normalizedId);
         return true;
     }
 
@@ -99,11 +109,13 @@ public class Session {
         String normalizedId = SessionValidation.normalizeId(creatureId);
         CreatureEntry removed = creatures.remove(normalizedId);
         if (removed == null) {
+            LOG.debug("Delete ignored for unknown creature {}", normalizedId);
             return false;
         }
         if (Objects.equals(selectedCreatureId, normalizedId)) {
             selectedCreatureId = creatures.isEmpty() ? null : creatures.keySet().iterator().next();
         }
+        LOG.info("Deleted creature {}. New selection: {}", normalizedId, selectedCreatureId);
         return true;
     }
 
@@ -126,18 +138,37 @@ public class Session {
     }
 
     public synchronized CreatureSnapshot addFeature(String creatureId, Feature feature) {
+        registerFeature(feature);
         FeatureInstance added = addFeatureInstance(creatureId, feature == null ? null : feature.ID, feature);
+        if (added != null) {
+            LOG.debug("Added feature {} to creature {}", added.ID, SessionValidation.normalizeId(creatureId));
+        }
         return added == null ? null : snapshotCreature(SessionValidation.normalizeId(creatureId));
     }
 
-    public synchronized CreatureSnapshot addFeature(String creatureId, String featureInstanceId, Feature feature) {
-        FeatureInstance added = addFeatureInstance(creatureId, featureInstanceId, feature);
+    /**
+     * Applies a previously registered feature to a creature by feature ID.
+     */
+    public synchronized CreatureSnapshot addFeature(String creatureId, String featureId) {
+        FeatureEntry featureEntry = requireFeature(featureId);
+        FeatureInstance added = addFeatureInstance(creatureId, featureEntry.id, featureEntry.feature);
         return added == null ? null : snapshotCreature(SessionValidation.normalizeId(creatureId));
     }
+
+    /*public synchronized CreatureSnapshot addFeature(String creatureId, String featureInstanceId, Feature feature) {
+        FeatureInstance added = addFeatureInstance(creatureId, featureInstanceId, feature);
+        return added == null ? null : snapshotCreature(SessionValidation.normalizeId(creatureId));
+    }*/
 
     public synchronized CreatureSnapshot removeFeature(String creatureId, String featureInstanceId) {
         CreatureEntry entry = requireCreature(creatureId);
-        FeatureInstance removed = entry.creature.feature.removeFeature(SessionValidation.normalizeId(featureInstanceId));
+        FeatureInstance removed = entry.creature.getFeatureSet().removeFeature(
+                SessionValidation.normalizeId(featureInstanceId));
+        if (removed == null) {
+            LOG.debug("Feature {} not found on creature {}", featureInstanceId, entry.id);
+        } else {
+            LOG.debug("Removed feature {} from creature {}", removed.ID, entry.id);
+        }
         return removed == null ? null : snapshotCreature(entry.id);
     }
 
@@ -146,14 +177,29 @@ public class Session {
         for (CreatureEntry entry : creatures.values()) {
             creatureSnapshots.add(toCreatureSnapshot(entry));
         }
-        return new SessionSnapshot(selectedCreatureId, creatureSnapshots, nextCreatureNumber);
+        return new SessionSnapshot(
+                SessionSnapshot.CURRENT_SCHEMA_VERSION,
+                selectedCreatureId,
+                creatureSnapshots,
+                nextCreatureNumber
+        );
+    }
+
+    public synchronized void registerFeature(Feature feature) {
+        Feature requiredFeature = SessionValidation.requireFeature(feature);
+        String featureId = SessionValidation.normalizeId(requiredFeature.ID);
+        features.put(featureId, new FeatureEntry(featureId, requiredFeature));
+    }
+
+    public synchronized boolean hasFeature(String featureId) {
+        return features.containsKey(SessionValidation.normalizeId(featureId));
     }
 
     private FeatureInstance addFeatureInstance(String creatureId, String featureInstanceId, Feature feature) {
         CreatureEntry entry = requireCreature(creatureId);
         Feature requiredFeature = SessionValidation.requireFeature(feature);
         String normalizedFeatureId = SessionValidation.normalizeId(featureInstanceId == null ? requiredFeature.ID : featureInstanceId);
-        return entry.creature.feature.addFeature(normalizedFeatureId, requiredFeature);
+        return entry.creature.getFeatureSet().addFeature(normalizedFeatureId, requiredFeature);
     }
 
     private CreatureSnapshot snapshotCreature(String creatureId) {
@@ -179,19 +225,20 @@ public class Session {
         );
     }
 
+    private FeatureEntry requireFeature(String featureId) {
+        return SessionValidation.requireById(
+                features,
+                featureId,
+                id -> new IllegalArgumentException("Feature not found: " + id)
+        );
+    }
+
     private String nextCreatureId() {
         return "creature-" + nextCreatureNumber++;
     }
 
-    private static final class CreatureEntry {
-        private final String id;
-        private final Creature creature;
+    private record CreatureEntry(String id, Creature creature) {}
 
-        private CreatureEntry(String id, Creature creature) {
-            this.id = id;
-            this.creature = creature;
-        }
-    }
-
+    private record FeatureEntry(String id, Feature feature) {}
 }
 

@@ -1,0 +1,6 @@
+2026-04-20 19:12:55.105 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-20 19:12:55.121 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-20 19:12:55.138 [main] DEBUG dungeonmanager.session.Session - Added feature feat:charisma_boost to creature creature-1
+2026-04-20 19:12:55.139 [main] DEBUG dungeonmanager.session.Session - Removed feature feat:charisma_boost from creature creature-1
+2026-04-20 19:12:55.140 [main] DEBUG dungeonmanager.session.Session - Selected creature creature-1
+2026-04-20 19:12:55.151 [main] INFO  dungeonmanager.session.Session - Deleted creature creature-1. New selection: null

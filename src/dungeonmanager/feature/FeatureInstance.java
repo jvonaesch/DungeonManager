@@ -50,6 +50,10 @@ public class FeatureInstance {
         return feature.getDescription();
     }
 
+    public String getFeatureId() {
+        return feature.ID;
+    }
+
     /**
      * Gets all stat modifiers applied by this feature instance's sections.
      * Recursively collects modifiers from all sections and their subsections.

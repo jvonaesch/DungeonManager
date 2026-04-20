@@ -6,14 +6,22 @@ import java.util.List;
 
 
 public class SessionSnapshot {
+    public static final int CURRENT_SCHEMA_VERSION = 1;
+
+    private final int schemaVersion;
     private final String selectedCreatureId;
     private final List<CreatureSnapshot> creatures;
     private final long nextCreatureNumber;
 
-    SessionSnapshot(String selectedCreatureId, List<CreatureSnapshot> creatures, long nextCreatureNumber) {
+    SessionSnapshot(int schemaVersion, String selectedCreatureId, List<CreatureSnapshot> creatures, long nextCreatureNumber) {
+        this.schemaVersion = schemaVersion;
         this.selectedCreatureId = selectedCreatureId;
         this.creatures = Collections.unmodifiableList(new ArrayList<>(creatures));
         this.nextCreatureNumber = nextCreatureNumber;
+    }
+
+    public int getSchemaVersion() {
+        return schemaVersion;
     }
 
     public String getSelectedCreatureId() {

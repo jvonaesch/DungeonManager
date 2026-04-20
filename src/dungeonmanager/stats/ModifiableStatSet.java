@@ -46,6 +46,13 @@ public class ModifiableStatSet implements WriteableStatSet {
         return stat.getDefaultValue();
     }
 
+    /**
+     * @return copy of assigned base values, excluding inherited defaults.
+     */
+    public Map<Stat, Integer> getBaseValues() {
+        return new HashMap<>(base_values);
+    }
+
     @Override
     public int getValue(Stat stat) {
         if (values.containsKey(stat)) return values.get(stat);

@@ -43,7 +43,8 @@ public class CommandParser {
 
     public static final CommandRecord readCommand (DungeonManagerApp context, String command_in) {
         List<String> tokens = parseCommand(command_in);
-        String command = tokens.removeFirst();
+        String command = tokens.remove(0);
+        // String command = tokens.removeFirst();
         String[] args = tokens.toArray(new String[0]);
 
         return new CommandRecord(context, command, args);

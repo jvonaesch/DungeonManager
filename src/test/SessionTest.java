@@ -6,6 +6,7 @@ import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.registry.Registries;
 import dungeonmanager.session.Session;
 import dungeonmanager.session.CreatureSnapshot;
+import dungeonmanager.session.FeatureSnapshot;
 import dungeonmanager.session.SessionSnapshot;
 import dungeonmanager.stats.StandardStat;
 import dungeonmanager.stats.StatModifier;
@@ -39,6 +40,9 @@ public class SessionTest {
         if (created.getStat("CHA") != 8) {
             throw new IllegalStateException("Expected CHA 8 but got " + created.getStat("CHA"));
         }
+        if (created.getBaseStatOverrides().get("STR") != 15) {
+            throw new IllegalStateException("Expected STR base override 15 in snapshot");
+        }
 
         CreatureSnapshot renamed = session.renameCreature(created.getId(), "Hero Prime");
         if (!"Hero Prime".equals(renamed.getName())) {
@@ -64,7 +68,12 @@ public class SessionTest {
                         false
                 ));
 
-        CreatureSnapshot afterFeat = session.addFeature(created.getId(), feat);
+        session.registerFeature(feat);
+        if (!session.hasFeature(feat.ID)) {
+            throw new IllegalStateException("Expected feature to be registered in session catalog");
+        }
+
+        CreatureSnapshot afterFeat = session.addFeature(created.getId(), feat.ID);
         if (afterFeat == null) {
             throw new IllegalStateException("Expected feat to be added");
         }
@@ -73,6 +82,13 @@ public class SessionTest {
         }
         if (afterFeat.getFeatures().size() != 1) {
             throw new IllegalStateException("Expected one feat in snapshot but got " + afterFeat.getFeatures().size());
+        }
+        FeatureSnapshot featSnapshot = afterFeat.getFeature(feat.ID);
+        if (featSnapshot == null) {
+            throw new IllegalStateException("Expected feature snapshot lookup by instance ID");
+        }
+        if (!feat.ID.equals(featSnapshot.getFeatureId())) {
+            throw new IllegalStateException("Expected source feature ID to match registered feature ID");
         }
 
         CreatureSnapshot afterRemoval = session.removeFeature(created.getId(), feat.ID);
@@ -91,6 +107,9 @@ public class SessionTest {
         }
 
         SessionSnapshot snapshot = session.snapshot();
+        if (snapshot.getSchemaVersion() != SessionSnapshot.CURRENT_SCHEMA_VERSION) {
+            throw new IllegalStateException("Unexpected schema version: " + snapshot.getSchemaVersion());
+        }
         if (snapshot.getCreatureCount() != 1) {
             throw new IllegalStateException("Expected one creature in the session snapshot");
         }
@@ -116,6 +135,16 @@ public class SessionTest {
         }
         if (!statsImmutable) {
             throw new IllegalStateException("Expected stat snapshot map to be immutable");
+        }
+
+        boolean baseOverridesImmutable = false;
+        try {
+            created.getBaseStatOverrides().put("STR", 99);
+        } catch (UnsupportedOperationException expected) {
+            baseOverridesImmutable = true;
+        }
+        if (!baseOverridesImmutable) {
+            throw new IllegalStateException("Expected base stat override snapshot map to be immutable");
         }
 
         if (!session.deleteCreature(created.getId())) {

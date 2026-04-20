@@ -17,6 +17,7 @@ public class FeatureTest {
 
     public static void test_stat_modifiers_1() {
         Creature olaf = new Creature("Olaf");
+        FeatureSet featureSet = olaf.getFeatureSet();
 
         System.out.println(olaf);
 
@@ -30,7 +31,7 @@ public class FeatureTest {
                                 .setValue("CHA", 2),
                         false
                 ));
-        FeatureInstance appealing_instance = olaf.feature.addFeature(appealing_feat);
+        FeatureInstance appealing_instance = featureSet.addFeature(appealing_feat);
 
         Feature sturdy_feat = new Feature("feat:sturdy", "Sturdy",
                 "You are a battlefield heavyweight")
@@ -44,10 +45,10 @@ public class FeatureTest {
                         false
                 ));
 
-        olaf.feature.addFeature(sturdy_feat);
+        featureSet.addFeature(sturdy_feat);
         System.out.println(olaf);
 
-        olaf.feature.removeFeature(appealing_instance);
+        featureSet.removeFeature(appealing_instance);
         System.out.println(olaf);
     }
     public static void test_stat_modifiers_2() {
@@ -75,7 +76,7 @@ public class FeatureTest {
 		);
 		battleHardenedFeat.addSection(survivalSection);
 
-		FeatureInstance instance = creature.feature.addFeature(battleHardenedFeat);
+		FeatureInstance instance = creature.getFeatureSet().addFeature(battleHardenedFeat);
 		System.out.println(creature);
 
         battleHardenedFeat.removeSection(combatBonusSection);
@@ -98,7 +99,7 @@ public class FeatureTest {
                 new StatModifier().setValue(unknownStatID, 1)
         ));
 
-        creature.feature.addFeature(improviserFeat);
+        creature.getFeatureSet().addFeature(improviserFeat);
 
         Stat registeredStat = Registries.get().stats.get(unknownStatID);
         if (registeredStat == null) {
@@ -154,7 +155,7 @@ public class FeatureTest {
                 );
         feat.addSection(selection);
 
-        FeatureInstance instance = creature.feature.addFeature(feat);
+        FeatureInstance instance = creature.getFeatureSet().addFeature(feat);
         ((Set<String>)instance.getSelection("spellcast_selection")).add("intelligence");
         instance.reload();
         System.out.println(selection.getConfiguration());

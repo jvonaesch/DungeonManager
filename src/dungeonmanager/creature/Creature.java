@@ -8,8 +8,8 @@ public class Creature implements HasStatSet {
 
     private String name;
     private CreatureType type;
-    public final DefaultedStatSet stats;
-    public final FeatureSet feature;
+    private final DefaultedStatSet stats;
+    private final FeatureSet feature;
 
     public Creature(String name, CreatureType type) {
         this.name = name;
@@ -50,5 +50,9 @@ public class Creature implements HasStatSet {
     @Override
     public ModifiableStatSet getStatSet() {
         return stats;
+    }
+
+    public FeatureSet getFeatureSet() {
+        return feature;
     }
 }
