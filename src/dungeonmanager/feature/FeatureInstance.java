@@ -100,20 +100,10 @@ public class FeatureInstance {
         return sections.size();
     }
 
-    /**
-     * Stores a selection choice for a Section requiring choices.
-     * @param selectionID the ID of the Section this selection corresponds to
-     * @param choices set of choices (specified by Section type)
-     */
     public void setSelection(String selectionID, Object choices) {
         config.put(selectionID, choices);
     }
 
-    /**
-     * Gets the stored choices for a given Section.
-     * @param selectionID the ID of the SelectionSection
-     * @return the stored choices, or null if not set
-     */
     public Object getSelection(String selectionID) {
         return config.get(selectionID);
     }

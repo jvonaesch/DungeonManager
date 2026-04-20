@@ -7,6 +7,7 @@ import dungeonmanager.command.commands.RollCommand;
 import dungeonmanager.command.commands.StopCommand;
 import dungeonmanager.registry.Registries;
 import test.FeatureTest;
+import test.SessionTest;
 import test.StatSetTest;
 
 import java.io.File;

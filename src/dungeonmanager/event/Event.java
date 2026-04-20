@@ -2,9 +2,15 @@ package dungeonmanager.event;
 
 public class Event {
 
-    public final BaseEventType type;
+    public final EventType type;
+    public final Object data;
 
-    public Event(BaseEventType type) {
+    public Event(EventType type, Object data) {
         this.type = type;
+        this.data = data;
+    }
+
+    public Event(EventType type) {
+        this(type, null);
     }
 }
