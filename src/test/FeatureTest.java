@@ -11,6 +11,8 @@ import dungeonmanager.stats.StatModifier;
 
 import java.util.Set;
 
+
+@SuppressWarnings("unused")
 public class FeatureTest {
 
     public static void test_stat_modifiers_1() {
@@ -44,7 +46,7 @@ public class FeatureTest {
                 new StatModifier().setValue("CON", 2).setValue("MAX_HP", 10),
                 false
         ));
-        FeatureInstance sturdy_feat = olaf.feature.addFeature(sturdyFeat);
+        olaf.feature.addFeature(sturdyFeat);
 
         System.out.println(olaf);
         olaf.feature.removeFeature(appealing_feat);
@@ -85,8 +87,44 @@ public class FeatureTest {
 			System.out.println(" - " + section.getName() + " (visible: " + section.isVisible() + ", type: " + section.getType() + ")");
 		}
 	}
+    public static void test_stat_modifiers_3() {
+        String unknownStatID = "ARC";
+        Creature creature = new Creature("Mira the Sage", IntegratedCreatureType.DEFAULT);
 
-    public static void test_selection_section() {
+        Feature improviserFeat = new Feature(
+                "feat:improvised_study",
+                "Improvised Study",
+                "A practical breakthrough grants an unusual bonus stat."
+        );
+        improviserFeat.addSection(new StatModifierSection(
+                "arcane_reserve_bonus",
+                "Arcane Reserve Bonus",
+                "ARC +1",
+                new StatModifier().setValue(unknownStatID, 1)
+        ));
+
+        creature.feature.addFeature(improviserFeat);
+
+        Stat registeredStat = Registries.get().stats.get(unknownStatID);
+        if (registeredStat == null) {
+            throw new IllegalStateException("Expected stat to be registered: " + unknownStatID);
+        }
+        if (!(registeredStat instanceof CustomStat)) {
+            throw new IllegalStateException("Expected " + unknownStatID + " to be a CustomStat");
+        }
+        if (!"other".equals(registeredStat.getType())) {
+            throw new IllegalStateException("Expected type 'other' for " + unknownStatID + " but got " + registeredStat.getType());
+        }
+        if (creature.getStatSet().getValue(unknownStatID) != 1) {
+            throw new IllegalStateException("Expected " + unknownStatID + " value 1 but got " + creature.getStatSet().getValue(unknownStatID));
+        }
+
+        System.out.println(creature);
+        System.out.println("Registered custom stat: " + registeredStat.getID() + " (type=" + registeredStat.getType() + ")");
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void test_sections_1() {
         Creature creature = new Creature("Wilbur the Wizard", IntegratedCreatureType.DEFAULT);
 
         Feature feat = new Feature(
@@ -137,42 +175,6 @@ public class FeatureTest {
         }
     }
 
-    public static void test_stat_modifiers_3() {
-        String unknownStatID = "ARC";
-        Creature creature = new Creature("Mira the Sage", IntegratedCreatureType.DEFAULT);
-
-        Feature improviserFeat = new Feature(
-                "feat:improvised_study",
-                "Improvised Study",
-                "A practical breakthrough grants an unusual bonus stat."
-        );
-        improviserFeat.addSection(new StatModifierSection(
-                "arcane_reserve_bonus",
-                "Arcane Reserve Bonus",
-                "ARC +1",
-                new StatModifier().setValue(unknownStatID, 1)
-        ));
-
-        creature.feature.addFeature(improviserFeat);
-
-        Stat registeredStat = Registries.get().stats.get(unknownStatID);
-        if (registeredStat == null) {
-            throw new IllegalStateException("Expected stat to be registered: " + unknownStatID);
-        }
-        if (!(registeredStat instanceof CustomStat)) {
-            throw new IllegalStateException("Expected " + unknownStatID + " to be a CustomStat");
-        }
-        if (!"other".equals(registeredStat.getType())) {
-            throw new IllegalStateException("Expected type 'other' for " + unknownStatID + " but got " + registeredStat.getType());
-        }
-        if (creature.getStatSet().getValue(unknownStatID) != 1) {
-            throw new IllegalStateException("Expected " + unknownStatID + " value 1 but got " + creature.getStatSet().getValue(unknownStatID));
-        }
-
-        System.out.println(creature);
-        System.out.println("Registered custom stat: " + registeredStat.getID() + " (type=" + registeredStat.getType() + ")");
-    }
-
     public static void test_modifiers() {
         System.out.println("=== Test Stat Modifiers 1 ===");
         test_stat_modifiers_1();
@@ -182,9 +184,13 @@ public class FeatureTest {
         test_stat_modifiers_3();
     }
 
+    public static void test_sections() {
+        System.out.println("=== Test Selection Section ===");
+        test_sections_1();
+    }
+
     public static void test_all() {
         test_modifiers();
-        System.out.println("\n=== Test Selection Section ===");
-        test_selection_section();
+        test_sections();
     }
 }

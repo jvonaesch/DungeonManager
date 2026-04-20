@@ -24,7 +24,7 @@ public class FeatureInstance {
     protected boolean active;
     private final List<FeatureSection> sections;
     private final ModifiableStatSet stat_context;
-    private final Map<String, Object> selections;
+    private final Map<String, Object> config;
     
     protected FeatureInstance(String ID, Feature feature, ModifiableStatSet stat_context) {
         this.feature = feature;
@@ -32,7 +32,7 @@ public class FeatureInstance {
         this.active = false;
         this.sections = new ArrayList<>();
         this.stat_context = stat_context;
-        this.selections = new HashMap<>();
+        this.config = new HashMap<>();
         loadSections();
     }
 
@@ -91,6 +91,7 @@ public class FeatureInstance {
         }
     }
 
+    @Deprecated
     protected FeatureSection removeSection(int index) {
         if (index >= 0 && index < sections.size()) {
             FeatureSection removed = sections.remove(index);
@@ -114,7 +115,7 @@ public class FeatureInstance {
      * @param choices set of choices (specified by Section type)
      */
     public void setSelection(String selectionID, Object choices) {
-        selections.put(selectionID, choices);
+        config.put(selectionID, choices);
     }
 
     /**
@@ -123,15 +124,7 @@ public class FeatureInstance {
      * @return the stored choices, or null if not set
      */
     public Object getSelection(String selectionID) {
-        return selections.get(selectionID);
-    }
-
-    /**
-     * Gets all stored selections as a map.
-     * @return defensive copy of selections map
-     */
-    public Map<String, Object> getSelections() {
-        return new HashMap<>(selections);
+        return config.get(selectionID);
     }
 
     @Override

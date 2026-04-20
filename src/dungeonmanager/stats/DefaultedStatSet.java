@@ -2,7 +2,6 @@ package dungeonmanager.stats;
 
 import java.util.HashSet;
 import java.util.Set;
-import java.util.TreeSet;
 
 /**
  * StatSet implementation that inherits values from a parent stat set.
@@ -68,7 +67,7 @@ public class DefaultedStatSet extends ModifiableStatSet {
         else if (base_values.containsKey(stat)) return base_values.get(stat);
         return (parentSet.getValue(stat));
     }
-    
+
     @Override
     public int getValue(Stat stat) {
         if (removed.contains(stat)) return parentSet.getValue(stat);
@@ -88,5 +87,17 @@ public class DefaultedStatSet extends ModifiableStatSet {
     public void reloadValues() {
         if (parent != null && parent.getStatSet() != parentSet) parentSet = parent.getStatSet();
         super.reloadValues();
+    }
+
+    public void changeParent(HasStatSet newParent) {
+        this.parent = newParent;
+        this.parentSet = newParent.getStatSet();
+        this.reloadValues();
+    }
+
+    public void changeParent(StatSet newParentSet) {
+        this.parent = null;
+        this.parentSet = newParentSet;
+        this.reloadValues();
     }
 }

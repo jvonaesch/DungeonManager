@@ -7,24 +7,24 @@ public enum IntegratedCreatureType implements CreatureType {
     OWLBEAR("owlbear", "Owlbear", 20, 12, 17, 3, 12, 7),
     DWARF("dwarf", "Dwarf", 10, 10, 14, 10, 10, 10);
 
-    private String id;
-    private String name;
-    private ModifiableStatSet abilitySet;
+    private final String id;
+    private final String name;
+    private final WriteableStatSet statSet;
 
-    private IntegratedCreatureType(String id, String name) {
+    IntegratedCreatureType(String id, String name) {
         this.id = "base:dungeonmanager.creature:" + id;
         this.name = name;
-        this.abilitySet = new DefaultedStatSet(DefaultStatSet.get());
+        this.statSet = new DefaultedStatSet(DefaultStatSet.get());
     }
 
-    private IntegratedCreatureType(String id, String name, int STR, int DEX, int CON, int INT, int WIS, int CHA) {
+    IntegratedCreatureType(String id, String name, int STR, int DEX, int CON, int INT, int WIS, int CHA) {
         this(id, name);
-        this.abilitySet.setBaseValue(StandardStat.STR, STR);
-        this.abilitySet.setBaseValue(StandardStat.DEX, DEX);
-        this.abilitySet.setBaseValue(StandardStat.CON, CON);
-        this.abilitySet.setBaseValue(StandardStat.INT, INT);
-        this.abilitySet.setBaseValue(StandardStat.WIS, WIS);
-        this.abilitySet.setBaseValue(StandardStat.CHA, CHA);
+        this.statSet.setBaseValue(StandardStat.STR, STR);
+        this.statSet.setBaseValue(StandardStat.DEX, DEX);
+        this.statSet.setBaseValue(StandardStat.CON, CON);
+        this.statSet.setBaseValue(StandardStat.INT, INT);
+        this.statSet.setBaseValue(StandardStat.WIS, WIS);
+        this.statSet.setBaseValue(StandardStat.CHA, CHA);
     }
 
     @Override
@@ -39,6 +39,6 @@ public enum IntegratedCreatureType implements CreatureType {
 
     @Override
     public StatSet getStatSet() {
-        return abilitySet;
+        return statSet;
     }
 }
