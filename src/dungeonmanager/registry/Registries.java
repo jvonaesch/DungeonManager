@@ -16,7 +16,7 @@ public class Registries {
     public final Registry<Feature> feature;
 
     private Registries() {
-        this.stats = new TreeRegistry<>();
+        this.stats = new HashRegistry<>();
         this.command = new LazyRegistry<>();
         this.entityType = new LazyRegistry<>();
         this.feature = new LazyRegistry<>();

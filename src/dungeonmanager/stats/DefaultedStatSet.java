@@ -1,5 +1,6 @@
 package dungeonmanager.stats;
 
+import java.util.HashSet;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -19,12 +20,13 @@ public class DefaultedStatSet extends ModifiableStatSet {
     }
 
     public DefaultedStatSet(StatSet parentSet) {
+        super();
         this.parentSet = parentSet;
-        this.removed = new TreeSet<> (Stats.getDefaultComparator());
+        this.removed = new HashSet<>();
     }
 
     /**
-     * Sets the base value for a stat, marking it as not removed.
+     * Sets the base value for a stat, <b>marking it as not removed</b>.
      * @param stat the stat to modify
      * @param value the new base value, or null to remove
      */
@@ -44,8 +46,6 @@ public class DefaultedStatSet extends ModifiableStatSet {
     @Override
     public void removeBaseValue(Stat stat) {
         super.removeBaseValue(stat);
-        base_values.remove(stat);
-        modifier_values.remove(stat);
         values.remove(stat);
         removed.add(stat);
         this.reloadValues();
@@ -68,12 +68,7 @@ public class DefaultedStatSet extends ModifiableStatSet {
         else if (base_values.containsKey(stat)) return base_values.get(stat);
         return (parentSet.getValue(stat));
     }
-
-    /**
-     * Gets the final value of a stat, respecting removal status and inheritance.
-     * @param stat the stat to query
-     * @return final value, or parent value if not locally defined and not removed
-     */
+    
     @Override
     public int getValue(Stat stat) {
         if (removed.contains(stat)) return parentSet.getValue(stat);
@@ -81,32 +76,14 @@ public class DefaultedStatSet extends ModifiableStatSet {
         else return (parentSet.getValue(stat) + this.getModifierTotal(stat));
     }
 
-    /**
-     * Gets the default value from the parent stat set.
-     * @param stat the stat to query
-     * @return parent's value for this stat
-     */
-    public int getDefaultValue(Stat stat) {
-        return parentSet.getValue(stat);
-    }
-
-    /**
-     * Gets all specified stats, including parent stats but excluding removed ones.
-     * @return combined set of local and inherited stats
-     */
     @Override
     public Set<Stat> getSpecifiedStats() {
-        Set<Stat> a = new TreeSet<>(Stats.getDefaultComparator());
-        a.addAll(parentSet.getSpecifiedStats());
+        Set<Stat> a = new HashSet<>(parentSet.getSpecifiedStats());
         a.addAll(super.getSpecifiedStats());
         a.removeAll(removed);
         return a;
     }
 
-    /**
-     * Recalculates values and updates parent reference if needed.
-     * @see dungeonmanager.stats.ModifiableStatSet#reloadValues() for base recalculation
-     */
     @Override
     public void reloadValues() {
         if (parent != null && parent.getStatSet() != parentSet) parentSet = parent.getStatSet();

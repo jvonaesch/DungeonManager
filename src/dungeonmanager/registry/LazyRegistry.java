@@ -29,7 +29,7 @@ public class LazyRegistry<T> implements Registry<T> {
     @Override
     public T get(String ID) {
         LazyRegistryObject item = registerMap.get(ID);
-        if (item == null) throw new IllegalArgumentException("item \"%s\" not found".formatted(ID));
+        if (item == null) return null;
         return item.get();
     }
 

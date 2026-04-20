@@ -1,14 +1,14 @@
 package dungeonmanager.registry;
 
-import java.util.TreeMap;
+import java.util.HashMap;
 import java.util.function.Supplier;
 
-public class TreeRegistry<T> implements Registry<T> {
+public class HashRegistry<T> implements Registry<T> {
 
-    private TreeMap<String, T> map;
+    private HashMap<String, T> map;
 
-    public TreeRegistry() {
-        this.map = new TreeMap<>();
+    public HashRegistry() {
+        this.map = new HashMap<>();
     }
 
     @Override
