@@ -50,7 +50,11 @@ public class StatModifier {
      */
     public int getValue (String ability_id) {
         Stat ability = Registries.get().stats.get(ability_id);
-        return values.get(ability);
+        if (ability == null) {
+            return 0;
+        }
+        Integer value = values.get(ability);
+        return value == null ? 0 : value;
     }
 
     /**
@@ -62,6 +66,12 @@ public class StatModifier {
      * @return this StatModifier for method chaining
      */
     public StatModifier setValue (Stat ability, int value) {
+        if (ability == null) {
+            throw new IllegalArgumentException("Stat cannot be null");
+        }
+        if (Registries.get().stats.get(ability.getID()) == null) {
+            Registries.get().stats.register(ability.getID(), ability);
+        }
         values.put(ability, value);
         return this;
     }
@@ -74,8 +84,14 @@ public class StatModifier {
      * @return this StatModifier for method chaining
      */
     public StatModifier setValue (String ability_id, int value) {
+        if (ability_id == null || ability_id.isBlank()) {
+            throw new IllegalArgumentException("Stat ID cannot be null or blank");
+        }
         Stat ability = Registries.get().stats.get(ability_id);
-        if (ability == null) throw new IllegalArgumentException("No stat found with ID: " + ability_id);
+        if (ability == null) {
+            ability = new CustomStat(ability_id, ability_id, "other", 0);
+            Registries.get().stats.register(ability_id, ability);
+        }
         return setValue(ability, value);
     }
 

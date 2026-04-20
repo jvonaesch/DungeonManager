@@ -46,7 +46,7 @@ public class DefaultedStatSet extends ModifiableStatSet {
         super.removeBaseValue(stat);
         base_values.remove(stat);
         modifier_values.remove(stat);
-        scores.remove(stat);
+        values.remove(stat);
         removed.add(stat);
         this.reloadValues();
     }
@@ -77,7 +77,7 @@ public class DefaultedStatSet extends ModifiableStatSet {
     @Override
     public int getValue(Stat stat) {
         if (removed.contains(stat)) return parentSet.getValue(stat);
-        if (base_values.containsKey(stat)) return scores.get(stat);
+        if (base_values.containsKey(stat)) return values.get(stat);
         else return (parentSet.getValue(stat) + this.getModifierTotal(stat));
     }
 

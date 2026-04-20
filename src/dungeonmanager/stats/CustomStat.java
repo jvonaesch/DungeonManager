@@ -1,5 +1,7 @@
 package dungeonmanager.stats;
 
+import dungeonmanager.registry.Registries;
+
 /**
  * User-defined stat implementation for custom attributes.
  * Allows creation of stats not covered by the standard set.
@@ -68,5 +70,17 @@ public class CustomStat implements Stat {
     @Override
     public String toString() {
         return this.ID;
+    }
+
+    public static void registerStat(String ID, String name, String type, int default_value) {
+        Registries.get().stats.register(ID, new CustomStat(ID, name, type, default_value));
+    }
+
+    public static void registerStat(String ID, String name, String type) {
+        Registries.get().stats.register(ID, new CustomStat(ID, name, type));
+    }
+
+    public static void registerStat(String ID, String name) {
+        Registries.get().stats.register(ID, new CustomStat(ID, name, "other"));
     }
 }
