@@ -1,21 +1,19 @@
 package dungeonmanager.feature;
 
-import dungeonmanager.stats.ModifiableStatSet;
-
 import java.util.*;
 
 /**
  * A FeatureSection that allows choosing from multiple subsections.
  * A specified number of subsections can be selected and added to the FeatureInstance.
  */
-public class SelectionSection implements FeatureSection {
+public class SelectionSection implements ConfiguredFeatureSection {
 
     private String id;
     private String name;
     private String description;
     private boolean visible;
     private int numSelections;
-    private Map<String, FeatureSection> choices;
+    private Map<String, FeatureSection> configuration;
 
     public SelectionSection(String id, String name, String description, int numSelections) {
         this(id, name, description, numSelections, true);
@@ -27,7 +25,7 @@ public class SelectionSection implements FeatureSection {
         this.description = description;
         this.numSelections = numSelections;
         this.visible = visible;
-        this.choices = new HashMap<>();
+        this.configuration = new HashMap<>();
     }
 
     @Override
@@ -57,13 +55,12 @@ public class SelectionSection implements FeatureSection {
 
     /**
      * Adds a choice option to this selection section.
-     * @param choiceID unique identifier for this choice
      * @param subsection the subsection to add as a choice
      * @return this SelectionSection for chaining
      */
-    public SelectionSection addChoice(String choiceID, FeatureSection subsection) {
-        if (choiceID != null && subsection != null) {
-            choices.put(choiceID, subsection);
+    public SelectionSection addOption(FeatureSection subsection) {
+        if (subsection != null) {
+            configuration.put(subsection.getID(), subsection);
         }
         return this;
     }
@@ -78,8 +75,8 @@ public class SelectionSection implements FeatureSection {
     /**
      * @return map of choice section ID to subsection
      */
-    public Map<String, FeatureSection> getChoices() {
-        return new HashMap<>(choices);
+    public Map<String, FeatureSection> getConfiguration() {
+        return new HashMap<>(configuration);
     }
 
     /**
@@ -87,7 +84,7 @@ public class SelectionSection implements FeatureSection {
      * @param choiceID the selected choice
      * @return compound ID suitable for tracking the selection
      */
-    public String getSelectionID(String choiceID) {
+    public String getOptionID(String choiceID) {
         return id + ":" + choiceID;
     }
 
@@ -97,7 +94,7 @@ public class SelectionSection implements FeatureSection {
                 "id='" + id + '\'' +
                 ", name='" + name + '\'' +
                 ", numSelections=" + numSelections +
-                ", choices=" + choices.keySet() +
+                ", choices=" + configuration.keySet() +
                 ", visible=" + visible +
                 '}';
     }
@@ -114,7 +111,14 @@ public class SelectionSection implements FeatureSection {
         }
 
         for (String key : selection) {
-            choices.get(key).loadToInstance(instance);
+            configuration.get(key).loadToInstance(instance);
         }
     }
+
+    @Override
+    public Class getConfigType() {
+        return SelectionConfig.class;
+    }
+
+    public static class SelectionConfig extends TreeSet<String> {}
 }

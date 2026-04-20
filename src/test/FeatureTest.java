@@ -3,10 +3,7 @@ package test;
 import dungeonmanager.creature.Creature;
 import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.*;
-import dungeonmanager.registry.Registries;
-import dungeonmanager.stats.CustomStat;
 import dungeonmanager.stats.StandardStat;
-import dungeonmanager.stats.Stat;
 import dungeonmanager.stats.StatModifier;
 
 import java.util.Set;
@@ -87,47 +84,44 @@ public class FeatureTest {
 	}
 
     public static void test_selection_section() {
-        Registries registry = Registries.get();
+        Creature creature = new Creature("Wilbur the Wizard", IntegratedCreatureType.DEFAULT);
 
-        Stat fire_resistance = new CustomStat(
-                "FIRE_RESISTANCE", "Fire Resistance", "property"
-        );
-        registry.stats.register(fire_resistance.getID(), fire_resistance);
-        Stat cold_resistance = new CustomStat(
-                "COLD_RESISTANCE", "Cold Resistance", "property"
-        );
-        registry.stats.register(cold_resistance.getID(), cold_resistance);
-
-        Creature creature = new Creature("Luna the Sorcerer", IntegratedCreatureType.DEFAULT);
-
-        Feature elementalAffinityFeat = new Feature(
-                "feat:elemental_affinity",
-                "Elemental Affinity",
-                "Choose an elemental affinity to gain related bonuses"
+        Feature feat = new Feature(
+                "feat:experienced_caster",
+                "Experienced Caster",
+                "You've spent years casting spells. The practice shows."
         );
 
-        SelectionSection affinitySelection = new SelectionSection(
-                "elemental_affinity_selection",
-                "Elemental Affinity Selection",
-                "Select one elemental affinity to gain its benefits",
+        SelectionSection selection = new SelectionSection(
+                "spellcast_selection",
+                "Spellcasting Ability Selection",
+                "Select one of the common spellcasting abilities to get a +1 bonus in it",
                 1)
-                .addChoice("fire", new StatModifierSection(
-                        "fire_affinity",
-                        "Fire Affinity",
-                        "Gain resistance to fire damage",
+                .addOption(new StatModifierSection(
+                        "charisma",
+                        "Charisma Bonus",
+                        "Gain a permanent +1 in CHA",
                         new StatModifier()
-                                .setValue("FIRE_RESISTANCE", 1)))
-                .addChoice("ice", new StatModifierSection(
-                        "ice_affinity",
-                        "Ice Affinity",
-                        "Gain resistance to cold damage",
+                                .setValue("CHA", 1)))
+                .addOption(new StatModifierSection(
+                        "intelligence",
+                        "Intelligence Bonus",
+                        "Gain a permanent +1 in INT",
                         new StatModifier()
-                                .setValue("COLD_RESISTANCE", 1)
-        ));
-        elementalAffinityFeat.addSection(affinitySelection);
+                                .setValue("INT", 1)))
+                .addOption(new StatModifierSection(
+                        "wisdom",
+                        "Wisdom Bonus",
+                        "Gain a permanent +1 in WIS",
+                        new StatModifier()
+                                .setValue("WIS", 1))
+                );
+        feat.addSection(selection);
 
-        FeatureInstance instance = creature.feature.addFeature(elementalAffinityFeat);
-        ((Set<String>)instance.getSelection("elemental_affinity_selection")).add("fire");
+        FeatureInstance instance = creature.feature.addFeature(feat);
+        ((Set<String>)instance.getSelection("spellcast_selection")).add("intelligence");
+        instance.reloadSections();
+        System.out.println(selection.getConfiguration());
         System.out.println(instance.getSelection("elemental_affinity_selection"));
 
         System.out.println(creature);
@@ -135,7 +129,7 @@ public class FeatureTest {
         for (FeatureSection section : instance.getSections()) {
             System.out.println(" - " + section.getName() + " (visible: " + section.isVisible() + ", type: " + section.getType() + ")");
             if (section instanceof SelectionSection) {
-                System.out.println("   Choices: " + ((SelectionSection) section).getChoices().keySet());
+                System.out.println("   Choices: " + ((SelectionSection) section).getConfiguration().keySet());
             }
         }
     }
