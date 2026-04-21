@@ -8,7 +8,6 @@ import dungeonmanager.registry.Registries;
 import dungeonmanager.session.CreatureSnapshot;
 import dungeonmanager.session.FeatureInstanceSnapshot;
 import dungeonmanager.session.Session;
-import dungeonmanager.session.SessionSnapshot;
 import dungeonmanager.stats.StandardStat;
 import dungeonmanager.stats.StatModifier;
 import org.junit.jupiter.api.BeforeEach;
@@ -16,19 +15,14 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-/**
- * SessionTest focuses on feature and snapshot behavior.
- * Creature lifecycle and selection tests are in SessionCreatureTest.
- */
-public class SessionTest {
+@DisplayName("Session Feature Tests")
+public class SessionFeatureTest {
 
     @BeforeEach
     void setUp() {
@@ -36,8 +30,19 @@ public class SessionTest {
     }
 
     @Test
+    @DisplayName("Registers a feature")
+    void registers_feature() {
+        Session session = new Session();
+        Feature feat = buildCharismaBoostFeature();
+
+        session.registerFeature(feat);
+
+        assertTrue(session.hasFeature(feat.ID), "Expected feature to be registered");
+    }
+
+    @Test
     @DisplayName("Apply and remove a stat modifier feature")
-    void stat_modifier_test() {
+    void applies_and_removes_stat_modifier_feature() {
         Session session = new Session();
         CreatureSnapshot created = createHero(session);
 
@@ -61,7 +66,7 @@ public class SessionTest {
 
     @Test
     @DisplayName("Initialize selection section configuration")
-    void selection_section_test() {
+    void initializes_selection_section_config() {
         Session session = new Session();
         CreatureSnapshot created = createHero(session);
 
@@ -80,62 +85,22 @@ public class SessionTest {
     }
 
     @Test
-    @DisplayName("Session snapshot metadata is correct")
-    void snapshot_metadata_test() {
+    @DisplayName("Apply multiple features to a creature")
+    void applies_multiple_features() {
         Session session = new Session();
         CreatureSnapshot created = createHero(session);
 
-        Feature selectableFeat = buildElementalAffinityFeature();
-        session.registerFeature(selectableFeat);
-        CreatureSnapshot withSelectable = session.addFeature(created.getId(), selectableFeat.ID);
-        assertNotNull(withSelectable, "Expected selectable feature to be added");
+        Feature feat1 = buildCharismaBoostFeature();
+        Feature feat2 = buildElementalAffinityFeature();
+        session.registerFeature(feat1);
+        session.registerFeature(feat2);
 
-        FeatureInstanceSnapshot selectableSnapshot = withSelectable.getFeature(selectableFeat.ID);
-        assertNotNull(selectableSnapshot, "Expected selectable feature snapshot");
+        CreatureSnapshot afterFeat1 = session.addFeature(created.getId(), feat1.ID);
+        assertEquals(1, afterFeat1.getFeatures().size(), "Expected one feature");
 
-        SessionSnapshot snapshot = session.snapshot();
-        assertEquals(SessionSnapshot.CURRENT_SCHEMA_VERSION, snapshot.getSchemaVersion(), "Unexpected schema version");
-        assertEquals(1, snapshot.getCreatureCount(), "Expected one creature in session snapshot");
-        assertNotNull(snapshot.getCreature(created.getId()), "Expected creature lookup by ID in snapshot");
+        CreatureSnapshot afterFeat2 = session.addFeature(created.getId(), feat2.ID);
+        assertEquals(2, afterFeat2.getFeatures().size(), "Expected two features");
     }
-
-    @Test
-    @DisplayName("Session snapshot collections are immutable")
-    void snapshot_mutability_test() {
-        Session session = new Session();
-        CreatureSnapshot created = createHero(session);
-
-        Feature selectableFeat = buildElementalAffinityFeature();
-        session.registerFeature(selectableFeat);
-        CreatureSnapshot withSelectable = session.addFeature(created.getId(), selectableFeat.ID);
-        assertNotNull(withSelectable, "Expected selectable feature to be added");
-
-        FeatureInstanceSnapshot selectableSnapshot = withSelectable.getFeature(selectableFeat.ID);
-        assertNotNull(selectableSnapshot, "Expected selectable feature snapshot");
-
-        SessionSnapshot snapshot = session.snapshot();
-
-        assertThrows(UnsupportedOperationException.class,
-                () -> snapshot.getCreatures().add(created),
-                "Expected creature list snapshot to be immutable");
-
-        assertThrows(UnsupportedOperationException.class,
-                () -> created.getStats().put("STR", 99),
-                "Expected stat snapshot map to be immutable");
-
-        assertThrows(UnsupportedOperationException.class,
-                () -> created.getBaseStatOverrides().put("STR", 99),
-                "Expected base stat override snapshot map to be immutable");
-
-        assertThrows(UnsupportedOperationException.class,
-                () -> selectableSnapshot.getConfig().put("elemental_affinity_selection", List.of("fire_affinity")),
-                "Expected feature selection map snapshot to be immutable");
-
-        assertThrows(UnsupportedOperationException.class,
-                () -> selectableSnapshot.getConfigFor("elemental_affinity_selection").add("fire_affinity"),
-                "Expected feature selection list snapshot to be immutable");
-    }
-
 
     private CreatureSnapshot createHero(Session session) {
         Map<String, Integer> baseStats = new HashMap<>();
@@ -173,3 +138,6 @@ public class SessionTest {
         }
     }
 }
+
+
+

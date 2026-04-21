@@ -56,11 +56,6 @@ public class FeatureInstance {
         return feature.ID;
     }
 
-    /**
-     * Gets all stat modifiers applied by this feature instance's sections.
-     * Recursively collects modifiers from all sections and their subsections.
-     * @return collection of all stat modifiers from this feature's sections
-     */
     public Collection<StatModifier> getStatModifiers() {
         return new HashSet<>(modifiers);
     }
@@ -106,7 +101,7 @@ public class FeatureInstance {
         return sections.size();
     }
 
-    public void setSelection(String selectionID, Object choices) {
+    public void setConfig(String selectionID, Object choices) {
         config.put(selectionID, choices);
     }
 
@@ -132,6 +127,20 @@ public class FeatureInstance {
             snapshot.put(entry.getKey(), List.copyOf(normalizedChoices));
         }
         return snapshot;
+    }
+
+    /**
+     * Applies a saved configuration snapshot to this feature instance.
+     * Used when rehydrating from a snapshot to restore user selections.
+     * @param configSnapshot map of config IDs to lists of selected option IDs
+     */
+    public void applyConfigSnapshot(Map<String, List<String>> configSnapshot) {
+        for (Map.Entry<String, List<String>> entry : configSnapshot.entrySet()) {
+            String configID = entry.getKey();
+            List<String> config = entry.getValue();
+            Set<String> configSet = new TreeSet<>(config);
+            setConfig(configID, configSet);
+        }
     }
 
     @Override

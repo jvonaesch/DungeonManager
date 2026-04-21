@@ -92,6 +92,14 @@ public class SessionCreatureTest {
 
         assertEquals(IntegratedCreatureType.DWARF.getID(), changed.getTypeId(), "Expected creature type to change");
         assertEquals(created.getId(), changed.getId(), "Expected ID to remain unchanged");
+        
+        // Verify that DWARF's base stats were applied
+        assertNotNull(changed.getStats(), "Expected stats map to exist");
+        for (StandardStat stat : StandardStat.values()) {
+            int expectedStat = IntegratedCreatureType.DWARF.getStatSet().getValue(stat);
+            int actualStat = changed.getStat(stat.getID());
+            assertEquals(expectedStat, actualStat, "Expected " + stat.getID() + " to match DWARF type: " + expectedStat);
+        }
     }
 
     @Test

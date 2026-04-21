@@ -107,7 +107,7 @@ public class SelectionSection implements ConfiguredFeatureSection {
         if (selection_object instanceof Set) selection = (Set<String>) selection_object;
         else {
             selection = new TreeSet<>();
-            instance.setSelection(this.id, selection);
+            instance.setConfig(this.id, selection);
         }
 
         for (String key : selection) {
