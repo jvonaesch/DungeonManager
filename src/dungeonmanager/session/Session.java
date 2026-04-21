@@ -21,6 +21,9 @@ public class Session {
 
     private static final Logger LOG = LoggerFactory.getLogger(Session.class);
 
+    private record CreatureEntry(String id, Creature creature) {}
+    private record FeatureEntry(String id, Feature feature) {}
+
     private final Map<String, CreatureEntry> creatures;
     private final Map<String, FeatureEntry> features;
     private String selectedCreatureId;
@@ -291,7 +294,7 @@ public class Session {
         }
 
         // Apply saved configuration (selections, etc.)
-        instance.applyConfigSnapshot(featureSnapshot.getConfig());
+        instance.loadConfigSnapshot(featureSnapshot.getConfig());
 
         LOG.debug("Loaded feature {} into creature", featureSnapshot.getInstanceId());
     }
@@ -328,11 +331,6 @@ public class Session {
     }
 
     private String nextCreatureId() {
-        return "creature-" + nextCreatureNumber++;
+        return "creature_" + nextCreatureNumber++;
     }
-
-    private record CreatureEntry(String id, Creature creature) {}
-
-    private record FeatureEntry(String id, Feature feature) {}
 }
-

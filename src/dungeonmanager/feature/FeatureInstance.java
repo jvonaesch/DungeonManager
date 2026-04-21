@@ -134,7 +134,7 @@ public class FeatureInstance {
      * Used when rehydrating from a snapshot to restore user selections.
      * @param configSnapshot map of config IDs to lists of selected option IDs
      */
-    public void applyConfigSnapshot(Map<String, List<String>> configSnapshot) {
+    public void loadConfigSnapshot(Map<String, List<String>> configSnapshot) {
         for (Map.Entry<String, List<String>> entry : configSnapshot.entrySet()) {
             String configID = entry.getKey();
             List<String> config = entry.getValue();

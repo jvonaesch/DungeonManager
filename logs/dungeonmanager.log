@@ -606,3 +606,246 @@
 2026-04-21 11:42:05.006 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero1' as type base:dungeonmanager.creature:default
 2026-04-21 11:42:05.007 [main] INFO  dungeonmanager.session.Session - Created creature creature-2 named 'Hero2' as type base:dungeonmanager.creature:default
 2026-04-21 11:42:05.007 [main] INFO  dungeonmanager.session.Session - Deleted creature creature-2. New selection: creature-1
+2026-04-21 11:47:58.947 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:58.998 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.016 [main] DEBUG dungeonmanager.session.Session - Removed feature feat:charisma_boost from creature creature-1
+2026-04-21 11:47:59.033 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.034 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.040 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.043 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.044 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.052 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.053 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.054 [main] INFO  dungeonmanager.session.Session - Created creature creature-2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.058 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.059 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.059 [main] INFO  dungeonmanager.session.Session - Created creature creature-2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.065 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.066 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.072 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.072 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.077 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.077 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.085 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.085 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.086 [main] INFO  dungeonmanager.session.Session - Created creature creature-2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.087 [main] DEBUG dungeonmanager.session.Session - Selected creature creature-1
+2026-04-21 11:47:59.090 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.090 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.095 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.096 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.100 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.101 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.123 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.124 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.127 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.127 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.130 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.131 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.131 [main] DEBUG dungeonmanager.session.Session - Delete ignored for unknown creature unknown-id
+2026-04-21 11:47:59.134 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.135 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.137 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.138 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Barbarian' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.140 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.140 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.145 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.146 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.146 [main] DEBUG dungeonmanager.session.Session - Selected creature creature-1
+2026-04-21 11:47:59.148 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.149 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.149 [main] INFO  dungeonmanager.session.Session - Deleted creature creature-1. New selection: null
+2026-04-21 11:47:59.151 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.152 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.154 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.154 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Beast' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.159 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.159 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.160 [main] INFO  dungeonmanager.session.Session - Created creature creature-2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.160 [main] INFO  dungeonmanager.session.Session - Created creature creature-3 named 'Hero3' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.160 [main] DEBUG dungeonmanager.session.Session - Selected creature creature-1
+2026-04-21 11:47:59.160 [main] DEBUG dungeonmanager.session.Session - Selected creature creature-2
+2026-04-21 11:47:59.162 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.163 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Knight' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.166 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.167 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Warrior' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.171 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.172 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Bear' as type base:dungeonmanager.creature:owlbear
+2026-04-21 11:47:59.176 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.177 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Paladin' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.181 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.181 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Ranger' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.186 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.186 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.187 [main] INFO  dungeonmanager.session.Session - Deleted creature creature-1. New selection: null
+2026-04-21 11:47:59.190 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.190 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.191 [main] DEBUG dungeonmanager.session.Session - Selection ignored for unknown creature unknown-id
+2026-04-21 11:47:59.193 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.194 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.197 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:47:59.198 [main] INFO  dungeonmanager.session.Session - Created creature creature-1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.198 [main] INFO  dungeonmanager.session.Session - Created creature creature-2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:47:59.199 [main] INFO  dungeonmanager.session.Session - Deleted creature creature-2. New selection: creature-1
+2026-04-21 11:50:31.258 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.275 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.296 [main] DEBUG dungeonmanager.session.Session - Removed feature feat:charisma_boost from creature creature_1
+2026-04-21 11:50:31.318 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.319 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.331 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.336 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.337 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.349 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.350 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.350 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.355 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.355 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.356 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.366 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.367 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.375 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.376 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.382 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.383 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.389 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.390 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.390 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.391 [main] DEBUG dungeonmanager.session.Session - Selected creature creature_1
+2026-04-21 11:50:31.395 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.396 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.402 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.403 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.407 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.408 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.432 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.433 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.438 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.438 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.443 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.444 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.445 [main] DEBUG dungeonmanager.session.Session - Delete ignored for unknown creature unknown-id
+2026-04-21 11:50:31.450 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.451 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.455 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.456 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Barbarian' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.462 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.463 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.467 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.467 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.468 [main] DEBUG dungeonmanager.session.Session - Selected creature creature_1
+2026-04-21 11:50:31.471 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.472 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.473 [main] INFO  dungeonmanager.session.Session - Deleted creature creature_1. New selection: null
+2026-04-21 11:50:31.475 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.476 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.479 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.479 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Beast' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.486 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.486 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.487 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.487 [main] INFO  dungeonmanager.session.Session - Created creature creature_3 named 'Hero3' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.488 [main] DEBUG dungeonmanager.session.Session - Selected creature creature_1
+2026-04-21 11:50:31.488 [main] DEBUG dungeonmanager.session.Session - Selected creature creature_2
+2026-04-21 11:50:31.491 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.491 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Knight' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.494 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.495 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Warrior' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.499 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.500 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Bear' as type base:dungeonmanager.creature:owlbear
+2026-04-21 11:50:31.503 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.504 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Paladin' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.507 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.508 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Ranger' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.511 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.512 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.512 [main] INFO  dungeonmanager.session.Session - Deleted creature creature_1. New selection: null
+2026-04-21 11:50:31.515 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.516 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.516 [main] DEBUG dungeonmanager.session.Session - Selection ignored for unknown creature unknown-id
+2026-04-21 11:50:31.518 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.519 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.521 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:50:31.522 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.523 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:50:31.523 [main] INFO  dungeonmanager.session.Session - Deleted creature creature_2. New selection: creature_1
+2026-04-21 11:56:27.982 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.017 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.079 [main] DEBUG dungeonmanager.session.Session - Removed feature feat:charisma_boost from creature creature_1
+2026-04-21 11:56:28.097 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.098 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.106 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.108 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.109 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.117 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.118 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.118 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.121 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.121 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.122 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.129 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.130 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.134 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.135 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.139 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.139 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.143 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.143 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.144 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.144 [main] DEBUG dungeonmanager.session.Session - Selected creature creature_1
+2026-04-21 11:56:28.146 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.146 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.150 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.150 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.153 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.154 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.171 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.172 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.174 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.174 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.176 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.176 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.176 [main] DEBUG dungeonmanager.session.Session - Delete ignored for unknown creature unknown-id
+2026-04-21 11:56:28.179 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.179 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.181 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.181 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Barbarian' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.183 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.183 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.186 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.186 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.186 [main] DEBUG dungeonmanager.session.Session - Selected creature creature_1
+2026-04-21 11:56:28.188 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.189 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.189 [main] INFO  dungeonmanager.session.Session - Deleted creature creature_1. New selection: null
+2026-04-21 11:56:28.191 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.191 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.194 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.194 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Beast' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.200 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.200 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.201 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.202 [main] INFO  dungeonmanager.session.Session - Created creature creature_3 named 'Hero3' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.203 [main] DEBUG dungeonmanager.session.Session - Selected creature creature_1
+2026-04-21 11:56:28.203 [main] DEBUG dungeonmanager.session.Session - Selected creature creature_2
+2026-04-21 11:56:28.206 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.206 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Knight' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.209 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.209 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Warrior' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.212 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.212 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Bear' as type base:dungeonmanager.creature:owlbear
+2026-04-21 11:56:28.214 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.214 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Paladin' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.216 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.217 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Ranger' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.219 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.219 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.220 [main] INFO  dungeonmanager.session.Session - Deleted creature creature_1. New selection: null
+2026-04-21 11:56:28.222 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.223 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.224 [main] DEBUG dungeonmanager.session.Session - Selection ignored for unknown creature unknown-id
+2026-04-21 11:56:28.225 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.226 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.228 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-21 11:56:28.228 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.229 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-21 11:56:28.229 [main] INFO  dungeonmanager.session.Session - Deleted creature creature_2. New selection: creature_1
