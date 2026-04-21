@@ -155,11 +155,6 @@ public class Session {
         return added == null ? null : snapshotCreature(SessionValidation.normalizeId(creatureId));
     }
 
-    /*public synchronized CreatureSnapshot addFeature(String creatureId, String featureInstanceId, Feature feature) {
-        FeatureInstance added = addFeatureInstance(creatureId, featureInstanceId, feature);
-        return added == null ? null : snapshotCreature(SessionValidation.normalizeId(creatureId));
-    }*/
-
     public synchronized CreatureSnapshot removeFeature(String creatureId, String featureInstanceId) {
         CreatureEntry entry = requireCreature(creatureId);
         FeatureInstance removed = entry.creature.getFeatureSet().removeFeature(

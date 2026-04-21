@@ -22,7 +22,7 @@ public class DungeonManagerApp {
     static final String USER_DIR = System.getProperty("user.home");
     static final String LIB_PATH = USER_DIR + "/DungeonManager/";
 
-    private Registries registry;
+    private final Registries registry;
     // private Session session;
 
     private Scanner console_in;

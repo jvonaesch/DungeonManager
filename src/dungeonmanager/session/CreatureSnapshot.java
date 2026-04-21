@@ -13,7 +13,7 @@ public class CreatureSnapshot {
     private final String typeName;
     private final Map<String, Integer> stats;
     private final Map<String, Integer> baseStatOverrides;
-    private final List<FeatureSnapshot> features;
+    private final List<FeatureInstanceSnapshot> features;
 
     CreatureSnapshot(
             String id,
@@ -22,7 +22,7 @@ public class CreatureSnapshot {
             String typeName,
             Map<String, Integer> stats,
             Map<String, Integer> baseStatOverrides,
-            List<FeatureSnapshot> features)
+            List<FeatureInstanceSnapshot> features)
     {
         this.id = id;
         this.name = name;
@@ -49,11 +49,11 @@ public class CreatureSnapshot {
             baseOverrides.put(stat.getID(), baseValueSnapshot.get(stat));
         }
 
-        List<FeatureSnapshot> featureSnapshots = new ArrayList<>();
+        List<FeatureInstanceSnapshot> featureSnapshots = new ArrayList<>();
         for (FeatureInstance instance : creature.getFeatureSet().getAllFeatures()) {
-            featureSnapshots.add(FeatureSnapshot.fromInstance(instance));
+            featureSnapshots.add(FeatureInstanceSnapshot.fromInstance(instance));
         }
-        featureSnapshots.sort(Comparator.comparing(FeatureSnapshot::getInstanceId));
+        featureSnapshots.sort(Comparator.comparing(FeatureInstanceSnapshot::getInstanceId));
 
         return new CreatureSnapshot(
                 id,
@@ -98,11 +98,11 @@ public class CreatureSnapshot {
         return value;
     }
 
-    public List<FeatureSnapshot> getFeatures() {
+    public List<FeatureInstanceSnapshot> getFeatures() {
         return features;
     }
 
-    public FeatureSnapshot getFeature(String featureInstanceId) {
+    public FeatureInstanceSnapshot getFeature(String featureInstanceId) {
         if (featureInstanceId == null) {
             return null;
         }
@@ -110,7 +110,7 @@ public class CreatureSnapshot {
         if (normalizedId.isEmpty()) {
             return null;
         }
-        for (FeatureSnapshot feature : features) {
+        for (FeatureInstanceSnapshot feature : features) {
             if (feature.getInstanceId().equals(normalizedId)) {
                 return feature;
             }

@@ -10,6 +10,8 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
+import java.util.TreeSet;
 
 /**
  * An instance of a {@link Feature} specific to a {@link dungeonmanager.creature.Creature}. It stores creature-specific
@@ -110,6 +112,26 @@ public class FeatureInstance {
 
     public Object getSelection(String selectionID) {
         return config.get(selectionID);
+    }
+
+    /**
+     * Exports selection-style config in a deterministic shape for snapshot persistence.
+     */
+    public Map<String, List<String>> getConfigSnapshot() {
+        Map<String, List<String>> snapshot = new TreeMap<>();
+        for (Map.Entry<String, Object> entry : config.entrySet()) {
+            if (!(entry.getValue() instanceof Set<?> rawChoices)) {
+                continue;
+            }
+            Set<String> normalizedChoices = new TreeSet<>();
+            for (Object value : rawChoices) {
+                if (value != null) {
+                    normalizedChoices.add(value.toString());
+                }
+            }
+            snapshot.put(entry.getKey(), List.copyOf(normalizedChoices));
+        }
+        return snapshot;
     }
 
     @Override
