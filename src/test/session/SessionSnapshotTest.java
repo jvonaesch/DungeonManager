@@ -39,10 +39,10 @@ public class SessionSnapshotTest {
 
         Feature selectableFeat = buildElementalAffinityFeature();
         session.registerFeature(selectableFeat);
-        CreatureSnapshot withSelectable = session.addFeature(created.getId(), selectableFeat.ID);
+        CreatureSnapshot withSelectable = session.addFeature(created.getId(), selectableFeat.getId());
         assertNotNull(withSelectable, "Expected selectable feature to be added");
 
-        FeatureInstanceSnapshot selectableSnapshot = withSelectable.getFeature(selectableFeat.ID);
+        FeatureInstanceSnapshot selectableSnapshot = withSelectable.getFeature(selectableFeat.getId());
         assertNotNull(selectableSnapshot, "Expected selectable feature snapshot");
 
         SessionSnapshot snapshot = session.snapshot();
@@ -59,10 +59,10 @@ public class SessionSnapshotTest {
 
         Feature selectableFeat = buildElementalAffinityFeature();
         session.registerFeature(selectableFeat);
-        CreatureSnapshot withSelectable = session.addFeature(created.getId(), selectableFeat.ID);
+        CreatureSnapshot withSelectable = session.addFeature(created.getId(), selectableFeat.getId());
         assertNotNull(withSelectable, "Expected selectable feature to be added");
 
-        FeatureInstanceSnapshot selectableSnapshot = withSelectable.getFeature(selectableFeat.ID);
+        FeatureInstanceSnapshot selectableSnapshot = withSelectable.getFeature(selectableFeat.getId());
         assertNotNull(selectableSnapshot, "Expected selectable feature snapshot");
 
         SessionSnapshot snapshot = session.snapshot();
@@ -134,9 +134,9 @@ public class SessionSnapshotTest {
 
         Feature selectableFeat = buildElementalAffinityFeature();
         session.registerFeature(selectableFeat);
-        CreatureSnapshot withFeature = session.addFeature(created.getId(), selectableFeat.ID);
+        CreatureSnapshot withFeature = session.addFeature(created.getId(), selectableFeat.getId());
 
-        FeatureInstanceSnapshot featSnapshot = withFeature.getFeature(selectableFeat.ID);
+        FeatureInstanceSnapshot featSnapshot = withFeature.getFeature(selectableFeat.getId());
         assertNotNull(featSnapshot, "Expected feature snapshot");
 
         assertThrows(UnsupportedOperationException.class,
@@ -160,9 +160,9 @@ public class SessionSnapshotTest {
 
         Feature selectableFeat = buildElementalAffinityFeature();
         session.registerFeature(selectableFeat);
-        CreatureSnapshot withFeature = session.addFeature(created.getId(), selectableFeat.ID);
+        CreatureSnapshot withFeature = session.addFeature(created.getId(), selectableFeat.getId());
 
-        FeatureInstanceSnapshot featSnapshot = withFeature.getFeature(selectableFeat.ID);
+        FeatureInstanceSnapshot featSnapshot = withFeature.getFeature(selectableFeat.getId());
         assertNotNull(featSnapshot, "Expected feature snapshot");
 
         List<String> selections = featSnapshot.getConfigFor("elemental_affinity_selection");

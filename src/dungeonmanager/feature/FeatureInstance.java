@@ -53,7 +53,7 @@ public class FeatureInstance {
     }
 
     public String getFeatureId() {
-        return feature.ID;
+        return feature.getId();
     }
 
     public Collection<StatModifier> getStatModifiers() {
@@ -147,7 +147,7 @@ public class FeatureInstance {
     public String toString() {
         return "feature instance %s (feat: %s)\n\t'%s'\n\t%s\n".formatted(
                 this.ID,
-                this.feature.ID,
+                this.feature.getId(),
                 this.feature.getDescription(),
                 this.getStatModifiers()
         );

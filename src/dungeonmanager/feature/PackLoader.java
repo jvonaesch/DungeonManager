@@ -115,8 +115,8 @@ public class PackLoader {
             Feature feature = Feature.fromJson(json);
 
             if (feature != null) {
-                Registries.get().feature.register(feature.ID, feature);
-                LOG.debug("Loaded feature '{}' from {}", feature.ID, filePath.getFileName());
+                Registries.get().feature.register(feature.getId(), feature);
+                LOG.debug("Loaded feature '{}' from {}", feature.getId(), filePath.getFileName());
             } else {
                 LOG.warn("Failed to deserialize feature from {}", filePath.toAbsolutePath());
             }

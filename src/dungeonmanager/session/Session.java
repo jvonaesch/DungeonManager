@@ -195,7 +195,7 @@ public class Session {
     }
 
     public synchronized void registerFeature(@NotNull Feature feature) {
-        String featureId = normalizeId(feature.ID);
+        String featureId = normalizeId(feature.getId());
         Registries.get().feature.register(featureId, feature);
     }
 
@@ -206,7 +206,7 @@ public class Session {
     private FeatureInstance addFeatureInstance(String creatureId, String featureInstanceId) {
         Feature feature = requireFeature(featureInstanceId);
         CreatureEntry entry = requireCreature(creatureId);
-        String normalizedFeatureId = normalizeId(featureInstanceId == null ? feature.ID : featureInstanceId);
+        String normalizedFeatureId = normalizeId(featureInstanceId == null ? feature.getId() : featureInstanceId);
         return entry.creature.getFeatureSet().addFeature(normalizedFeatureId, feature);
     }
 

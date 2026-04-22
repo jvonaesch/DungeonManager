@@ -37,7 +37,7 @@ public class SessionFeatureTest {
 
         session.registerFeature(feat);
 
-        assertTrue(session.hasFeature(feat.ID), "Expected feature to be registered");
+        assertTrue(session.hasFeature(feat.getId()), "Expected feature to be registered");
     }
 
     @Test
@@ -48,18 +48,18 @@ public class SessionFeatureTest {
 
         Feature feat = buildCharismaBoostFeature();
         session.registerFeature(feat);
-        assertTrue(session.hasFeature(feat.ID), "Expected feature to be registered in session catalog");
+        assertTrue(session.hasFeature(feat.getId()), "Expected feature to be registered in session catalog");
 
-        CreatureSnapshot afterFeat = session.addFeature(created.getId(), feat.ID);
+        CreatureSnapshot afterFeat = session.addFeature(created.getId(), feat.getId());
         assertNotNull(afterFeat, "Expected feature to be added");
         assertEquals(10, afterFeat.getStat("CHA"), "Expected CHA 10 after feature add");
         assertEquals(1, afterFeat.getFeatures().size(), "Expected one feature in snapshot");
 
-        FeatureInstanceSnapshot featSnapshot = afterFeat.getFeature(feat.ID);
+        FeatureInstanceSnapshot featSnapshot = afterFeat.getFeature(feat.getId());
         assertNotNull(featSnapshot, "Expected feature snapshot lookup by instance ID");
-        assertEquals(feat.ID, featSnapshot.getFeatureId(), "Expected source feature ID to match registered feature ID");
+        assertEquals(feat.getId(), featSnapshot.getFeatureId(), "Expected source feature ID to match registered feature ID");
 
-        CreatureSnapshot afterRemoval = session.removeFeature(created.getId(), feat.ID);
+        CreatureSnapshot afterRemoval = session.removeFeature(created.getId(), feat.getId());
         assertNotNull(afterRemoval, "Expected feature removal to succeed");
         assertEquals(8, afterRemoval.getStat("CHA"), "Expected CHA 8 after feature removal");
     }
@@ -73,10 +73,10 @@ public class SessionFeatureTest {
         Feature selectableFeat = buildElementalAffinityFeature();
         session.registerFeature(selectableFeat);
 
-        CreatureSnapshot afterSelectableFeat = session.addFeature(created.getId(), selectableFeat.ID);
+        CreatureSnapshot afterSelectableFeat = session.addFeature(created.getId(), selectableFeat.getId());
         assertNotNull(afterSelectableFeat, "Expected selectable feature to be added");
 
-        FeatureInstanceSnapshot selectableSnapshot = afterSelectableFeat.getFeature(selectableFeat.ID);
+        FeatureInstanceSnapshot selectableSnapshot = afterSelectableFeat.getFeature(selectableFeat.getId());
         assertNotNull(selectableSnapshot, "Expected selectable feature snapshot");
         assertTrue(selectableSnapshot.getConfig().containsKey("elemental_affinity_selection"),
                 "Expected selection config key from SelectionSection#loadToInstance");
@@ -95,10 +95,10 @@ public class SessionFeatureTest {
         session.registerFeature(feat1);
         session.registerFeature(feat2);
 
-        CreatureSnapshot afterFeat1 = session.addFeature(created.getId(), feat1.ID);
+        CreatureSnapshot afterFeat1 = session.addFeature(created.getId(), feat1.getId());
         assertEquals(1, afterFeat1.getFeatures().size(), "Expected one feature");
 
-        CreatureSnapshot afterFeat2 = session.addFeature(created.getId(), feat2.ID);
+        CreatureSnapshot afterFeat2 = session.addFeature(created.getId(), feat2.getId());
         assertEquals(2, afterFeat2.getFeatures().size(), "Expected two features");
     }
 

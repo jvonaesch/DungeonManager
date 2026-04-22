@@ -25,7 +25,7 @@ public class FeatureSet {
     }
 
     public FeatureInstance addFeature(Feature feature) {
-        return addFeature(feature.ID, feature);
+        return addFeature(feature.getId(), feature);
     }
 
     public void disableFeature(String ID) {
