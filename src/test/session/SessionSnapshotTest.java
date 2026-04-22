@@ -4,16 +4,14 @@ import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.SelectionSection;
 import dungeonmanager.feature.StatModifierSection;
-import dungeonmanager.registry.Registries;
 import dungeonmanager.session.CreatureSnapshot;
 import dungeonmanager.session.FeatureInstanceSnapshot;
 import dungeonmanager.session.Session;
 import dungeonmanager.session.SessionSnapshot;
-import dungeonmanager.stats.StandardStat;
-import dungeonmanager.stats.StatModifier;
-import org.junit.jupiter.api.BeforeEach;
+import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import test.AppTest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -24,17 +22,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Session Snapshot Tests")
-public class SessionSnapshotTest {
-
-    @BeforeEach
-    void setUp() {
-        registerStandardStats();
-    }
+public class SessionSnapshotTest extends AppTest {
 
     @Test
     @DisplayName("Session snapshot metadata is correct")
     void snapshot_metadata_is_correct() {
-        Session session = new Session();
         CreatureSnapshot created = createHero(session);
 
         Feature selectableFeat = buildElementalAffinityFeature();
@@ -54,7 +46,6 @@ public class SessionSnapshotTest {
     @Test
     @DisplayName("Session snapshot collections are immutable")
     void snapshot_collections_are_immutable() {
-        Session session = new Session();
         CreatureSnapshot created = createHero(session);
 
         Feature selectableFeat = buildElementalAffinityFeature();
@@ -89,28 +80,26 @@ public class SessionSnapshotTest {
     }
 
     @Test
-    @DisplayName("Creature snapshot stats map is immutable")
+    @DisplayName("Creature snapshot stat map is immutable")
     void creature_snapshot_stats_immutable() {
-        Session session = new Session();
         CreatureSnapshot created = createHero(session);
 
         assertThrows(UnsupportedOperationException.class,
                 () -> created.getStats().put("DEX", 50),
-                "Expected creature stats map to be immutable");
+                "Expected creature stat map to be immutable");
 
         assertThrows(UnsupportedOperationException.class,
                 () -> created.getStats().clear(),
-                "Expected creature stats clear to fail");
+                "Expected creature stat clear to fail");
 
         assertThrows(UnsupportedOperationException.class,
                 () -> created.getStats().remove("STR"),
-                "Expected creature stats remove to fail");
+                "Expected creature stat remove to fail");
     }
 
     @Test
     @DisplayName("Creature snapshot base overrides map is immutable")
     void creature_snapshot_base_overrides_immutable() {
-        Session session = new Session();
         CreatureSnapshot created = createHero(session);
 
         assertThrows(UnsupportedOperationException.class,
@@ -129,7 +118,6 @@ public class SessionSnapshotTest {
     @Test
     @DisplayName("Feature instance snapshot config is immutable")
     void feature_instance_snapshot_config_immutable() {
-        Session session = new Session();
         CreatureSnapshot created = createHero(session);
 
         Feature selectableFeat = buildElementalAffinityFeature();
@@ -155,7 +143,6 @@ public class SessionSnapshotTest {
     @Test
     @DisplayName("Feature snapshot selection lists are immutable")
     void feature_snapshot_selection_lists_immutable() {
-        Session session = new Session();
         CreatureSnapshot created = createHero(session);
 
         Feature selectableFeat = buildElementalAffinityFeature();
@@ -178,7 +165,6 @@ public class SessionSnapshotTest {
     @Test
     @DisplayName("Session snapshot creatures list is immutable")
     void session_snapshot_creatures_list_immutable() {
-        Session session = new Session();
         CreatureSnapshot c1 = session.createCreature("Hero1");
         CreatureSnapshot c2 = session.createCreature("Hero2");
 
@@ -200,7 +186,6 @@ public class SessionSnapshotTest {
     @Test
     @DisplayName("Snapshot reflects multiple creatures")
     void snapshot_reflects_multiple_creatures() {
-        Session session = new Session();
         CreatureSnapshot c1 = session.createCreature("Hero1");
         CreatureSnapshot c2 = session.createCreature("Hero2");
 
@@ -214,7 +199,6 @@ public class SessionSnapshotTest {
     @Test
     @DisplayName("Snapshot preserves selected creature ID")
     void snapshot_preserves_selected_creature_id() {
-        Session session = new Session();
         CreatureSnapshot c1 = session.createCreature("Hero1");
         session.createCreature("Hero2");
         session.selectCreature(c1.getId());
@@ -241,12 +225,6 @@ public class SessionSnapshotTest {
                                 new StatModifier().setValue("FIRE", 1),
                                 false
                         )));
-    }
-
-    private void registerStandardStats() {
-        for (StandardStat stat : StandardStat.values()) {
-            Registries.get().stats.register(stat.getID(), stat);
-        }
     }
 }
 

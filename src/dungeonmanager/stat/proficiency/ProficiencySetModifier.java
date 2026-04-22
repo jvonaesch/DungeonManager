@@ -1,6 +1,6 @@
-package dungeonmanager.stats.proficiency;
+package dungeonmanager.stat.proficiency;
 
-import dungeonmanager.stats.Stat;
+import dungeonmanager.stat.Stat;
 
 import java.util.HashMap;
 

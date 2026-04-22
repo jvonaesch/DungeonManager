@@ -1,4 +1,4 @@
-package dungeonmanager.stats;
+package dungeonmanager.stat;
 
 import java.util.*;
 
@@ -6,14 +6,14 @@ import java.util.*;
  * Mutable implementation of StatSet that supports base values and modifiers.
  * Manages the core stat calculation logic: base_value + modifier_total = final_score.
  * 
- * @see dungeonmanager.stats.StatSet for read-only interface
- * @see dungeonmanager.stats.DefaultedStatSet for inheritance-based delegation
+ * @see dungeonmanager.stat.StatSet for read-only interface
+ * @see dungeonmanager.stat.DefaultedStatSet for inheritance-based delegation
  */
 public class ModifiableStatSet implements WriteableStatSet {
 
     public Set<StatModifier> modifiers;
     public Map<Stat, Integer> base_values;
-    public Map<Stat, Integer> modifier_values;
+    public Map<String, Integer> modifier_values;
     public Map<Stat, Integer> values;
 
     public ModifiableStatSet(Map<Stat, Integer> base_stats) {
@@ -61,7 +61,8 @@ public class ModifiableStatSet implements WriteableStatSet {
     }
 
     public int getModifierTotal(Stat stat) {
-        Integer value = modifier_values.get(stat);
+        if (stat == null || !modifier_values.containsKey(stat.getID())) return 0;
+        Integer value = modifier_values.get(stat.getID());
         return (value == null) ? 0 : value;
     }
 
@@ -78,18 +79,16 @@ public class ModifiableStatSet implements WriteableStatSet {
 
     @Override
     public Set<Stat> getSpecifiedStats() {
-        Set<Stat> specified = new HashSet<>(base_values.keySet());
-        specified.addAll(modifier_values.keySet());
-        return specified;
+        return new HashSet<>(base_values.keySet());
     }
 
     public void reloadValues() {
         modifier_values.clear();
         for (StatModifier modifier: this.modifiers) {
-            for (Stat stat: modifier.getStats()) {
+            for (String statId: modifier.getStats()) {
                 modifier_values.put(
-                        stat,
-                        modifier.getValue(stat) + modifier_values.getOrDefault(stat, 0));
+                        statId,
+                        modifier.getValue(statId) + modifier_values.getOrDefault(statId, 0));
             }
         }
         for (Stat stat: getSpecifiedStats()) {

@@ -24,7 +24,7 @@ Verified entry points and symbols in the existing codebase:
   - supports `rename(String)` and `changeType(CreatureType)`
 - `dungeonmanager.feature.FeatureSet#addFeature(String, Feature)` and `removeFeature(...)`
 - `dungeonmanager.feature.FeatureInstance#reload()` loads feature sections and modifiers
-- `dungeonmanager.stats.ModifiableStatSet#reloadValues()` recalculates derived stat values
+- `dungeonmanager.stat.ModifiableStatSet#reloadValues()` recalculates derived stat values
 - `dungeonmanager.registry.Registries#get()` is the shared registry entry point
 
 Important constraint: keep the current registry-driven stat model intact while adding persistence and UI layers around it.
@@ -58,7 +58,7 @@ Keep the Java domain model as the source of truth for creature state.
 
 ### Work items
 1. Review `dungeonmanager.creature.Creature` as the main aggregate root for session data.
-2. Keep stat recalculation inside `dungeonmanager.stats.ModifiableStatSet#reloadValues()`.
+2. Keep stat recalculation inside `dungeonmanager.stat.ModifiableStatSet#reloadValues()`.
 3. Keep feature application/removal routed through `dungeonmanager.feature.FeatureSet`.
 4. Avoid direct UI access to internal maps like `ModifiableStatSet#base_values` or `FeatureSet#features`.
 
@@ -266,7 +266,7 @@ Use concrete project symbols in prompts and comments, for example:
 - `dungeonmanager.creature.Creature#changeType(CreatureType)`
 - `dungeonmanager.feature.FeatureSet#addFeature(String, Feature)`
 - `dungeonmanager.feature.FeatureInstance#reload()`
-- `dungeonmanager.stats.ModifiableStatSet#reloadValues()`
+- `dungeonmanager.stat.ModifiableStatSet#reloadValues()`
 - `dungeonmanager.registry.Registries#get()`
 
 Keep the roadmap aligned with real behavior already present in the codebase, and avoid speculative changes that are not supported by current symbols.

@@ -1,6 +1,6 @@
 package dungeonmanager.creature;
 
-import dungeonmanager.stats.HasStatSet;
+import dungeonmanager.stat.HasStatSet;
 
 public interface CreatureType extends HasStatSet {
 

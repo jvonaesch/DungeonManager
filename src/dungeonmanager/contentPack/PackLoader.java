@@ -2,6 +2,7 @@ package dungeonmanager.contentPack;
 
 import dungeonmanager.feature.Feature;
 import dungeonmanager.registry.Registries;
+import dungeonmanager.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,19 +25,24 @@ import java.util.stream.Stream;
 public class PackLoader {
 
     private static final Logger LOG = LoggerFactory.getLogger(PackLoader.class);
+    private final Session session;
+
+    public PackLoader(Session session) {
+        this.session = session;
+    }
 
     /**
      * Load all packs in a library directory
      * @param libraryPath the path to the DungeonManagerLibrary directory
      */
-    public static void loadLibrary(String libraryPath) {
+    public void loadLibrary(String libraryPath) {
         Path libDir = Paths.get(libraryPath);
 
         if (!checkDirectory(libDir)) return;
 
         try (Stream<Path> packDirs = Files.list(libDir)) {
             packDirs.filter(Files::isDirectory)
-                    .forEach(PackLoader::loadPack);
+                    .forEach(this::loadPack);
 
             // TODO: enable loading from zip files
 
@@ -45,13 +51,7 @@ public class PackLoader {
         }
     }
 
-    /**
-     * Load features from a single pack root directory.
-     * The pack root is expected to contain a 'features' directory.
-     *
-     * @param packPath the path to a single pack directory
-     */
-    public static void loadFromPack(String packPath) {
+    public void loadFromPack(String packPath) {
         Path packDir = Paths.get(packPath);
         if (!Files.exists(packDir)) {
             LOG.warn("Pack directory does not exist: {}", packDir.toAbsolutePath());
@@ -71,7 +71,7 @@ public class PackLoader {
      *
      * @param packDir the path to a pack directory
      */
-    private static void loadPack(Path packDir) {
+    private void loadPack(Path packDir) {
         Path featuresDir = packDir.resolve("features");
 
         if (!Files.exists(featuresDir)) {
@@ -93,11 +93,11 @@ public class PackLoader {
      *
      * @param dir the directory to scan
      */
-    private static void loadFeaturesRecursive(Path dir) {
+    private void loadFeaturesRecursive(Path dir) {
         try (Stream<Path> files = Files.walk(dir)) {
             files.filter(Files::isRegularFile)
                     .filter(path -> path.toString().endsWith(".json"))
-                    .forEach(PackLoader::loadFeatureFromFile);
+                    .forEach(this::loadFeatureFromFile);
         } catch (IOException e) {
             LOG.error("Error walking directory: {}", dir.toAbsolutePath(), e);
         }
@@ -108,17 +108,12 @@ public class PackLoader {
      *
      * @param filePath the path to the JSON file
      */
-    private static void loadFeatureFromFile(Path filePath) {
+    private void loadFeatureFromFile(Path filePath) {
         try {
             String json = Files.readString(filePath);
             Feature feature = Feature.fromJson(json);
-
-            if (feature != null) {
-                Registries.get().feature.register(feature.getId(), feature);
-                LOG.debug("Loaded feature '{}' from {}", feature.getId(), filePath.getFileName());
-            } else {
-                LOG.warn("Failed to deserialize feature from {}", filePath.toAbsolutePath());
-            }
+            session.registerFeature(feature);
+            LOG.debug("Loaded feature '{}' from {}", feature.getId(), filePath.getFileName());
         } catch (IOException e) {
             LOG.error("Error reading feature file: {}", filePath.toAbsolutePath(), e);
         } catch (Exception e) {

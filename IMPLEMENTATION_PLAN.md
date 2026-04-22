@@ -28,7 +28,7 @@ Target area: `src/dungeonmanager/session/`
 
 Implementation notes:
 - Use `dungeonmanager.creature.Creature` as the aggregate root for creature state.
-- Keep stat recalculation inside `dungeonmanager.stats.ModifiableStatSet#reloadValues()`.
+- Keep stat recalculation inside `dungeonmanager.stat.ModifiableStatSet#reloadValues()`.
 - Route feat application through `dungeonmanager.feature.FeatureSet#addFeature(String, Feature)` and `removeFeature(...)`.
 - Avoid letting UI code modify internal maps directly.
 
@@ -45,7 +45,7 @@ Target area: `src/dungeonmanager/session/` or a nearby persistence package
 Implementation notes:
 - Keep a schema version field from the start.
 - Make load deterministic so round-tripping preserves the visible session state.
-- Ensure custom stats created through `dungeonmanager.stats.StatModifier#setValue(String, int)` can be restored.
+- Ensure custom stats created through `dungeonmanager.stat.StatModifier#setValue(String, int)` can be restored.
 
 ### 3) Expose a thin local API boundary
 
@@ -137,7 +137,7 @@ Use concrete symbols from the codebase in future guidance, such as:
 - `dungeonmanager.creature.Creature#changeType(CreatureType)`
 - `dungeonmanager.feature.FeatureSet#addFeature(String, Feature)`
 - `dungeonmanager.feature.FeatureInstance#reload()`
-- `dungeonmanager.stats.ModifiableStatSet#reloadValues()`
+- `dungeonmanager.stat.ModifiableStatSet#reloadValues()`
 - `dungeonmanager.registry.Registries#get()`
 
 Keep the plan aligned with the real project structure and avoid speculative changes that are not supported by current symbols.

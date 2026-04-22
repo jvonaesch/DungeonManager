@@ -1,15 +1,15 @@
-package dungeonmanager.stats;
+package dungeonmanager.stat;
 
 import java.util.Map;
 import java.util.TreeMap;
 
 /**
  * Utility class for advanced stat set formatting and organization.
- * Groups stats by type and provides hierarchical display formatting.
+ * Groups stat by type and provides hierarchical display formatting.
  * Used for creating readable representations of complex stat sets.
  * 
- * @see dungeonmanager.stats.Stats for basic stat utilities
- * @see dungeonmanager.stats.ModifiableStatSet#toString() for simple formatting
+ * @see dungeonmanager.stat.Stats for basic stat utilities
+ * @see dungeonmanager.stat.ModifiableStatSet#toString() for simple formatting
  */
 public class StatSets {
 
@@ -38,7 +38,7 @@ public class StatSets {
         Map<String, Map<Stat, Integer>> type_map = getByType(set);
         string.append("%sAbilities:".formatted(space));
         string.append(mapString(type_map.remove("ability"), indent + 1));
-        string.append("\n%sBase stats:".formatted(space));
+        string.append("\n%sBase stat:".formatted(space));
         string.append(mapString(type_map.remove("base_stat"), indent + 1));
         for (String stat_type: type_map.keySet()) {
             string.append("\n%s%s:".formatted(space, stat_type));

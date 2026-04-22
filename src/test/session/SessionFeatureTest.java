@@ -4,15 +4,14 @@ import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.SelectionSection;
 import dungeonmanager.feature.StatModifierSection;
-import dungeonmanager.registry.Registries;
 import dungeonmanager.session.CreatureSnapshot;
 import dungeonmanager.session.FeatureInstanceSnapshot;
 import dungeonmanager.session.Session;
-import dungeonmanager.stats.StandardStat;
-import dungeonmanager.stats.StatModifier;
-import org.junit.jupiter.api.BeforeEach;
+import dungeonmanager.stat.StandardStat;
+import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import test.AppTest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -22,17 +21,11 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Session Feature Tests")
-public class SessionFeatureTest {
-
-    @BeforeEach
-    void setUp() {
-        registerStandardStats();
-    }
+public class SessionFeatureTest extends AppTest {
 
     @Test
     @DisplayName("Registers a feature")
     void registers_feature() {
-        Session session = new Session();
         Feature feat = buildCharismaBoostFeature();
 
         session.registerFeature(feat);
@@ -43,8 +36,7 @@ public class SessionFeatureTest {
     @Test
     @DisplayName("Apply and remove a stat modifier feature")
     void applies_and_removes_stat_modifier_feature() {
-        Session session = new Session();
-        CreatureSnapshot created = createHero(session);
+        CreatureSnapshot created = createHero();
 
         Feature feat = buildCharismaBoostFeature();
         session.registerFeature(feat);
@@ -67,8 +59,7 @@ public class SessionFeatureTest {
     @Test
     @DisplayName("Initialize selection section configuration")
     void initializes_selection_section_config() {
-        Session session = new Session();
-        CreatureSnapshot created = createHero(session);
+        CreatureSnapshot created = createHero();
 
         Feature selectableFeat = buildElementalAffinityFeature();
         session.registerFeature(selectableFeat);
@@ -87,8 +78,7 @@ public class SessionFeatureTest {
     @Test
     @DisplayName("Apply multiple features to a creature")
     void applies_multiple_features() {
-        Session session = new Session();
-        CreatureSnapshot created = createHero(session);
+        CreatureSnapshot created = createHero();
 
         Feature feat1 = buildCharismaBoostFeature();
         Feature feat2 = buildElementalAffinityFeature();
@@ -102,7 +92,7 @@ public class SessionFeatureTest {
         assertEquals(2, afterFeat2.getFeatures().size(), "Expected two features");
     }
 
-    private CreatureSnapshot createHero(Session session) {
+    private CreatureSnapshot createHero() {
         Map<String, Integer> baseStats = new HashMap<>();
         baseStats.put("STR", 15);
         baseStats.put("CHA", 8);
@@ -130,12 +120,6 @@ public class SessionFeatureTest {
                                 new StatModifier().setValue("FIRE", 1),
                                 false
                         )));
-    }
-
-    private void registerStandardStats() {
-        for (StandardStat stat : StandardStat.values()) {
-            Registries.get().stats.register(stat.getID(), stat);
-        }
     }
 }
 

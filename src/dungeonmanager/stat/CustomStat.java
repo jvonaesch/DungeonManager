@@ -1,13 +1,11 @@
-package dungeonmanager.stats;
-
-import dungeonmanager.registry.Registries;
+package dungeonmanager.stat;
 
 /**
  * User-defined stat implementation for custom attributes.
- * Allows creation of stats not covered by the standard set.
- * Custom stats are registered with the global stat registry for lookup by ID.
+ * Allows creation of stat not covered by the standard set.
+ * Custom stat are registered with the global stat registry for lookup by ID.
  * 
- * @see dungeonmanager.stats.StandardStat for predefined stats
+ * @see dungeonmanager.stat.StandardStat for predefined stat
  */
 public class CustomStat implements Stat {
 
@@ -26,15 +24,15 @@ public class CustomStat implements Stat {
     }
 
     public CustomStat(String ID, String name, String type, int default_value) {
-        this(ID, name, type, default_value, "custom:dungeonmanager.stats." + type + ':' + ID);
+        this(ID, name, type, default_value, "custom:dungeonmanager.stat." + type + ':' + ID);
     }
 
     public CustomStat(String ID, String name, String type) {
-        this(ID, name, type, 0, "custom:dungeonmanager.stats." + type + ':' + ID);
+        this(ID, name, type, 0, "custom:dungeonmanager.stat." + type + ':' + ID);
     }
 
     public CustomStat(String ID, String name) {
-        this(ID, name, "base_stat", 0,"custom:dungeonmanager.stats:" + ID);
+        this(ID, name, "base_stat", 0,"custom:dungeonmanager.stat:" + ID);
     }
 
     @Override
@@ -70,17 +68,5 @@ public class CustomStat implements Stat {
     @Override
     public String toString() {
         return this.ID;
-    }
-
-    public static void registerStat(String ID, String name, String type, int default_value) {
-        Registries.get().stats.register(ID, new CustomStat(ID, name, type, default_value));
-    }
-
-    public static void registerStat(String ID, String name, String type) {
-        Registries.get().stats.register(ID, new CustomStat(ID, name, type));
-    }
-
-    public static void registerStat(String ID, String name) {
-        Registries.get().stats.register(ID, new CustomStat(ID, name, "other"));
     }
 }

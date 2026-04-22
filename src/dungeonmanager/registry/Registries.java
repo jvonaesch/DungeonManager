@@ -1,22 +1,22 @@
 package dungeonmanager.registry;
 
-import dungeonmanager.stats.Stat;
+import dungeonmanager.stat.Stat;
 import dungeonmanager.command.Command;
 import dungeonmanager.creature.CreatureType;
 import dungeonmanager.feature.Feature;
 
 public class Registries {
 
-    private static final Registries instance = new Registries();
-    public static Registries get() { return instance; }
+    // public static final Registries instance = new Registries();
+    // public static Registries get() { return instance; }
 
-    public final Registry<Stat> stats;
+    public final Registry<Stat> stat;
     public final Registry<Command<?>> command;
     public final Registry<CreatureType> entityType;
     public final Registry<Feature> feature;
 
-    private Registries() {
-        this.stats = new HashRegistry<>();
+    public Registries() {
+        this.stat = new HashRegistry<>();
         this.command = new LazyRegistry<>();
         this.entityType = new LazyRegistry<>();
         this.feature = new LazyRegistry<>();

@@ -1,42 +1,59 @@
 package dungeonmanager.session;
 
+import dungeonmanager.DungeonManagerApp;
+import dungeonmanager.contentPack.PackLoader;
 import dungeonmanager.creature.Creature;
 import dungeonmanager.creature.CreatureType;
 import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.FeatureInstance;
 import dungeonmanager.registry.Registries;
+import dungeonmanager.stat.Stat;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import java.util.ArrayList;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.nio.file.Path;
+import java.util.*;
+
+import static dungeonmanager.DungeonManagerApp.LIB_PATH;
 
 
 public class Session {
 
     private static final Logger LOG = LoggerFactory.getLogger(Session.class);
+    private final Path workingDirectory;
+    private final PackLoader packLoader;
 
     private record CreatureEntry(String id, Creature creature) {}
 
+    private final DungeonManagerApp app;
+    private final Registries registry = new Registries();
     private final Map<String, CreatureEntry> creatures;
-
     /**
      * The ID of the currently selected creature. This is null if no creature is selected.
      * <br><b>Note:</b> <i>Always</i> handle null values!
      */
     private String selectedCreatureId;
-
     private long nextCreatureNumber;
 
-    public Session() {
+    public Session(DungeonManagerApp app, String workingDirectory) {
+        this.app = app;
         this.creatures = new LinkedHashMap<>();
         this.nextCreatureNumber = 1L;
+        this.workingDirectory = Path.of(workingDirectory);
+        this.packLoader = new PackLoader(this);
+
+        LOG.debug("Loading shared content packs from {}", LIB_PATH);
+        packLoader.loadLibrary(LIB_PATH);
+        LOG.debug("Loading workspace content pack from {}", workingDirectory);
+        packLoader.loadFromPack(workingDirectory);
+        LOG.debug("Content pack loading complete: {} features loaded", registry.feature.getSize());
         LOG.debug("Session initialized");
+    }
+
+    public Session(DungeonManagerApp app) {
+        this(app, DungeonManagerApp.DEFAULT_WORKSPACE_PATH);
     }
 
     static String normalizeId(String value) {
@@ -148,19 +165,21 @@ public class Session {
 
     public synchronized CreatureSnapshot setBaseStat(String creatureId, String statId, Integer value) {
         CreatureEntry entry = requireCreature(creatureId);
-        entry.creature.getStatSet().setBaseValue(normalizeId(statId), value);
+        entry.creature.getStatSet().setBaseValue(
+                registry.stat.get(normalizeId(statId)),
+                value);
         return snapshotCreature(entry.id);
     }
 
     public synchronized CreatureSnapshot resetBaseStat(String creatureId, String statId) {
         CreatureEntry entry = requireCreature(creatureId);
-        entry.creature.getStatSet().resetBaseValue(normalizeId(statId));
+        entry.creature.getStatSet().resetBaseValue(registry.stat.get(normalizeId(statId)));
         return snapshotCreature(entry.id);
     }
 
     public synchronized CreatureSnapshot removeBaseStat(String creatureId, String statId) {
         CreatureEntry entry = requireCreature(creatureId);
-        entry.creature.getStatSet().removeBaseValue(normalizeId(statId));
+        entry.creature.getStatSet().removeBaseValue(registry.stat.get(normalizeId(statId)));
         return snapshotCreature(entry.id);
     }
 
@@ -196,11 +215,28 @@ public class Session {
 
     public synchronized void registerFeature(@NotNull Feature feature) {
         String featureId = normalizeId(feature.getId());
-        Registries.get().feature.register(featureId, feature);
+        registry.feature.register(featureId, feature);
+    }
+
+    public synchronized Set<String> getFeatureIDs() {
+        return registry.feature.getAllKeys();
+    }
+
+    public synchronized Feature getFeature(String featureId) {
+        return registry.feature.get(normalizeId(featureId));
+    }
+
+    public synchronized void registerStat(@NotNull Stat stat) {
+        String statId = normalizeId(stat.getID());
+        registry.stat.register(statId, stat);
+    }
+
+    public synchronized Stat getStat(String statId) {
+        return registry.stat.get(normalizeId(statId));
     }
 
     public synchronized boolean hasFeature(String featureId) {
-        return Registries.get().feature.get(normalizeId(featureId)) != null;
+        return registry.feature.get(normalizeId(featureId)) != null;
     }
 
     private FeatureInstance addFeatureInstance(String creatureId, String featureInstanceId) {
@@ -212,7 +248,7 @@ public class Session {
 
     /**
      * Load a session from a snapshot. Restores creature IDs, order, selected creature, and nextCreatureNumber.
-     * All creatures and their features/stats are reconstructed from the snapshot data.
+     * All creatures and their features/stat are reconstructed from the snapshot data.
      * @param snapshot the session snapshot to load from
      * @throws IllegalArgumentException if a required creature type or feature is not registered
      */
@@ -250,7 +286,7 @@ public class Session {
         String creatureId = creatureSnapshot.getId();
         
         // Look up creature type from registry
-        CreatureType type = Registries.get().entityType.get(creatureSnapshot.getTypeId());
+        CreatureType type = registry.entityType.get(creatureSnapshot.getTypeId());
         if (type == null) {
             throw new IllegalArgumentException("Creature type not registered: " + creatureSnapshot.getTypeId());
         }
@@ -260,7 +296,8 @@ public class Session {
         
         // Apply base stat overrides
         for (Map.Entry<String, Integer> override : creatureSnapshot.getBaseStatOverrides().entrySet()) {
-            creature.getStatSet().setBaseValue(override.getKey(), override.getValue());
+            Stat stat = registry.stat.get(normalizeId(override.getKey()));
+            creature.getStatSet().setBaseValue(stat, override.getValue());
         }
 
         // Recreate features with their saved configuration
@@ -284,7 +321,7 @@ public class Session {
      */
     private void loadFeatureIntoCreature(@NotNull Creature creature, @NotNull FeatureInstanceSnapshot featureSnapshot) {
         // Look up feature from registry
-        Feature feature = Registries.get().feature.get(featureSnapshot.getFeatureId());
+        Feature feature = registry.feature.get(featureSnapshot.getFeatureId());
         if (feature == null) {
             throw new IllegalArgumentException("Feature not registered: " + featureSnapshot.getFeatureId());
         }
@@ -312,7 +349,11 @@ public class Session {
 
     private void applyBaseStats(Creature creature, @NotNull Map<String, Integer> baseStats) {
         for (Map.Entry<String, Integer> entry : baseStats.entrySet()) {
-            creature.getStatSet().setBaseValue(normalizeId(entry.getKey()), entry.getValue());
+            Stat stat = registry.stat.get(normalizeId(entry.getKey()));
+            if (stat == null) {
+                throw new IllegalArgumentException("Stat not found: " + entry.getKey());
+            }
+            creature.getStatSet().setBaseValue(stat, entry.getValue());
         }
     }
 
@@ -326,7 +367,7 @@ public class Session {
 
     private Feature requireFeature(String featureId) {
         String normalized = normalizeId(featureId);
-        Feature feature = Registries.get().feature.get(normalized);
+        Feature feature = registry.feature.get(normalized);
         if (feature == null) {
             throw new IllegalArgumentException("Feature not found: " + normalized);
         }

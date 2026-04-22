@@ -1,8 +1,8 @@
 package dungeonmanager.session;
 
 import dungeonmanager.feature.FeatureInstance;
-import dungeonmanager.stats.Stat;
-import dungeonmanager.stats.StatModifier;
+import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.StatModifier;
 
 import java.util.Collections;
 import java.util.LinkedHashMap;
@@ -45,8 +45,8 @@ public class FeatureInstanceSnapshot {
     static FeatureInstanceSnapshot fromInstance(FeatureInstance instance) {
         Map<String, Integer> modifierTotals = new LinkedHashMap<>();
         for (StatModifier modifier : instance.getStatModifiers()) {
-            for (Map.Entry<Stat, Integer> entry : modifier.getValues().entrySet()) {
-                String statId = entry.getKey().getID();
+            for (Map.Entry<String, Integer> entry : modifier.getValues().entrySet()) {
+                String statId = entry.getKey();
                 modifierTotals.put(statId, modifierTotals.getOrDefault(statId, 0) + entry.getValue());
             }
         }

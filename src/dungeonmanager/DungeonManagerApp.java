@@ -1,12 +1,9 @@
 package dungeonmanager;
 
-import dungeonmanager.stats.Stat;
-import dungeonmanager.stats.StandardStat;
+import dungeonmanager.session.Session;
+import dungeonmanager.stat.StandardStat;
 import dungeonmanager.command.*;
-import dungeonmanager.command.commands.RollCommand;
-import dungeonmanager.command.commands.StopCommand;
 import dungeonmanager.contentPack.PackLoader;
-import dungeonmanager.registry.Registries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -18,14 +15,10 @@ public class DungeonManagerApp {
 
     private static final Logger LOG = LoggerFactory.getLogger(DungeonManagerApp.class);
 
-    static final String USER_DIR = System.getProperty("user.home");
-    static final String APP_PATH = USER_DIR + "/DungeonManager/";
-    static final String LIB_PATH = APP_PATH + "library/";
-    static final String DEFAULT_WORKSPACE_PATH = APP_PATH + "workspace/default/";
-
-    private static final Registries registry = Registries.get();
-    private String workingDirectory;
-    // private Session session;
+    public static final String USER_DIR = System.getProperty("user.home");
+    public static final String APP_PATH = USER_DIR + "/DungeonManager/";
+    public static final String LIB_PATH = APP_PATH + "library/";
+    public static final String DEFAULT_WORKSPACE_PATH = APP_PATH + "workspace/default/";
 
     private Scanner console_in;
     private CommandLine command_line;
@@ -37,42 +30,26 @@ public class DungeonManagerApp {
         app.run();
     }
 
-    public DungeonManagerApp(
-            String workingDirectory
-    ) {
+    public DungeonManagerApp() {
         LOG.info("Starting DungeonManager application");
-        this.workingDirectory = workingDirectory;
         try {
             requireDirectory(LIB_PATH, "library");
-            requireDirectory(this.workingDirectory, "workspace");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
 
         LOG.debug("Initializing application registries and command line context");
         console_in = new Scanner(System.in);
-        command_line = new CommandLine(new CommandContext(this, console_in, registry));
+        // command_line = new CommandLine(new CommandContext(this, console_in, registry));
 
-        for (Stat stat : StandardStat.values()) {
-            registry.stats.register(stat.getID(), () -> stat);
-        }
-        LOG.debug("Registered {} standard stats", StandardStat.values().length);
+        LOG.debug("Registered {} standard stat", StandardStat.values().length);
 
-        registry.command.register("roll", () -> new RollCommand());
-        registry.command.register("r", () -> registry.command.get("roll"));
-        registry.command.register("stop", () -> new StopCommand());
-        LOG.debug("Registered commands");
+        // registry.command.register("roll", () -> new RollCommand());
+        // registry.command.register("r", () -> registry.command.get("roll"));
+        // registry.command.register("stop", () -> new StopCommand());
+        // LOG.debug("Registered commands");
 
-        LOG.debug("Loading shared content packs from {}", LIB_PATH);
-        PackLoader.loadLibrary(LIB_PATH);
-        LOG.debug("Loading workspace content pack from {}", workingDirectory);
-        PackLoader.loadFromPack(workingDirectory);
-        LOG.debug("Content pack loading complete: {} features loaded", registry.feature.getSize());
         LOG.info("Initialization complete");
-    }
-
-    public DungeonManagerApp() {
-        this(DEFAULT_WORKSPACE_PATH);
     }
 
     public void run() {
@@ -86,14 +63,22 @@ public class DungeonManagerApp {
         LOG.info("Quitting DungeonManager application");
     }
 
-    public void setWorkingDirectory(String directoryPath) throws FileNotFoundException {
+    /*public void setWorkingDirectory(String directoryPath) throws FileNotFoundException {
         File workspaceDir = new File(directoryPath);
         requireDirectory(workspaceDir.getPath(), "workspace");
         this.workingDirectory = workspaceDir.getPath();
+    }*/
+
+    /*public String getWorkingDirectory() {
+        return this.workingDirectory;
+    }*/
+
+    public Session getSession(String workspacePath) {
+        return new Session(this, workspacePath);
     }
 
-    public String getWorkingDirectory() {
-        return this.workingDirectory;
+    public Session getSession() {
+        return new Session(this, DEFAULT_WORKSPACE_PATH);
     }
 
     /**

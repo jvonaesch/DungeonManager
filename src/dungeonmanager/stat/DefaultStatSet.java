@@ -1,10 +1,10 @@
-package dungeonmanager.stats;
+package dungeonmanager.stat;
 
 import java.util.HashSet;
 import java.util.Set;
 
 /**
- * Singleton class representing the default set of stats for a creature.
+ * Singleton class representing the default set of stat for a creature.
  */
 public class DefaultStatSet implements StatSet {
 

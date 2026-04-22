@@ -1,11 +1,11 @@
-package dungeonmanager.stats;
+package dungeonmanager.stat;
 
 /**
- * Enumeration of standard stats provided by the system.
- * Provides predefined stats with standard names, IDs, and default values.
- * All standard stats are automatically registered with the global stat registry.
+ * Enumeration of standard stat provided by the system.
+ * Provides predefined stat with standard names, IDs, and default values.
+ * All standard stat are automatically registered with the global stat registry.
  * 
- * @see dungeonmanager.stats.CustomStat for user-defined stats
+ * @see dungeonmanager.stat.CustomStat for user-defined stat
  * @see dungeonmanager.DungeonManagerApp#initialize() for registration
  */
 public enum StandardStat implements Stat {
@@ -33,7 +33,7 @@ public enum StandardStat implements Stat {
     }
 
     private StandardStat(String ID, String name, String type, int default_value) {
-        this(ID, name, type, default_value, "standard:dungeonmanager.stats." + type + ':' + ID);
+        this(ID, name, type, default_value, "standard:dungeonmanager.stat." + type + ':' + ID);
     }
 
     private StandardStat(String ID, String name, String type) {

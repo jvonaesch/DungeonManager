@@ -1,23 +1,18 @@
 package test.session;
 
-import dungeonmanager.registry.Registries;
-import dungeonmanager.stats.StandardStat;
-import dungeonmanager.stats.StatModifier;
-import org.junit.jupiter.api.BeforeEach;
+import dungeonmanager.stat.CustomStat;
+import dungeonmanager.stat.StandardStat;
+import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import test.AppTest;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 @DisplayName("Session Stat Modifier Tests")
-public class SessionStatModifierTest {
-
-    @BeforeEach
-    void setUp() {
-        registerStandardStats();
-    }
+public class SessionStatModifierTest extends AppTest {
 
     @Test
     @DisplayName("Stat modifier correctly adds value to stat")
@@ -29,13 +24,17 @@ public class SessionStatModifierTest {
     }
 
     @Test
-    @DisplayName("Stat modifier with string stat ID creates and registers custom stat")
+    @DisplayName("Registering a custom stat")
     void stat_modifier_with_string_id_registers_custom_stat() {
-        StatModifier modifier = new StatModifier();
-        modifier.setValue("FIRE", 3);
+        Stat fire = new CustomStat("FIRE", "Fire", "other");
+        session.registerStat(fire);
 
-        assertEquals(3, modifier.getValue("FIRE"), "Expected modifier to store FIRE +3");
-        assertNotNull(Registries.get().stats.get("FIRE"), "Expected FIRE custom stat to be registered");
+        StatModifier modifier = new StatModifier();
+        modifier.setValue(fire, 3);
+
+        Stat read_stat = session.getStat("FIRE");
+        assertEquals(fire, read_stat, "Expected session to return registered FIRE stat");
+        assertEquals(3, modifier.getValue(read_stat), "Expected modifier to store FIRE +3");
     }
 
     @Test
@@ -81,12 +80,6 @@ public class SessionStatModifierTest {
         modifier.setValue(StandardStat.STR, 0);
 
         assertEquals(0, modifier.getValue(StandardStat.STR), "Expected modifier to store STR 0");
-    }
-
-    private void registerStandardStats() {
-        for (StandardStat stat : StandardStat.values()) {
-            Registries.get().stats.register(stat.getID(), stat);
-        }
     }
 }
 

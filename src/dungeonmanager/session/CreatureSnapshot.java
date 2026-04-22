@@ -2,7 +2,7 @@ package dungeonmanager.session;
 
 import dungeonmanager.creature.Creature;
 import dungeonmanager.feature.FeatureInstance;
-import dungeonmanager.stats.Stat;
+import dungeonmanager.stat.Stat;
 
 import java.util.*;
 

@@ -1,7 +1,7 @@
 package dungeonmanager.feature;
 
 import dungeonmanager.session.JsonSerializable;
-import dungeonmanager.stats.ModifiableStatSet;
+import dungeonmanager.stat.ModifiableStatSet;
 
 /**
  * A section within a Feature that groups related information together.

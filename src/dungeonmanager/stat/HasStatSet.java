@@ -1,4 +1,4 @@
-package dungeonmanager.stats;
+package dungeonmanager.stat;
 
 
 public interface HasStatSet {

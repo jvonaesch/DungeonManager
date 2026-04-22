@@ -1,7 +1,7 @@
 package dungeonmanager.creature;
 
 import dungeonmanager.feature.Features;
-import dungeonmanager.stats.*;
+import dungeonmanager.stat.*;
 import dungeonmanager.feature.FeatureSet;
 
 public class Creature implements HasStatSet {

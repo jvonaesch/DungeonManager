@@ -4,10 +4,11 @@ import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.registry.Registries;
 import dungeonmanager.session.CreatureSnapshot;
 import dungeonmanager.session.Session;
-import dungeonmanager.stats.StandardStat;
+import dungeonmanager.stat.StandardStat;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import test.AppTest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,17 +20,11 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Session Creature Lifecycle Tests")
-public class SessionCreatureTest {
-
-    @BeforeEach
-    void setUp() {
-        registerStandardStats();
-    }
+public class SessionCreatureTest extends AppTest {
 
     @Test
     @DisplayName("Creates creature with default type")
     void creates_creature_with_default_type() {
-        Session session = new Session();
         CreatureSnapshot creature = session.createCreature("Ranger");
 
         assertNotNull(creature, "Expected creature to be created");
@@ -42,7 +37,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Creates creature with specified type")
     void creates_creature_with_specified_type() {
-        Session session = new Session();
         CreatureSnapshot creature = session.createCreature("Bear", IntegratedCreatureType.OWLBEAR);
 
         assertNotNull(creature, "Expected creature to be created");
@@ -53,7 +47,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Creates creature with base stat overrides")
     void creates_creature_with_base_stat_overrides() {
-        Session session = new Session();
         Map<String, Integer> baseStats = new HashMap<>();
         baseStats.put("STR", 18);
         baseStats.put("DEX", 10);
@@ -71,7 +64,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Renames a creature")
     void renames_creature() {
-        Session session = new Session();
         CreatureSnapshot created = session.createCreature("Hero");
         String creatureId = created.getId();
 
@@ -84,7 +76,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Changes creature type")
     void changes_creature_type() {
-        Session session = new Session();
         CreatureSnapshot created = session.createCreature("Beast", IntegratedCreatureType.DEFAULT);
         String creatureId = created.getId();
 
@@ -93,8 +84,8 @@ public class SessionCreatureTest {
         assertEquals(IntegratedCreatureType.DWARF.getID(), changed.getTypeId(), "Expected creature type to change");
         assertEquals(created.getId(), changed.getId(), "Expected ID to remain unchanged");
         
-        // Verify that DWARF's base stats were applied
-        assertNotNull(changed.getStats(), "Expected stats map to exist");
+        // Verify that DWARF's base stat were applied
+        assertNotNull(changed.getStats(), "Expected stat map to exist");
         for (StandardStat stat : StandardStat.values()) {
             int expectedStat = IntegratedCreatureType.DWARF.getStatSet().getValue(stat);
             int actualStat = changed.getStat(stat.getID());
@@ -105,7 +96,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Sets base stat on creature")
     void sets_base_stat() {
-        Session session = new Session();
         CreatureSnapshot created = session.createCreature("Warrior");
         String creatureId = created.getId();
 
@@ -118,7 +108,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Resets base stat on creature")
     void resets_base_stat() {
-        Session session = new Session();
         Map<String, Integer> baseStats = new HashMap<>();
         baseStats.put("STR", 18);
         CreatureSnapshot created = session.createCreature("Knight", IntegratedCreatureType.DEFAULT, baseStats);
@@ -132,7 +121,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Removes base stat on creature")
     void removes_base_stat() {
-        Session session = new Session();
         Map<String, Integer> baseStats = new HashMap<>();
         baseStats.put("STR", 18);
         CreatureSnapshot created = session.createCreature("Paladin", IntegratedCreatureType.DEFAULT, baseStats);
@@ -146,7 +134,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Selects a creature by ID")
     void selects_creature_by_id() {
-        Session session = new Session();
         CreatureSnapshot created = session.createCreature("Hero");
         String creatureId = created.getId();
         session.clearSelection();
@@ -158,7 +145,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Selection fails for unknown creature")
     void selection_fails_for_unknown_creature() {
-        Session session = new Session();
         session.createCreature("Hero");
 
         assertFalse(session.selectCreature("unknown-id"), "Expected selection to fail");
@@ -167,7 +153,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Gets selected creature snapshot")
     void gets_selected_creature_snapshot() {
-        Session session = new Session();
         CreatureSnapshot created = session.createCreature("Hero");
 
         CreatureSnapshot selected = session.getSelectedCreatureSnapshot();
@@ -179,7 +164,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Gets selected creature snapshot when none selected")
     void gets_selected_creature_snapshot_when_none_selected() {
-        Session session = new Session();
         session.createCreature("Hero");
         session.clearSelection();
 
@@ -191,7 +175,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Gets creature snapshot by ID")
     void gets_creature_snapshot_by_id() {
-        Session session = new Session();
         CreatureSnapshot created = session.createCreature("Hero");
         String creatureId = created.getId();
         session.clearSelection();
@@ -205,7 +188,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Checks if creature exists")
     void checks_if_creature_exists() {
-        Session session = new Session();
         CreatureSnapshot created = session.createCreature("Hero");
         String creatureId = created.getId();
 
@@ -216,7 +198,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Deletes a creature")
     void deletes_creature() {
-        Session session = new Session();
         CreatureSnapshot created = session.createCreature("Hero");
         String creatureId = created.getId();
 
@@ -227,16 +208,13 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Deletion fails for unknown creature")
     void deletion_fails_for_unknown_creature() {
-        Session session = new Session();
         session.createCreature("Hero");
-
         assertFalse(session.deleteCreature("unknown-id"), "Expected deletion to fail");
     }
 
     @Test
     @DisplayName("Deleting selected creature clears selection")
     void deleting_selected_creature_clears_selection() {
-        Session session = new Session();
         CreatureSnapshot created = session.createCreature("Hero");
         String creatureId = created.getId();
         assertEquals(creatureId, session.getSelectedCreatureId(), "Expected creature to be selected after creation");
@@ -249,7 +227,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Deleting selected creature selects next available")
     void deleting_selected_creature_selects_next_available() {
-        Session session = new Session();
         CreatureSnapshot first = session.createCreature("Hero1");
         CreatureSnapshot second = session.createCreature("Hero2");
         String secondId = second.getId();
@@ -264,7 +241,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Clears creature selection")
     void clears_creature_selection() {
-        Session session = new Session();
         CreatureSnapshot created = session.createCreature("Hero");
         assertEquals(created.getId(), session.getSelectedCreatureId(), "Expected creature to be selected");
 
@@ -276,7 +252,6 @@ public class SessionCreatureTest {
     @Test
     @DisplayName("Multiple creatures can be created and selected independently")
     void multiple_creatures_can_be_created_and_selected() {
-        Session session = new Session();
         CreatureSnapshot c1 = session.createCreature("Hero1");
         CreatureSnapshot c2 = session.createCreature("Hero2");
         CreatureSnapshot c3 = session.createCreature("Hero3");
@@ -288,12 +263,6 @@ public class SessionCreatureTest {
 
         assertTrue(session.selectCreature(c2.getId()), "Expected to select c2");
         assertEquals(c2.getId(), session.getSelectedCreatureId(), "Expected c2 to be selected");
-    }
-
-    private void registerStandardStats() {
-        for (StandardStat stat : StandardStat.values()) {
-            Registries.get().stats.register(stat.getID(), stat);
-        }
     }
 }
 

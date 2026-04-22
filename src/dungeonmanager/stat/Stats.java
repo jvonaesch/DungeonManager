@@ -1,4 +1,4 @@
-package dungeonmanager.stats;
+package dungeonmanager.stat;
 
 import java.util.Comparator;
 
@@ -6,8 +6,8 @@ import java.util.Comparator;
  * Utility class for stat-related operations and constants.
  * Provides stat comparison utilities and string formatting helpers.
  * 
- * @see dungeonmanager.stats.StatSets for advanced stat set formatting
- * @see dungeonmanager.stats.ModifiableStatSet for stat set implementations
+ * @see dungeonmanager.stat.StatSets for advanced stat set formatting
+ * @see dungeonmanager.stat.ModifiableStatSet for stat set implementations
  */
 public class Stats {
 
@@ -17,7 +17,7 @@ public class Stats {
 
     /**
      * Enumeration providing stat comparison functionality.
-     * Used for consistent ordering of stats in collections (TreeSet, TreeMap).
+     * Used for consistent ordering of stat in collections (TreeSet, TreeMap).
      */
     public enum AbilityComparator implements Comparator<Stat> {
         DEFAULT;
@@ -29,9 +29,9 @@ public class Stats {
     }
 
     /**
-     * Gets the default comparator for stats (compares by ID).
-     * @return comparator that orders stats alphabetically by ID
-     * @see dungeonmanager.stats.Stats.AbilityComparator for implementation
+     * Gets the default comparator for stat (compares by ID).
+     * @return comparator that orders stat alphabetically by ID
+     * @see dungeonmanager.stat.Stats.AbilityComparator for implementation
      */
     public static Comparator<? super Stat> getDefaultComparator () {
         return AbilityComparator.DEFAULT;

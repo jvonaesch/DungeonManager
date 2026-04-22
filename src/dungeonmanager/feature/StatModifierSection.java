@@ -4,9 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
-import dungeonmanager.stats.ModifiableStatSet;
-import dungeonmanager.stats.Stat;
-import dungeonmanager.stats.StatModifier;
+import dungeonmanager.stat.ModifiableStatSet;
+import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.StatModifier;
 
 import java.util.Map;
 
@@ -106,8 +106,8 @@ public class StatModifierSection implements FeatureSection {
         obj.put("visible", visible);
 
         ObjectNode modifierNode = MAPPER.createObjectNode();
-        for (Map.Entry<Stat, Integer> entry : modifier.getValues().entrySet()) {
-            modifierNode.put(entry.getKey().getID(), entry.getValue());
+        for (Map.Entry<String, Integer> entry : modifier.getValues().entrySet()) {
+            modifierNode.put(entry.getKey(), entry.getValue());
         }
         obj.set("modifier", modifierNode);
 

@@ -1,4 +1,4 @@
-package dungeonmanager.stats.proficiency;
+package dungeonmanager.stat.proficiency;
 
 public class ProficiencySet {
 

@@ -1,4 +1,6 @@
-package dungeonmanager.stats;
+package dungeonmanager.stat;
+
+import org.jetbrains.annotations.NotNull;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -30,7 +32,7 @@ public class DefaultedStatSet extends ModifiableStatSet {
      * @param value the new base value, or null to remove
      */
     @Override
-    public void setBaseValue(Stat stat, Integer value) {
+    public void setBaseValue(@NotNull Stat stat, Integer value) {
         if (value == null) this.removeBaseValue(stat);
         else super.setBaseValue(stat, value);
         this.removed.remove(stat);
@@ -39,11 +41,11 @@ public class DefaultedStatSet extends ModifiableStatSet {
 
     /**
      * Removes the base value for a stat and marks it as removed.
-     * Removed stats will not fall back to parent values.
+     * Removed stat will not fall back to parent values.
      * @param stat the stat to remove
      */
     @Override
-    public void removeBaseValue(Stat stat) {
+    public void removeBaseValue(@NotNull Stat stat) {
         super.removeBaseValue(stat);
         values.remove(stat);
         removed.add(stat);
@@ -55,7 +57,7 @@ public class DefaultedStatSet extends ModifiableStatSet {
      * @param stat the stat to reset
      */
     @Override
-    public void resetBaseValue(Stat stat) {
+    public void resetBaseValue(@NotNull Stat stat) {
         this.removed.remove(stat);
         this.base_values.remove(stat);
         this.reloadValues();
