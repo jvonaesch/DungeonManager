@@ -1,6 +1,7 @@
 package dungeonmanager.registry;
 
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.function.Supplier;
@@ -31,6 +32,16 @@ public class LazyRegistry<T> implements Registry<T> {
         LazyRegistryObject item = registerMap.get(ID);
         if (item == null) return null;
         return item.get();
+    }
+
+    @Override
+    public int getSize() {
+        return registerMap.size();
+    }
+
+    @Override
+    public Set<String> getAllKeys() {
+        return registerMap.keySet();
     }
 
     private class LazyRegistryObject implements RegistryObject <T> {

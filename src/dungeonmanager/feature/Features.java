@@ -1,7 +1,5 @@
 package dungeonmanager.feature;
 
-import dungeonmanager.stats.StatModifier;
-
 /**
  * Utility class for converting features and feature sets to strings for display purposes.
  */

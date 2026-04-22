@@ -162,7 +162,7 @@ public class SelectionSection implements
                 }
 
                 // Deserialize based on type
-                FeatureSection deserialized = Sections.loadSection(sectionJson);
+                FeatureSection deserialized = FeatureSerializer.loadSection(sectionJson);
                 if (deserialized != null) {
                     section.configuration.put(optionId, deserialized);
                 }

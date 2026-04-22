@@ -4,7 +4,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-public class Sections {
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
+
+public class FeatureSerializer {
 
     protected static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -15,7 +20,7 @@ public class Sections {
      * @param json the JSON string representation of the section
      * @return the deserialized FeatureSection, or null if type is unknown
      */
-    static FeatureSection loadSection(String json) {
+    public static FeatureSection loadSection(String json) {
         JsonNode obj;
         try {
             obj = MAPPER.readTree(json);
@@ -31,5 +36,12 @@ public class Sections {
             return SelectionSection.fromJson(json);
         }
         return null;
+    }
+
+    public static void writeToFile(String pathStr, String content) throws IOException {
+        Path path = Path.of(pathStr);
+        Path parent = path.getParent();
+        if (parent != null) Files.createDirectories(parent);
+        Files.writeString(path, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     }
 }

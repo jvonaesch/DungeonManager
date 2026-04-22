@@ -1,5 +1,6 @@
-package dungeonmanager.feature;
+package dungeonmanager.contentPack;
 
+import dungeonmanager.feature.Feature;
 import dungeonmanager.registry.Registries;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,8 +12,13 @@ import java.nio.file.Paths;
 import java.util.stream.Stream;
 
 /**
- * Loads feature templates from pack directories.
- * Scans each top-level pack folder for a 'features' subdirectory and recursively loads all JSON files.
+ * Loads data from Content Packs.
+ * <br>Scans each pack folder and recursively loads all JSON files.
+ * Layout:
+ * <pre><code>
+ *  └─ pack/
+ *     └─ features/
+ * </code></pre>
  * Features are registered into Registries.get().feature for global access.
  */
 public class PackLoader {
@@ -20,27 +26,20 @@ public class PackLoader {
     private static final Logger LOG = LoggerFactory.getLogger(PackLoader.class);
 
     /**
-     * Load all features from packs in the library directory.
-     * Each pack is expected to have a 'features' folder with JSON files defining features.
-     *
+     * Load all packs in a library directory
      * @param libraryPath the path to the DungeonManagerLibrary directory
      */
-    public static void loadFeaturesFromLibrary(String libraryPath) {
+    public static void loadLibrary(String libraryPath) {
         Path libDir = Paths.get(libraryPath);
 
-        if (!Files.exists(libDir)) {
-            LOG.warn("Library directory does not exist: {}", libDir.toAbsolutePath());
-            return;
-        }
-
-        if (!Files.isDirectory(libDir)) {
-            LOG.warn("Library path is not a directory: {}", libDir.toAbsolutePath());
-            return;
-        }
+        if (!checkDirectory(libDir)) return;
 
         try (Stream<Path> packDirs = Files.list(libDir)) {
             packDirs.filter(Files::isDirectory)
-                    .forEach(PackLoader::loadFeaturesFromPack);
+                    .forEach(PackLoader::loadPack);
+
+            // TODO: enable loading from zip files
+
         } catch (IOException e) {
             LOG.error("Error accessing library directory: {}", libDir.toAbsolutePath(), e);
         }
@@ -64,7 +63,7 @@ public class PackLoader {
             return;
         }
 
-        loadFeaturesFromPack(packDir);
+        loadPack(packDir);
     }
 
     /**
@@ -72,7 +71,7 @@ public class PackLoader {
      *
      * @param packDir the path to a pack directory
      */
-    private static void loadFeaturesFromPack(Path packDir) {
+    private static void loadPack(Path packDir) {
         Path featuresDir = packDir.resolve("features");
 
         if (!Files.exists(featuresDir)) {
@@ -125,6 +124,30 @@ public class PackLoader {
         } catch (Exception e) {
             LOG.error("Error loading feature from {}: {}", filePath.toAbsolutePath(), e.getMessage(), e);
         }
+    }
+
+    public static boolean checkDirectory(Path filePath, String failureMessage, String notADirectoryMessage) {
+        if (!Files.exists(filePath)) {
+            try {
+                Files.createDirectories(filePath);
+            } catch (IOException e) {
+                LOG.error(failureMessage, filePath.toAbsolutePath(), e);
+                return false;
+            }
+        }
+        if (!Files.isDirectory(filePath)) {
+            LOG.error(notADirectoryMessage, filePath.toAbsolutePath());
+            return false;
+        }
+        return true;
+    }
+
+    public static boolean checkDirectory(Path filePath) {
+        return checkDirectory(
+                filePath,
+                "Failed to create directory: {}",
+                "Expected a directory but found a file: {}"
+        );
     }
 }
 

@@ -104,7 +104,7 @@ public class Feature implements JsonSerializable {
                 sectionsArray.forEach(element -> {
                     try {
                         String sectionJson = MAPPER.writeValueAsString(element);
-                        FeatureSection deserialized = Sections.loadSection(sectionJson);
+                        FeatureSection deserialized = FeatureSerializer.loadSection(sectionJson);
                         if (deserialized != null) {
                             feature.addSection(deserialized);
                         }

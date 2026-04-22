@@ -1,6 +1,7 @@
 package dungeonmanager.registry;
 
 import java.util.HashMap;
+import java.util.Set;
 import java.util.function.Supplier;
 
 public class HashRegistry<T> implements Registry<T> {
@@ -24,5 +25,15 @@ public class HashRegistry<T> implements Registry<T> {
     @Override
     public T get(String ID) {
         return map.get(ID);
+    }
+
+    @Override
+    public int getSize() {
+        return map.size();
+    }
+
+    @Override
+    public Set<String> getAllKeys() {
+        return map.keySet();
     }
 }

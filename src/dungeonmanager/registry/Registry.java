@@ -1,5 +1,6 @@
 package dungeonmanager.registry;
 
+import java.util.Set;
 import java.util.function.Supplier;
 
 public interface Registry<T> {
@@ -8,4 +9,8 @@ public interface Registry<T> {
     void register(String ID, Supplier<T> supplier);
 
     T get(String ID);
+
+    int getSize();
+
+    Set<String> getAllKeys();
 }
