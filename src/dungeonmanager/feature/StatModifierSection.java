@@ -1,12 +1,21 @@
 package dungeonmanager.feature;
 
-import dungeonmanager.stats.StatModifier;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dungeonmanager.stats.ModifiableStatSet;
+import dungeonmanager.stats.Stat;
+import dungeonmanager.stats.StatModifier;
+
+import java.util.Map;
 
 /**
  * A FeatureSection that contains a score modifier.
  */
 public class StatModifierSection implements FeatureSection {
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private String id;
     private String name;
@@ -85,5 +94,49 @@ public class StatModifierSection implements FeatureSection {
                 ", modifier=" + modifier +
                 ", visible=" + visible +
                 '}';
+    }
+
+    @Override
+    public String toJson() {
+        ObjectNode obj = MAPPER.createObjectNode();
+        obj.put("type", getType());
+        obj.put("id", id);
+        obj.put("name", name);
+        obj.put("description", description);
+        obj.put("visible", visible);
+
+        ObjectNode modifierNode = MAPPER.createObjectNode();
+        for (Map.Entry<Stat, Integer> entry : modifier.getValues().entrySet()) {
+            modifierNode.put(entry.getKey().getID(), entry.getValue());
+        }
+        obj.set("modifier", modifierNode);
+
+        try {
+            return MAPPER.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Failed to serialize stat modifier section '" + id + "'", e);
+        }
+    }
+
+    public static StatModifierSection fromJson(String json) {
+        JsonNode obj;
+        try {
+            obj = MAPPER.readTree(json);
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException("Invalid stat modifier section JSON", e);
+        }
+
+        String sectionId = obj.path("id").asText();
+        String sectionName = obj.path("name").asText();
+        String sectionDesc = obj.path("description").asText();
+        boolean sectionVisible = obj.path("visible").asBoolean(true);
+
+        StatModifier mod = new StatModifier();
+        JsonNode modifierData = obj.path("modifier");
+        if (modifierData.isObject()) {
+            modifierData.fields().forEachRemaining(entry -> mod.setValue(entry.getKey(), entry.getValue().asInt()));
+        }
+
+        return new StatModifierSection(sectionId, sectionName, sectionDesc, mod, sectionVisible);
     }
 }

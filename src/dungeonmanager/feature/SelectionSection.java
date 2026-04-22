@@ -1,12 +1,22 @@
 package dungeonmanager.feature;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+
 import java.util.*;
 
 /**
  * A FeatureSection that allows choosing from multiple subsections.
  * A specified number of subsections can be selected and added to the FeatureInstance.
  */
-public class SelectionSection implements ConfiguredFeatureSection {
+public class SelectionSection implements
+        ConfiguredFeatureSection<Set<String>>
+{
+
+    private static final ObjectMapper MAPPER = new ObjectMapper();
 
     private String id;
     private String name;
@@ -89,14 +99,104 @@ public class SelectionSection implements ConfiguredFeatureSection {
     }
 
     @Override
-    public String toString() {
-        return "SelectionSection{" +
-                "id='" + id + '\'' +
-                ", name='" + name + '\'' +
-                ", numSelections=" + numSelections +
-                ", choices=" + configuration.keySet() +
-                ", visible=" + visible +
-                '}';
+    public String toJson() {
+        ObjectNode obj = MAPPER.createObjectNode();
+        obj.put("type", getType());
+        obj.put("id", id);
+        obj.put("name", name);
+        obj.put("description", description);
+        obj.put("visible", visible);
+        obj.put("numSelections", numSelections);
+
+        ArrayNode optionsArray = MAPPER.createArrayNode();
+        for (Map.Entry<String, FeatureSection> entry : configuration.entrySet()) {
+            ObjectNode optionObj = MAPPER.createObjectNode();
+            optionObj.put("id", entry.getKey());
+            String sectionJson = serializeSection(entry.getValue());
+            if (sectionJson == null) {
+                continue;
+            }
+            try {
+                optionObj.set("section", MAPPER.readTree(sectionJson));
+            } catch (JsonProcessingException e) {
+                throw new IllegalStateException("Failed to serialize selection option '" + entry.getKey() + "'", e);
+            }
+
+            optionsArray.add(optionObj);
+        }
+        obj.set("options", optionsArray);
+
+        try {
+            return MAPPER.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Failed to serialize selection section '" + id + "'", e);
+        }
+    }
+
+    public static SelectionSection fromJson(String json) {
+        JsonNode obj;
+        try {
+            obj = MAPPER.readTree(json);
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException("Invalid selection section JSON", e);
+        }
+
+        String sectionId = obj.path("id").asText();
+        String sectionName = obj.path("name").asText();
+        String sectionDesc = obj.path("description").asText();
+        boolean sectionVisible = obj.path("visible").asBoolean(true);
+        int numSel = obj.path("numSelections").asInt();
+
+        SelectionSection section = new SelectionSection(sectionId, sectionName, sectionDesc, numSel, sectionVisible);
+
+        JsonNode optionsArray = obj.path("options");
+        if (optionsArray.isArray()) {
+            optionsArray.forEach(element -> {
+                String optionId = element.path("id").asText();
+                JsonNode sectionObj = element.path("section");
+                String sectionJson;
+                try {
+                    sectionJson = MAPPER.writeValueAsString(sectionObj);
+                } catch (JsonProcessingException e) {
+                    throw new IllegalStateException("Failed to deserialize selection option", e);
+                }
+
+                // Deserialize based on type
+                FeatureSection deserialized = deserializeSection(sectionJson);
+                if (deserialized != null) {
+                    section.configuration.put(optionId, deserialized);
+                }
+            });
+        }
+
+        return section;
+    }
+
+    private static FeatureSection deserializeSection(String json) {
+        JsonNode obj;
+        try {
+            obj = MAPPER.readTree(json);
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException("Invalid nested section JSON", e);
+        }
+        String type = obj.path("type").asText();
+
+        if ("score_modifiers".equals(type)) {
+            return StatModifierSection.fromJson(json);
+        } else if ("selection".equals(type)) {
+            return SelectionSection.fromJson(json);
+        }
+        return null;
+    }
+
+    private static String serializeSection(FeatureSection section) {
+        if (section instanceof StatModifierSection statModifierSection) {
+            return statModifierSection.toJson();
+        }
+        if (section instanceof SelectionSection selectionSection) {
+            return selectionSection.toJson();
+        }
+        return null;
     }
 
     @Override

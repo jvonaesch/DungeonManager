@@ -1,6 +1,7 @@
 package dungeonmanager.session;
 
 import dungeonmanager.creature.CreatureType;
+import dungeonmanager.creature.IntegratedCreatureType;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -31,6 +32,10 @@ class Requires {
             throw errorFactory.apply(id);
         }
         return value;
+    }
+
+    public static <T> T getOrDefault(T value, T fallback) {
+        return value != null ? value : fallback;
     }
 }
 

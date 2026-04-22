@@ -26,7 +26,13 @@ public class Session {
 
     private final Map<String, CreatureEntry> creatures;
     private final Map<String, FeatureEntry> features;
+
+    /**
+     * The ID of the currently selected creature. This is null if no creature is selected.
+     * <br><b>Note:</b> <i>Always</i> handle null values!
+     */
     private String selectedCreatureId;
+
     private long nextCreatureNumber;
 
     public Session() {
@@ -59,7 +65,7 @@ public class Session {
     }
 
     public synchronized CreatureSnapshot createCreature(String name) {
-        return createCreature(name, IntegratedCreatureType.DEFAULT);
+        return createCreature(name, IntegratedCreatureType.DEFAULT, null);
     }
 
     public synchronized CreatureSnapshot createCreature(String name, CreatureType type) {
@@ -67,34 +73,33 @@ public class Session {
     }
 
     public synchronized CreatureSnapshot createCreature(String name, CreatureType type, Map<String, Integer> baseStats) {
+        type = Requires.getOrDefault(type, IntegratedCreatureType.DEFAULT);
         String creatureId = nextCreatureId();
-        Creature creature = new Creature(normalizeName(name), Requires.requireNonNull(type, "Creature type"));
+        Creature creature = new Creature(normalizeName(name), type);
+        if (baseStats != null) applyBaseStats(creature, baseStats);
+
         CreatureEntry entry = new CreatureEntry(creatureId, creature);
         creatures.put(creatureId, entry);
         selectedCreatureId = creatureId;
 
-        if (baseStats != null) {
-            applyBaseStats(creature, baseStats);
-        }
-
         LOG.info("Created creature {} named '{}' as type {}", creatureId, creature.getName(), creature.getType().getID());
-
         return snapshotCreature(creatureId);
     }
 
     public synchronized boolean selectCreature(String creatureId) {
-        String normalizedId = normalizeId(creatureId);
-        if (!creatures.containsKey(normalizedId)) {
-            LOG.debug("Selection ignored for unknown creature {}", normalizedId);
+        creatureId = normalizeId(creatureId);
+        if (!creatures.containsKey(creatureId)) {
+            LOG.debug("Selection ignored for unknown creature {}", creatureId);
             return false;
         }
-        selectedCreatureId = normalizedId;
-        LOG.debug("Selected creature {}", normalizedId);
+        selectedCreatureId = creatureId;
+        LOG.debug("Selected creature {}", creatureId);
         return true;
     }
 
     public synchronized void clearSelection() {
         selectedCreatureId = null;
+        LOG.debug("Cleared creature selection");
     }
 
     public synchronized String getSelectedCreatureId() {
@@ -119,26 +124,28 @@ public class Session {
     public synchronized CreatureSnapshot renameCreature(String creatureId, String name) {
         CreatureEntry entry = requireCreature(creatureId);
         entry.creature.rename(normalizeName(name));
+        LOG.debug("Renamed creature {} to '{}'", entry.id, entry.creature.getName());
         return snapshotCreature(entry.id);
     }
 
     public synchronized CreatureSnapshot changeCreatureType(String creatureId, CreatureType type) {
         CreatureEntry entry = requireCreature(creatureId);
         entry.creature.changeType(Requires.requireNonNull(type, "Creature type"));
+        LOG.debug("Changed creature {} type to {}", entry.id, entry.creature.getType().getID());
         return snapshotCreature(entry.id);
     }
 
     public synchronized boolean deleteCreature(String creatureId) {
-        String normalizedId = normalizeId(creatureId);
-        CreatureEntry removed = creatures.remove(normalizedId);
+        creatureId = normalizeId(creatureId);
+        CreatureEntry removed = creatures.remove(creatureId);
         if (removed == null) {
-            LOG.debug("Delete ignored for unknown creature {}", normalizedId);
+            LOG.debug("Delete ignored for unknown creature {}", creatureId);
             return false;
         }
-        if (Objects.equals(selectedCreatureId, normalizedId)) {
+        if (Objects.equals(selectedCreatureId, creatureId)) {
             selectedCreatureId = creatures.isEmpty() ? null : creatures.keySet().iterator().next();
         }
-        LOG.info("Deleted creature {}. New selection: {}", normalizedId, selectedCreatureId);
+        LOG.info("Deleted creature {}. New selection: {}", creatureId, selectedCreatureId);
         return true;
     }
 
@@ -308,7 +315,7 @@ public class Session {
         return CreatureSnapshot.fromCreature(entry.id, entry.creature);
     }
 
-    private void applyBaseStats(Creature creature, Map<String, Integer> baseStats) {
+    private void applyBaseStats(Creature creature, @NotNull Map<String, Integer> baseStats) {
         for (Map.Entry<String, Integer> entry : baseStats.entrySet()) {
             creature.getStatSet().setBaseValue(normalizeId(entry.getKey()), entry.getValue());
         }
