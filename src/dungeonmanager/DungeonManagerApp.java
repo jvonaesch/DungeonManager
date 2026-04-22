@@ -5,9 +5,8 @@ import dungeonmanager.stats.StandardStat;
 import dungeonmanager.command.*;
 import dungeonmanager.command.commands.RollCommand;
 import dungeonmanager.command.commands.StopCommand;
+import dungeonmanager.feature.PackLoader;
 import dungeonmanager.registry.Registries;
-import test.FeatureTest;
-import test.StatSetTest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -20,9 +19,12 @@ public class DungeonManagerApp {
     private static final Logger LOG = LoggerFactory.getLogger(DungeonManagerApp.class);
 
     static final String USER_DIR = System.getProperty("user.home");
-    static final String LIB_PATH = USER_DIR + "/DungeonManager/";
+    static final String APP_PATH = USER_DIR + "/DungeonManager/";
+    static final String LIB_PATH = APP_PATH + "library/";
+    static final String DEFAULT_WORKSPACE_PATH = APP_PATH + "workspace/default/";
 
     private final Registries registry;
+    private String workingDirectory;
     // private Session session;
 
     private Scanner console_in;
@@ -41,8 +43,10 @@ public class DungeonManagerApp {
     }
 
     public DungeonManagerApp() {
+        this.workingDirectory = DEFAULT_WORKSPACE_PATH;
         try {
-            loadLibrary();
+            loadDirectory(LIB_PATH, "library");
+            loadDirectory(this.workingDirectory, "workspace");
         } catch (FileNotFoundException e) {
             throw new RuntimeException(e);
         }
@@ -66,15 +70,15 @@ public class DungeonManagerApp {
         registry.command.register("r", () -> registry.command.get("roll"));
         registry.command.register("stop", () -> new StopCommand());
         LOG.debug("Registered command aliases: roll, r, stop");
+
+        LOG.debug("Loading shared feature packs from {}", LIB_PATH);
+        PackLoader.loadFeaturesFromLibrary(LIB_PATH);
+        LOG.debug("Loading workspace feature pack from {}", workingDirectory);
+        PackLoader.loadFromPack(workingDirectory);
+        LOG.info("Feature pack loading complete (library + workspace)");
     }
 
     public void run() {
-        LOG.info("Running current debug test harness");
-
-        // INITIAL DEBUG CODE
-        StatSetTest.test1();
-        FeatureTest.test_modifiers();
-        LOG.info("Debug test harness completed");
 
         // COMMAND PROMPT
         /*while (this.alive) {
@@ -84,13 +88,23 @@ public class DungeonManagerApp {
         }*/
     }
 
-    public static void loadLibrary() throws FileNotFoundException {
-        File lib_dir = new File(LIB_PATH);
-        if (!lib_dir.exists()) {
-            if (!lib_dir.mkdirs()) throw new FileNotFoundException("Path to library could not be created");
-            LOG.info("Created library directory at {}", lib_dir.getAbsolutePath());
+    public void setWorkingDirectory(String directoryPath) throws FileNotFoundException {
+        File workspaceDir = new File(directoryPath);
+        loadDirectory(workspaceDir.getPath(), "workspace");
+        this.workingDirectory = workspaceDir.getPath();
+    }
+
+    public String getWorkingDirectory() {
+        return this.workingDirectory;
+    }
+
+    private static void loadDirectory(String path, String label) throws FileNotFoundException {
+        File dir = new File(path);
+        if (!dir.exists()) {
+            if (!dir.mkdirs()) throw new FileNotFoundException("Path to " + label + " could not be created");
+            LOG.info("Created {} directory at {}", label, dir.getAbsolutePath());
         } else {
-            LOG.debug("Library directory already exists at {}", lib_dir.getAbsolutePath());
+            LOG.debug("{} directory already exists at {}", label, dir.getAbsolutePath());
         }
     }
 

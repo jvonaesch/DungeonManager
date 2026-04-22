@@ -22,10 +22,8 @@ public class Session {
     private static final Logger LOG = LoggerFactory.getLogger(Session.class);
 
     private record CreatureEntry(String id, Creature creature) {}
-    private record FeatureEntry(String id, Feature feature) {}
 
     private final Map<String, CreatureEntry> creatures;
-    private final Map<String, FeatureEntry> features;
 
     /**
      * The ID of the currently selected creature. This is null if no creature is selected.
@@ -37,7 +35,6 @@ public class Session {
 
     public Session() {
         this.creatures = new LinkedHashMap<>();
-        this.features = new LinkedHashMap<>();
         this.nextCreatureNumber = 1L;
         LOG.debug("Session initialized");
     }
@@ -168,8 +165,7 @@ public class Session {
     }
 
     public synchronized CreatureSnapshot addFeature(String creatureId, String featureId) {
-        FeatureEntry featureEntry = requireFeature(featureId);
-        FeatureInstance added = addFeatureInstance(creatureId, featureEntry.id);
+        FeatureInstance added = addFeatureInstance(creatureId, normalizeId(featureId));
         return added == null ? null : snapshotCreature(normalizeId(creatureId));
     }
 
@@ -200,15 +196,15 @@ public class Session {
 
     public synchronized void registerFeature(@NotNull Feature feature) {
         String featureId = normalizeId(feature.ID);
-        features.put(featureId, new FeatureEntry(featureId, feature));
+        Registries.get().feature.register(featureId, feature);
     }
 
     public synchronized boolean hasFeature(String featureId) {
-        return features.containsKey(normalizeId(featureId));
+        return Registries.get().feature.get(normalizeId(featureId)) != null;
     }
 
     private FeatureInstance addFeatureInstance(String creatureId, String featureInstanceId) {
-        Feature feature = requireFeature(featureInstanceId).feature;
+        Feature feature = requireFeature(featureInstanceId);
         CreatureEntry entry = requireCreature(creatureId);
         String normalizedFeatureId = normalizeId(featureInstanceId == null ? feature.ID : featureInstanceId);
         return entry.creature.getFeatureSet().addFeature(normalizedFeatureId, feature);
@@ -227,7 +223,6 @@ public class Session {
 
         // Clear existing state
         creatures.clear();
-        features.clear();
         selectedCreatureId = null;
         nextCreatureNumber = 1L;
 
@@ -329,12 +324,13 @@ public class Session {
         );
     }
 
-    private FeatureEntry requireFeature(String featureId) {
-        return Requires.requireById(
-                features,
-                featureId,
-                id -> new IllegalArgumentException("Feature not found: " + id)
-        );
+    private Feature requireFeature(String featureId) {
+        String normalized = normalizeId(featureId);
+        Feature feature = Registries.get().feature.get(normalized);
+        if (feature == null) {
+            throw new IllegalArgumentException("Feature not found: " + normalized);
+        }
+        return feature;
     }
 
     private String nextCreatureId() {

@@ -1,8 +1,8 @@
 package dungeonmanager.session;
 
-public interface JsonSerializable <T> {
+public interface JsonSerializable{
     String toJson();
     static <T> T fromJson(String json) {
-        throw new UnsupportedOperationException("Use concrete type static fromJson(String)");
-    }
+        throw new UnsupportedOperationException("fromJson() must be implemented by the concrete class");
+    };
 }

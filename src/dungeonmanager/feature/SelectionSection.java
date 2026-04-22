@@ -112,7 +112,7 @@ public class SelectionSection implements
         for (Map.Entry<String, FeatureSection> entry : configuration.entrySet()) {
             ObjectNode optionObj = MAPPER.createObjectNode();
             optionObj.put("id", entry.getKey());
-            String sectionJson = serializeSection(entry.getValue());
+            String sectionJson = entry.getValue().toJson();
             if (sectionJson == null) {
                 continue;
             }
@@ -162,7 +162,7 @@ public class SelectionSection implements
                 }
 
                 // Deserialize based on type
-                FeatureSection deserialized = deserializeSection(sectionJson);
+                FeatureSection deserialized = Sections.loadSection(sectionJson);
                 if (deserialized != null) {
                     section.configuration.put(optionId, deserialized);
                 }
@@ -170,33 +170,6 @@ public class SelectionSection implements
         }
 
         return section;
-    }
-
-    private static FeatureSection deserializeSection(String json) {
-        JsonNode obj;
-        try {
-            obj = MAPPER.readTree(json);
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("Invalid nested section JSON", e);
-        }
-        String type = obj.path("type").asText();
-
-        if ("score_modifiers".equals(type)) {
-            return StatModifierSection.fromJson(json);
-        } else if ("selection".equals(type)) {
-            return SelectionSection.fromJson(json);
-        }
-        return null;
-    }
-
-    private static String serializeSection(FeatureSection section) {
-        if (section instanceof StatModifierSection statModifierSection) {
-            return statModifierSection.toJson();
-        }
-        if (section instanceof SelectionSection selectionSection) {
-            return selectionSection.toJson();
-        }
-        return null;
     }
 
     @Override

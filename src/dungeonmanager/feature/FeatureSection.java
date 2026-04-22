@@ -8,7 +8,7 @@ import dungeonmanager.stats.ModifiableStatSet;
  * Sections can contain different types of content (e.g., score modifiers, descriptions).
  * Sections can be marked as visible to control whether they appear in the feature's display.
  */
-public interface FeatureSection extends JsonSerializable<FeatureSection> {
+public interface FeatureSection extends JsonSerializable {
 
     /**
      * @return the unique identifier for this section
