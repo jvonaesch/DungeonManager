@@ -14,6 +14,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.nio.file.Path;
 import java.util.Set;
 
 import static dungeonmanager.contentpack.PackLoader.writeToFile;
@@ -21,7 +22,7 @@ import static dungeonmanager.contentpack.PackLoader.writeToFile;
 public abstract class AppTest {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AppTest.class);
-    protected static final String TEST_WORKSPACE_PATH = "test/";
+    protected static final Path TEST_WORKSPACE_PATH = Path.of("test/");
 
     protected static final DungeonManagerApp app = new DungeonManagerApp();
     protected static final Session setupSession = app.getSession(TEST_WORKSPACE_PATH);

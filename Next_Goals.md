@@ -1,6 +1,8 @@
 
 ## Content Packs / serialization
 - [x] Implement loading stats from content packs
+- [x] Switch all content pack loading to use java io paths instead of String paths
+- [ ] Make stat sets work with String ids instead of Stat instances
 - [ ] Implement creature serialization and deserialization
 - [ ] Enable loading packs from zip files
 

@@ -25,9 +25,7 @@ public class Session {
     private static final Logger LOG = LoggerFactory.getLogger(Session.class);
     private final Path workingDirectory;
     private final PackLoader packLoader;
-
     private record CreatureEntry(String id, Creature creature) {}
-
     private final DungeonManagerApp app;
     private final Registries registry = new Registries();
     private final Map<String, CreatureEntry> creatures;
@@ -38,20 +36,27 @@ public class Session {
     private String selectedCreatureId;
     private long nextCreatureNumber;
 
-    public Session(DungeonManagerApp app, String workingDirectory) {
+    public Session(DungeonManagerApp app, Path workspacePath) {
         this.app = app;
         this.creatures = new LinkedHashMap<>();
         this.nextCreatureNumber = 1L;
-        this.workingDirectory = Path.of(workingDirectory);
+        this.workingDirectory = workspacePath;
         this.packLoader = new PackLoader(this);
 
-        // LOG.debug("Loading shared content packs from {}", LIB_PATH);
-        // packLoader.loadLibrary(LIB_PATH);
-        // TODO: Instead load selected content into working directory if absent on initial population.
-        LOG.debug("Loading workspace content pack from {}", workingDirectory);
-        packLoader.loadLibrary(workingDirectory);
+        LOG.debug("Loading workspace content pack from {}", workspacePath);
+        packLoader.loadLibrary(workspacePath);
         LOG.debug("Content pack loading complete: {} features loaded", registry.feature.getSize());
         LOG.debug("Session initialized");
+    }
+
+    public Session(DungeonManagerApp dungeonManagerApp, Path workspacePath, Set<String> contentPacks) {
+        this(dungeonManagerApp, workspacePath);
+        LOG.debug("Loading additional content packs: {}", contentPacks);
+        for (String pack : contentPacks) {
+            LOG.debug("Loading additional content pack {} from library", pack);
+            packLoader.loadPack(LIB_PATH.resolve(pack));
+        }
+        LOG.debug("Additional content pack loading complete");
     }
 
     public Session(DungeonManagerApp app) {
@@ -233,7 +238,7 @@ public class Session {
     }
 
     public synchronized void registerStat(@NotNull Stat stat) {
-        String statId = normalizeId(stat.getID());
+        String statId = normalizeId(stat.getId());
         registry.stat.register(statId, stat);
     }
 

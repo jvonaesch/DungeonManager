@@ -1,6 +1,6 @@
 package dungeonmanager.stat;
 
-import java.util.HashSet;
+import java.util.Map;
 import java.util.Set;
 
 /**
@@ -8,11 +8,11 @@ import java.util.Set;
  */
 public class DefaultStatSet implements StatSet {
 
-    protected Set<Stat> specified;
+    protected Map<String, Stat> specified;
     private static DefaultStatSet INSTANCE;
 
     private DefaultStatSet(Set<Stat> specified) {
-        this.specified = new HashSet<>(specified);
+        this.specified = specified.stream().collect(java.util.stream.Collectors.toMap(Stat::getId, stat -> stat));
     }
 
     /**
@@ -27,12 +27,13 @@ public class DefaultStatSet implements StatSet {
     }
 
     @Override
-    public int getValue(Stat stat) {
-        return stat.getDefaultValue();
+    public Integer getValue(String statId) {
+        if (specified.containsKey(statId)) return specified.get(statId).getDefaultValue();
+        return null;
     }
 
     @Override
-    public Set<Stat> getSpecifiedStats() {
-        return Set.of(StandardStat.values());
+    public Set<String> getSpecifiedStats() {
+        return specified.keySet();
     }
 }

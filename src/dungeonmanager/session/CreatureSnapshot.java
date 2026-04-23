@@ -2,7 +2,6 @@ package dungeonmanager.session;
 
 import dungeonmanager.creature.Creature;
 import dungeonmanager.feature.FeatureInstance;
-import dungeonmanager.stat.Stat;
 
 import java.util.*;
 
@@ -30,23 +29,23 @@ public class CreatureSnapshot {
         this.typeName = typeName;
         this.stats = Collections.unmodifiableMap(new LinkedHashMap<>(stats));
         this.baseStatOverrides = Collections.unmodifiableMap(new LinkedHashMap<>(baseStatOverrides));
-        this.features = Collections.unmodifiableList(new ArrayList<>(features));
+        this.features = List.copyOf(features);
     }
 
     static CreatureSnapshot fromCreature(String id, Creature creature) {
         Map<String, Integer> statValues = new LinkedHashMap<>();
-        List<Stat> stats = new ArrayList<>(creature.getStatSet().getSpecifiedStats());
-        stats.sort(Comparator.comparing(Stat::getID));
-        for (Stat stat : stats) {
-            statValues.put(stat.getID(), creature.getStatSet().getValue(stat));
+        List<String> statIds = new ArrayList<>(creature.getStatSet().getSpecifiedStats());
+        statIds.sort(String::compareTo);
+        for (String statId : statIds) {
+            statValues.put(statId, creature.getStatSet().getValue(statId));
         }
 
-        Map<Stat, Integer> baseValueSnapshot = creature.getStatSet().getBaseValues();
+        Map<String, Integer> baseValueSnapshot = creature.getStatSet().getBaseValues();
         Map<String, Integer> baseOverrides = new LinkedHashMap<>();
-        List<Stat> baseOverrideStats = new ArrayList<>(baseValueSnapshot.keySet());
-        baseOverrideStats.sort(Comparator.comparing(Stat::getID));
-        for (Stat stat : baseOverrideStats) {
-            baseOverrides.put(stat.getID(), baseValueSnapshot.get(stat));
+        List<String> baseOverrideStats = new ArrayList<>(baseValueSnapshot.keySet());
+        baseOverrideStats.sort(String::compareTo);
+        for (String statId : baseOverrideStats) {
+            baseOverrides.put(statId, baseValueSnapshot.get(statId));
         }
 
         List<FeatureInstanceSnapshot> featureSnapshots = new ArrayList<>();

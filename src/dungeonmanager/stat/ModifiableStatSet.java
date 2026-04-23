@@ -12,87 +12,83 @@ import java.util.*;
 public class ModifiableStatSet implements WriteableStatSet {
 
     public Set<StatModifier> modifiers;
-    public Map<Stat, Integer> base_values;
-    public Map<String, Integer> modifier_values;
-    public Map<Stat, Integer> values;
+    public Map<String, Integer> baseValues;
+    public Map<String, Integer> modifierValues;
+    public Map<String, Integer> values;
 
-    public ModifiableStatSet(Map<Stat, Integer> base_stats) {
+    public ModifiableStatSet(Map<String, Integer> baseStatValues) {
         this.modifiers = new HashSet<>();
-        this.base_values = new HashMap<>(base_stats);
-        this.modifier_values = new HashMap<>();
-        this.values = new HashMap<>(base_stats);
+        this.baseValues = new HashMap<>(baseStatValues);
+        this.modifierValues = new HashMap<>();
+        this.values = new HashMap<>(baseStatValues);
     }
 
     public ModifiableStatSet() {
         this(new HashMap<>());
     }
 
-    public ModifiableStatSet(Set<Stat> base_stats) {
-        this();
-        for (Stat stat: base_stats) {
-            setBaseValue(stat, stat.getDefaultValue());
-        }
-    }
-
     @Override
-    public void setBaseValue(Stat stat, Integer value) {
-        if (value == null) this.base_values.remove(stat);
-        else this.base_values.put(stat, value);
+    public void setBaseValue(String statId, Integer value) {
+        if (value == null) this.baseValues.remove(statId);
+        else this.baseValues.put(statId, value);
         this.reloadValues();
     }
 
-    public int getBaseValue(Stat stat) {
-        if (base_values.containsKey(stat)) return base_values.get(stat);
-        return stat.getDefaultValue();
+    public Integer getBaseValue(String statId) {
+        if (baseValues.containsKey(statId)) return baseValues.get(statId);
+        return null;
     }
 
-    /**
-     * @return copy of assigned base values, excluding inherited defaults.
-     */
-    public Map<Stat, Integer> getBaseValues() {
-        return new HashMap<>(base_values);
+    @Deprecated
+    public int getBaseValue(String statId, int defaultValue) {
+        Integer value = getBaseValue(statId);
+        return (value == null) ? defaultValue : value;
+    }
+
+    public Map<String, Integer> getBaseValues() {
+        return new HashMap<>(baseValues);
     }
 
     @Override
-    public int getValue(Stat stat) {
+    public Integer getValue(String stat) {
         if (values.containsKey(stat)) return values.get(stat);
-        else if (base_values.containsKey(stat)) return base_values.get(stat);
-        return stat.getDefaultValue();
+        else if (baseValues.containsKey(stat)) return baseValues.get(stat);
+        return null;
     }
 
-    public int getModifierTotal(Stat stat) {
-        if (stat == null || !modifier_values.containsKey(stat.getID())) return 0;
-        Integer value = modifier_values.get(stat.getID());
+    public int getModifierTotal(String statId) {
+        if (statId == null || !modifierValues.containsKey(statId)) return 0;
+        Integer value = modifierValues.get(statId);
         return (value == null) ? 0 : value;
     }
 
     @Override
-    public void removeBaseValue(Stat stat) {
-        base_values.remove(stat);
+    public void removeBaseValue(String statId) {
+        baseValues.remove(statId);
         this.reloadValues();
     }
 
     @Override
     public void resetBaseValue(Stat stat) {
-        setBaseValue(stat, stat.getDefaultValue());
+        setBaseValue(stat.getId(), stat.getDefaultValue());
     }
 
     @Override
-    public Set<Stat> getSpecifiedStats() {
-        return new HashSet<>(base_values.keySet());
+    public Set<String> getSpecifiedStats() {
+        return new HashSet<>(baseValues.keySet());
     }
 
     public void reloadValues() {
-        modifier_values.clear();
+        modifierValues.clear();
         for (StatModifier modifier: this.modifiers) {
             for (String statId: modifier.getStats()) {
-                modifier_values.put(
+                modifierValues.put(
                         statId,
-                        modifier.getValue(statId) + modifier_values.getOrDefault(statId, 0));
+                        modifier.getValue(statId) + modifierValues.getOrDefault(statId, 0));
             }
         }
-        for (Stat stat: getSpecifiedStats()) {
-            values.put(stat, getBaseValue(stat) + getModifierTotal(stat));
+        for (String statId: getSpecifiedStats()) {
+            values.put(statId, getBaseValue(statId) + getModifierTotal(statId));
         }
     }
 
@@ -112,8 +108,8 @@ public class ModifiableStatSet implements WriteableStatSet {
     @Override
     public String toString() {
         StringBuilder string = new StringBuilder("Ability set: ");
-        for (Stat stat : getSpecifiedStats()) {
-            string.append("\n > ").append(stat.getID()).append(": ").append(getValue(stat));
+        for (String statId : getSpecifiedStats()) {
+            string.append("\n > ").append(statId).append(": ").append(getValue(statId));
         }
         return string.toString();
     }

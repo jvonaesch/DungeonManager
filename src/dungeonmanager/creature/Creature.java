@@ -1,6 +1,7 @@
 package dungeonmanager.creature;
 
 import dungeonmanager.feature.Features;
+import dungeonmanager.session.Session;
 import dungeonmanager.stat.*;
 import dungeonmanager.feature.FeatureSet;
 
@@ -26,10 +27,10 @@ public class Creature implements HasStatSet {
         return name;
     }
 
-    public String toString() {
+    public String toString(Session session) {
         return "\n\"%s\":\n %s%s".formatted(
                 name,
-                StatSets.toString(stats, 1),
+                StatSets.toString(stats, 1, session),
                 Features.toString(feature, 1)
         );
     }

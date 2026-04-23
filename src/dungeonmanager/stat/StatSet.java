@@ -7,6 +7,16 @@ import java.util.Set;
  */
 public interface StatSet {
 
-    public int getValue(Stat stat);
-    public Set<Stat> getSpecifiedStats();
+    Integer getValue(String statId);
+
+    default int getValue(String statId, int defaultValue) {
+        Integer value = getValue(statId);
+        return value != null ? value : defaultValue;
+    }
+
+    default int getValue(Stat stat) {
+        return getValue(stat.getId(), stat.getDefaultValue());
+    }
+
+    Set<String> getSpecifiedStats();
 }

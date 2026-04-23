@@ -1,7 +1,5 @@
 package dungeonmanager.stat;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.HashSet;
 import java.util.Set;
 
@@ -13,7 +11,7 @@ public class DefaultedStatSet extends ModifiableStatSet {
 
     private HasStatSet parent;
     private StatSet parentSet;
-    private final Set<Stat> removed;
+    private final Set<String> removed;
 
     public DefaultedStatSet(HasStatSet parent) {
         this(parent.getStatSet());
@@ -28,58 +26,56 @@ public class DefaultedStatSet extends ModifiableStatSet {
 
     /**
      * Sets the base value for a stat, <b>marking it as not removed</b>.
-     * @param stat the stat to modify
-     * @param value the new base value, or null to remove
+     *
+     * @param statId the stat to modify
+     * @param value  the new base value, or null to remove
      */
     @Override
-    public void setBaseValue(@NotNull Stat stat, Integer value) {
-        if (value == null) this.removeBaseValue(stat);
-        else super.setBaseValue(stat, value);
-        this.removed.remove(stat);
+    public void setBaseValue(String statId, Integer value) {
+        if (value == null) this.removeBaseValue(statId);
+        else super.setBaseValue(statId, value);
+        this.removed.remove(statId);
         this.reloadValues();
     }
 
     /**
      * Removes the base value for a stat and marks it as removed.
      * Removed stat will not fall back to parent values.
-     * @param stat the stat to remove
+     *
+     * @param statId the stat to remove
      */
     @Override
-    public void removeBaseValue(@NotNull Stat stat) {
-        super.removeBaseValue(stat);
-        values.remove(stat);
-        removed.add(stat);
-        this.reloadValues();
-    }
-
-    /**
-     * Resets a stat to parent value.
-     * @param stat the stat to reset
-     */
-    @Override
-    public void resetBaseValue(@NotNull Stat stat) {
-        this.removed.remove(stat);
-        this.base_values.remove(stat);
+    public void removeBaseValue(String statId) {
+        super.removeBaseValue(statId);
+        values.remove(statId);
+        removed.add(statId);
         this.reloadValues();
     }
 
     @Override
-    public int getBaseValue(Stat stat) {
-        if (removed.contains(stat)) return parentSet.getValue(stat);
-        else if (base_values.containsKey(stat)) return base_values.get(stat);
-        return (parentSet.getValue(stat));
+    public void resetBaseValue(Stat stat) {
+        this.removed.remove(stat.getId());
+        this.baseValues.remove(stat.getId());
+        this.reloadValues();
     }
 
     @Override
-    public int getValue(Stat stat) {
-        if (removed.contains(stat)) return parentSet.getValue(stat);
-        if (base_values.containsKey(stat)) return values.get(stat);
-        else return (parentSet.getValue(stat) + this.getModifierTotal(stat));
+    public Integer getBaseValue(String statId) {
+        if (removed.contains(statId)) return parentSet.getValue(statId);
+        else if (baseValues.containsKey(statId)) return baseValues.get(statId);
+        return (parentSet.getValue(statId));
     }
 
     @Override
-    public Set<Stat> getSpecifiedStats() {
-        Set<Stat> a = new HashSet<>(parentSet.getSpecifiedStats());
+    public Integer getValue(String statId) {
+        if (removed.contains(statId)) return parentSet.getValue(statId);
+        if (baseValues.containsKey(statId)) return values.get(statId);
+        else return (parentSet.getValue(statId) + this.getModifierTotal(statId));
+    }
+
+    @Override
+    public Set<String> getSpecifiedStats() {
+        Set<String> a = new HashSet<>(parentSet.getSpecifiedStats());
         a.addAll(super.getSpecifiedStats());
         a.removeAll(removed);
         return a;
@@ -97,6 +93,7 @@ public class DefaultedStatSet extends ModifiableStatSet {
         this.reloadValues();
     }
 
+    @Deprecated
     public void changeParent(StatSet newParentSet) {
         this.parent = null;
         this.parentSet = newParentSet;

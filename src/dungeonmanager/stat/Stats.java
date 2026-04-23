@@ -12,7 +12,7 @@ import java.util.Comparator;
 public class Stats {
 
     public static String toString(Stat ability) {
-        return ability.getID();
+        return ability.getId();
     }
 
     /**
@@ -24,7 +24,7 @@ public class Stats {
 
         @Override
         public int compare(Stat o1, Stat o2) {
-            return o1.getID().compareTo(o2.getID());
+            return o1.getId().compareTo(o2.getId());
         }
     }
 

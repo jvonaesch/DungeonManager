@@ -1,11 +1,8 @@
 package test.session;
 
 import dungeonmanager.creature.IntegratedCreatureType;
-import dungeonmanager.registry.Registries;
 import dungeonmanager.session.CreatureSnapshot;
-import dungeonmanager.session.Session;
 import dungeonmanager.stat.StandardStat;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import test.AppTest;
@@ -87,9 +84,9 @@ public class SessionCreatureTest extends AppTest {
         // Verify that DWARF's base stat were applied
         assertNotNull(changed.getStats(), "Expected stat map to exist");
         for (StandardStat stat : StandardStat.values()) {
-            int expectedStat = IntegratedCreatureType.DWARF.getStatSet().getValue(stat);
-            int actualStat = changed.getStat(stat.getID());
-            assertEquals(expectedStat, actualStat, "Expected " + stat.getID() + " to match DWARF type: " + expectedStat);
+            int expectedStat = IntegratedCreatureType.DWARF.getStatSet().getValue(stat.getId(), stat.getDefaultValue());
+            int actualStat = changed.getStat(stat.getId());
+            assertEquals(expectedStat, actualStat, "Expected " + stat.getId() + " to match DWARF type: " + expectedStat);
         }
     }
 

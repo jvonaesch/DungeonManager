@@ -41,7 +41,7 @@ public class CustomStat implements Stat {
     }
 
     @Override
-    public String getID() {
+    public String getId() {
         return ID;
     }
 

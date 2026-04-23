@@ -17,7 +17,7 @@ public class ContentPackTest extends AppTest {
     @DisplayName("Check that standard stats were loaded from generated test content pack")
     void testLoadStandardStats() {
         for (Stat stat: StandardStat.values()) {
-            assertTrue(session.getStatIDs().contains(stat.getID()), "Expected standard stat '" + stat.getID() + "' to be registered");
+            assertTrue(session.getStatIDs().contains(stat.getId()), "Expected standard stat '" + stat.getId() + "' to be registered");
         }
     }
 

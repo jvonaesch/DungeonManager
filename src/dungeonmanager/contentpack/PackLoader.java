@@ -51,19 +51,18 @@ public class PackLoader {
      * Load all packs in a library directory to the PackLoader's session
      * @param libraryPath the path to the DungeonManagerLibrary directory
      */
-    public void loadLibrary(String libraryPath) {
-        Path libDir = Paths.get(libraryPath);
+    public void loadLibrary(Path libraryPath) {
 
-        if (!checkOrMakeDir(libDir)) return;
+        if (!checkOrMakeDir(libraryPath)) return;
 
-        try (Stream<Path> packDirs = Files.list(libDir)) {
+        try (Stream<Path> packDirs = Files.list(libraryPath)) {
             packDirs.filter(Files::isDirectory)
                     .forEach(this::loadPack);
 
             // TODO: enable loading from zip files
 
         } catch (IOException e) {
-            LOG.error("Error accessing library directory: {}", libDir.toAbsolutePath(), e);
+            LOG.error("Error accessing library directory: {}", libraryPath.toAbsolutePath(), e);
         }
     }
 
@@ -72,7 +71,7 @@ public class PackLoader {
      * Sequence does not matter since registration is lazy and only reads JSON when accessed
      * @param packDir the path to a pack directory
      */
-    private void loadPack(Path packDir) {
+    public void loadPack(Path packDir) {
         String packName = packDir.getFileName().toString();
         Path featuresDir = packDir.resolve("features");
 

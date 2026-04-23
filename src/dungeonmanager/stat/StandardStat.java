@@ -69,7 +69,7 @@ public enum StandardStat implements Stat {
     }
 
     @Override
-    public String getID() {
+    public String getId() {
         return ID;
     }
 }

@@ -1,21 +1,21 @@
 package dungeonmanager;
 
 import dungeonmanager.session.Session;
-import dungeonmanager.command.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.File;
-import java.util.Scanner;
+import java.nio.file.Path;
+import java.util.Set;
 
 public class DungeonManagerApp {
 
     private static final Logger LOG = LoggerFactory.getLogger(DungeonManagerApp.class);
 
-    public static final String USER_DIR = System.getProperty("user.home");
-    public static final String APP_PATH = USER_DIR + "/DungeonManager/";
-    public static final String LIB_PATH = APP_PATH + "library/";
-    public static final String DEFAULT_WORKSPACE_PATH = APP_PATH + "workspace/default/";
+    public static final Path USER_DIR = Path.of(System.getProperty("user.home"));
+    public static final Path APP_PATH = USER_DIR.resolve("DungeonManager");
+    public static final Path LIB_PATH = APP_PATH.resolve("library");
+    public static final Path DEFAULT_WORKSPACE_PATH = APP_PATH.resolve("workspace/default");
 
     public static void main(String[] args) {
         DungeonManagerApp app = new DungeonManagerApp();
@@ -24,7 +24,7 @@ public class DungeonManagerApp {
 
     public DungeonManagerApp() {
         LOG.info("Starting DungeonManager application");
-        File dir = new File(LIB_PATH);
+        File dir = LIB_PATH.toFile();
         if (!dir.exists()) {
             if (!dir.mkdirs()) throw new RuntimeException(
                     "Path to library could not be created! Running without library");
@@ -39,12 +39,16 @@ public class DungeonManagerApp {
         LOG.info("Quitting DungeonManager application");
     }
 
-    public Session getSession(String workspacePath) {
+    public Session getSession(Path workspacePath) {
         return new Session(this, workspacePath);
     }
 
     public Session getSession() {
         return new Session(this, DEFAULT_WORKSPACE_PATH);
+    }
+
+    public Session getSession(Path workspacePath, Set<String> contentPacks) {
+        return new Session(this, workspacePath, contentPacks);
     }
 
     public void shutdown() {

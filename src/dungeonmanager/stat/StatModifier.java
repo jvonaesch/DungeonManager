@@ -29,7 +29,7 @@ public class StatModifier {
     }
 
     public int getValue(@NotNull Stat stat) {
-        return values.get(stat.getID());
+        return values.get(stat.getId());
     }
 
     public StatModifier setValue (String statId, int value) {
@@ -41,7 +41,7 @@ public class StatModifier {
     }
 
     public StatModifier setValue (Stat stat, int value) {
-        return this.setValue(stat.getID(), value);
+        return this.setValue(stat.getId(), value);
     }
 
     public HashMap<String, Integer> getValues () {

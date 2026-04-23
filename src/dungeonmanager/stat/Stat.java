@@ -23,7 +23,7 @@ public interface Stat {
         ArrayNode root = MAPPER.createArrayNode();
         root.addAll(stats.stream().map(stat -> {
             ObjectNode statNode = MAPPER.createObjectNode();
-            statNode.put("id", stat.getID());
+            statNode.put("id", stat.getId());
             statNode.put("name", stat.getName());
             statNode.put("type", stat.getType());
             statNode.put("default_value", stat.getDefaultValue());
@@ -59,7 +59,7 @@ public interface Stat {
     }
 
     String getName();
-    String getID();
+    String getId();
     
     /**
      * @return the origin identifier indicating where this stat was defined (default, mod, homebrew, etc.)
