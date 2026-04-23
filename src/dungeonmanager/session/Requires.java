@@ -1,13 +1,12 @@
 package dungeonmanager.session;
 
-import dungeonmanager.creature.CreatureType;
-import dungeonmanager.creature.IntegratedCreatureType;
+import dungeonmanager.creature.CreatureBasis;
 
 import java.util.Map;
 import java.util.function.Function;
 
 class Requires {
-    static CreatureType requireType(CreatureType type) {
+    static CreatureBasis requireType(CreatureBasis type) {
         if (type == null) {
             throw new IllegalArgumentException("Creature type cannot be null");
         }

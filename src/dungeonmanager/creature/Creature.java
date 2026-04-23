@@ -5,26 +5,33 @@ import dungeonmanager.session.Session;
 import dungeonmanager.stat.*;
 import dungeonmanager.feature.FeatureSet;
 
-public class Creature implements HasStatSet {
+public class Creature implements CreatureBasis {
 
+    private final String id;
     private String name;
-    private CreatureType type;
+    private CreatureBasis type;
     private final DefaultedStatSet stats;
     private final FeatureSet feature;
 
-    public Creature(String name, CreatureType type) {
+    public Creature(String id, String name, CreatureBasis type) {
+        this.id = id;
         this.name = name;
         this.type = type;
         this.stats = new DefaultedStatSet(this.type);
         this.feature = new FeatureSet(this.stats);
     }
 
-    public Creature(String name) {
-        this(name, IntegratedCreatureType.DEFAULT);
+    public Creature(String id, String name) {
+        this(id, name, IntegratedCreatureType.DEFAULT);
     }
 
     public String getName() {
         return name;
+    }
+
+    @Override
+    public String getID() {
+        return id;
     }
 
     public String toString(Session session) {
@@ -35,11 +42,11 @@ public class Creature implements HasStatSet {
         );
     }
 
-    public CreatureType getType() {
+    public CreatureBasis getType() {
         return type;
     }
 
-    public void changeType(CreatureType type) {
+    public void changeType(CreatureBasis type) {
         this.type = type;
         this.stats.changeParent(type);
     }

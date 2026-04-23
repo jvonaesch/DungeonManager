@@ -6,7 +6,6 @@ import dungeonmanager.feature.SelectionSection;
 import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.session.CreatureSnapshot;
 import dungeonmanager.session.FeatureInstanceSnapshot;
-import dungeonmanager.session.Session;
 import dungeonmanager.stat.StandardStat;
 import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.DisplayName;

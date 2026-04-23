@@ -2,7 +2,7 @@ package dungeonmanager.creature;
 
 import dungeonmanager.stat.*;
 
-public enum IntegratedCreatureType implements CreatureType {
+public enum IntegratedCreatureType implements CreatureBasis {
     DEFAULT("default", "Default"),
     OWLBEAR("owlbear", "Owlbear", 20, 12, 17, 3, 12, 7),
     DWARF("dwarf", "Dwarf", 10, 10, 14, 10, 10, 10);

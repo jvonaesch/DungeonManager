@@ -3,7 +3,7 @@ package dungeonmanager.session;
 import dungeonmanager.DungeonManagerApp;
 import dungeonmanager.contentpack.PackLoader;
 import dungeonmanager.creature.Creature;
-import dungeonmanager.creature.CreatureType;
+import dungeonmanager.creature.CreatureBasis;
 import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.FeatureInstance;
@@ -89,14 +89,16 @@ public class Session {
         return createCreature(name, IntegratedCreatureType.DEFAULT, null);
     }
 
-    public synchronized CreatureSnapshot createCreature(String name, CreatureType type) {
+    public synchronized CreatureSnapshot createCreature(String name, CreatureBasis type) {
         return createCreature(name, type, null);
     }
 
-    public synchronized CreatureSnapshot createCreature(String name, CreatureType type, Map<String, Integer> baseStats) {
+    public synchronized CreatureSnapshot createCreature(String name, CreatureBasis type, Map<String, Integer> baseStats) {
         type = Requires.getOrDefault(type, IntegratedCreatureType.DEFAULT);
-        String creatureId = nextCreatureId();
-        Creature creature = new Creature(normalizeName(name), type);
+        String creatureId = normalizeName(name).toLowerCase().replaceAll("\\s+", "_");
+        if (creatures.containsKey(creatureId)) creatureId += "_" + nextCreatureNumber++;
+
+        Creature creature = new Creature(creatureId, normalizeName(name), type);
         if (baseStats != null) applyBaseStats(creature, baseStats);
 
         CreatureEntry entry = new CreatureEntry(creatureId, creature);
@@ -149,7 +151,7 @@ public class Session {
         return snapshotCreature(entry.id);
     }
 
-    public synchronized CreatureSnapshot changeCreatureType(String creatureId, CreatureType type) {
+    public synchronized CreatureSnapshot changeCreatureType(String creatureId, CreatureBasis type) {
         CreatureEntry entry = requireCreature(creatureId);
         entry.creature.changeType(Requires.requireNonNull(type, "Creature type"));
         LOG.debug("Changed creature {} type to {}", entry.id, entry.creature.getType().getID());
@@ -301,13 +303,13 @@ public class Session {
         String creatureId = creatureSnapshot.getId();
         
         // Look up creature type from registry
-        CreatureType type = registry.entityType.get(creatureSnapshot.getTypeId());
+        CreatureBasis type = registry.entityType.get(creatureSnapshot.getTypeId());
         if (type == null) {
             throw new IllegalArgumentException("Creature type not registered: " + creatureSnapshot.getTypeId());
         }
 
         // Create creature with type
-        Creature creature = new Creature(creatureSnapshot.getName(), type);
+        Creature creature = new Creature(creatureSnapshot.getId(), creatureSnapshot.getName(), type);
         
         // Apply base stat overrides
         for (Map.Entry<String, Integer> override : creatureSnapshot.getBaseStatOverrides().entrySet()) {

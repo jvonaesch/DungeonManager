@@ -1,4 +1,8 @@
 
+## Core Features
+- [ ] Let creature own its own ID
+- [ ] Replace CreatureType with CreatureBasis, also implemented by Creature (can be sourced by ID)
+
 ## Content Packs / serialization
 - [x] Implement loading stats from content packs
 - [x] Switch all content pack loading to use java io paths instead of String paths
