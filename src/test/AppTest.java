@@ -6,7 +6,6 @@ import dungeonmanager.feature.FeatureSerializer;
 import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.session.Session;
 import dungeonmanager.stat.StandardStat;
-import dungeonmanager.stat.Stat;
 import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,7 +17,7 @@ import java.io.IOException;
 public abstract class AppTest {
 
     protected static final Logger LOG = LoggerFactory.getLogger(AppTest.class);
-    protected static final String TEST_WORKSPACE_PATH = "/data/test/";
+    protected static final String TEST_WORKSPACE_PATH = "test/";
 
     protected static final DungeonManagerApp app = new DungeonManagerApp();
     protected static final Session setupSession = app.getSession(TEST_WORKSPACE_PATH);
@@ -45,7 +44,7 @@ public abstract class AppTest {
 
     static void generateTestData() {
         Feature testFeature = new Feature(
-                "test_feature",
+                "test_feature_1",
                 "Test Feature",
                 "A feature for testing purposes."
         );
@@ -55,7 +54,7 @@ public abstract class AppTest {
                 "A stat modifier for testing.",
                 new StatModifier().setValue(setupSession.getStat("STR"), 2)
         ));
-        String featureTargetPath = TEST_WORKSPACE_PATH + "features/test_feature_1.json";
+        String featureTargetPath = TEST_WORKSPACE_PATH + "test_pack_1/features/test_feature_1.json";
         try {
             FeatureSerializer.writeToFile(featureTargetPath, testFeature.toJson());
         } catch (IOException e) {

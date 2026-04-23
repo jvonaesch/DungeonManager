@@ -3,7 +3,6 @@ package dungeonmanager;
 import dungeonmanager.session.Session;
 import dungeonmanager.stat.StandardStat;
 import dungeonmanager.command.*;
-import dungeonmanager.contentPack.PackLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 

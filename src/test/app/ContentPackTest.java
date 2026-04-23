@@ -16,10 +16,10 @@ public class ContentPackTest extends AppTest {
     void testLoadDummyFeature() {
         session.getFeatureIDs().forEach(key -> {
             LOG.debug("Registered feature: " + key);
-            assertTrue(session.getFeatureIDs().contains("test_feature"), "Expected 'test_feature' to be registered");
-            if (key.equals("test_feature")) {
+            assertTrue(session.getFeatureIDs().contains("test_feature_1"), "Expected 'test_feature_1' to be registered");
+            if (key.equals("test_feature_1")) {
                 Feature feature = session.getFeature(key);
-                assertEquals(1, feature.getSections().size(), "Expected 'test_feature' to have 1 section");
+                assertEquals(1, feature.getSections().size(), "Expected 'test_feature_1' to have 1 section");
                 assertTrue(feature.getSections().get(0) instanceof StatModifierSection, "Expected section to be a StatModifierSection");
                 StatModifierSection section = (StatModifierSection) feature.getSections().get(0);
                 assertEquals(2, section.getModifier().getValue(session.getStat("STR")), "Expected STR modifier to be 2");

@@ -31,7 +31,7 @@
 2026-04-22 18:32:13.461 [main] DEBUG dungeonmanager.DungeonManagerApp - Registered commands
 2026-04-22 18:32:13.462 [main] DEBUG dungeonmanager.DungeonManagerApp - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
 2026-04-22 18:32:13.468 [main] DEBUG dungeonmanager.DungeonManagerApp - Loading workspace content pack from C:\Users\jonas/DungeonManager/workspace/default/
-2026-04-22 18:32:13.469 [main] DEBUG dungeonmanager.contentPack.PackLoader - Pack 'default' has no features directory, skipping
+2026-04-22 18:32:13.469 [main] DEBUG dungeonmanager.contentpack.PackLoader - Pack 'default' has no features directory, skipping
 2026-04-22 18:32:13.470 [main] DEBUG dungeonmanager.DungeonManagerApp - Content pack loading complete: 0 features loaded
 2026-04-22 18:32:13.470 [main] INFO  dungeonmanager.DungeonManagerApp - Initialization complete
 2026-04-22 18:34:30.005 [main] INFO  dungeonmanager.DungeonManagerApp - Starting DungeonManager application
@@ -40,8 +40,8 @@
 2026-04-22 18:34:30.022 [main] DEBUG dungeonmanager.DungeonManagerApp - Registered commands
 2026-04-22 18:34:30.022 [main] DEBUG dungeonmanager.DungeonManagerApp - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
 2026-04-22 18:34:30.027 [main] DEBUG dungeonmanager.DungeonManagerApp - Loading workspace content pack from C:\Users\jonas/DungeonManager/workspace/test/
-2026-04-22 18:34:30.029 [main] DEBUG dungeonmanager.contentPack.PackLoader - Loading features from pack: test
-2026-04-22 18:34:30.491 [main] DEBUG dungeonmanager.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 18:34:30.029 [main] DEBUG dungeonmanager.contentpack.PackLoader - Loading features from pack: test
+2026-04-22 18:34:30.491 [main] DEBUG dungeonmanager.contentpack.PackLoader - Loaded feature 'dummy' from test_1.json
 2026-04-22 18:34:30.492 [main] DEBUG dungeonmanager.DungeonManagerApp - Content pack loading complete: 1 features loaded
 2026-04-22 18:34:30.492 [main] INFO  dungeonmanager.DungeonManagerApp - Initialization complete
 2026-04-22 18:34:30.497 [main] DEBUG test.app.ContentPackTest - Registered feature: dummy
@@ -2511,3 +2511,396 @@
 2026-04-22 23:55:55.150 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
 2026-04-22 23:55:55.151 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
 2026-04-22 23:55:55.151 [main] INFO  dungeonmanager.session.Session - Deleted creature creature_2. New selection: creature_1
+2026-04-22 23:58:45.356 [main] INFO  dungeonmanager.DungeonManagerApp - Starting DungeonManager application
+2026-04-22 23:58:45.361 [main] DEBUG dungeonmanager.DungeonManagerApp - Initializing application registries and command line context
+2026-04-22 23:58:45.370 [main] DEBUG dungeonmanager.DungeonManagerApp - Registered 7 standard stat
+2026-04-22 23:58:45.376 [main] INFO  dungeonmanager.DungeonManagerApp - Initialization complete
+2026-04-22 23:58:45.383 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:45.388 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:45.978 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:45.979 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:45.980 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:45.986 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:45.986 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:45.987 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:45.989 [main] INFO  test.AppTest - Setting up test environment...
+2026-04-22 23:58:46.028 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.031 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.034 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.034 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.035 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.041 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.042 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.042 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.054 [main] DEBUG test.AppTest - Registered feature: dummy
+2026-04-22 23:58:46.062 [main] DEBUG test.AppTest - Registered feature: test_feature
+2026-04-22 23:58:46.109 [main] INFO  test.AppTest - Setting up test environment...
+2026-04-22 23:58:46.118 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.120 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.123 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.124 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.125 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.132 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.133 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.134 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.149 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.159 [main] DEBUG dungeonmanager.session.Session - Removed feature feat:charisma_boost from creature creature_1
+2026-04-22 23:58:46.165 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.167 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.170 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.170 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.171 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.174 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.174 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.174 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.175 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.185 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.187 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.190 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.192 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.193 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.195 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.196 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.197 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.201 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.204 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.208 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.209 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.209 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.212 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.212 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.212 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.213 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.223 [main] INFO  test.AppTest - Setting up test environment...
+2026-04-22 23:58:46.228 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.229 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.232 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.233 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.234 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.240 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.240 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.241 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.242 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.243 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.247 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.249 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.252 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.253 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.254 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.256 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.257 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.257 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.258 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.258 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.266 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.268 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.271 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.271 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.272 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.274 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.275 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.275 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.276 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.288 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.289 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.292 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.293 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.294 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.296 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.297 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.297 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.299 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.305 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.306 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.309 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.309 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.310 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.312 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.313 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.313 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.314 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.319 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.320 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.322 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.323 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.324 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.326 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.327 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.328 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.330 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.331 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.331 [main] DEBUG dungeonmanager.session.Session - Selected creature creature_1
+2026-04-22 23:58:46.335 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.336 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.339 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.339 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.340 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.342 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.343 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.343 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.344 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.350 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.352 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.355 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.356 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.356 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.358 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.359 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.359 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.360 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.365 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.367 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.369 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.370 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.370 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.372 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.373 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.373 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.374 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.380 [main] INFO  test.AppTest - Setting up test environment...
+2026-04-22 23:58:46.385 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.386 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.389 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.389 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.390 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.396 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.397 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.397 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.402 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.405 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.407 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.408 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.408 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.411 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.412 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.412 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.416 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.418 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.420 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.421 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.422 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.424 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.424 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.424 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.428 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.429 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.431 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.431 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.432 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.435 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.435 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.435 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.439 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.440 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.442 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.443 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.444 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.446 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.446 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.446 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.450 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.452 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.454 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.454 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.455 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.458 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.459 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.459 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.466 [main] INFO  test.AppTest - Setting up test environment...
+2026-04-22 23:58:46.471 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.473 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.476 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.476 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.477 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.484 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.484 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.485 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.486 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.487 [main] DEBUG dungeonmanager.session.Session - Cleared creature selection
+2026-04-22 23:58:46.492 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.493 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.496 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.496 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.497 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.499 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.500 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.500 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.500 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.501 [main] DEBUG dungeonmanager.session.Session - Renamed creature creature_1 to 'Legend'
+2026-04-22 23:58:46.505 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.506 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.508 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.509 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.509 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.511 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.512 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.512 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.513 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.514 [main] DEBUG dungeonmanager.session.Session - Delete ignored for unknown creature unknown-id
+2026-04-22 23:58:46.518 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.519 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.521 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.522 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.523 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.524 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.525 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.525 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.526 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.529 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.531 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.535 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.535 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.536 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.538 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.538 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.538 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.539 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Barbarian' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.542 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.544 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.546 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.547 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.547 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.549 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.549 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.550 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.550 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.551 [main] DEBUG dungeonmanager.session.Session - Cleared creature selection
+2026-04-22 23:58:46.554 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.556 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.561 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.562 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.563 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.565 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.565 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.565 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.566 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.567 [main] DEBUG dungeonmanager.session.Session - Cleared creature selection
+2026-04-22 23:58:46.567 [main] DEBUG dungeonmanager.session.Session - Selected creature creature_1
+2026-04-22 23:58:46.570 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.571 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.573 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.574 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.574 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.576 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.576 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.576 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.577 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.577 [main] INFO  dungeonmanager.session.Session - Deleted creature creature_1. New selection: null
+2026-04-22 23:58:46.580 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.582 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.585 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.586 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.586 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.588 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.588 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.588 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.589 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.592 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.593 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.595 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.596 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.596 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.599 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.599 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.599 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.600 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Beast' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.600 [main] DEBUG dungeonmanager.session.Session - Changed creature creature_1 type to base:dungeonmanager.creature:dwarf
+2026-04-22 23:58:46.607 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.610 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.612 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.612 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.613 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.615 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.616 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.616 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.616 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.617 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.617 [main] INFO  dungeonmanager.session.Session - Created creature creature_3 named 'Hero3' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.617 [main] DEBUG dungeonmanager.session.Session - Selected creature creature_1
+2026-04-22 23:58:46.617 [main] DEBUG dungeonmanager.session.Session - Selected creature creature_2
+2026-04-22 23:58:46.620 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.621 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.624 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.624 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.625 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.627 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.627 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.627 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.628 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Knight' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.632 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.634 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.637 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.638 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.638 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.640 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.640 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.641 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.641 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Warrior' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.645 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.646 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.648 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.649 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.650 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.652 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.652 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.653 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.653 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Bear' as type base:dungeonmanager.creature:owlbear
+2026-04-22 23:58:46.656 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.658 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.661 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.662 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.663 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.664 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.665 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.665 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.666 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Paladin' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.670 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.671 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.674 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.675 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.675 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.677 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.677 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.678 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.678 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Ranger' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.681 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.682 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.684 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.684 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.685 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.688 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.688 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.688 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.689 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.690 [main] INFO  dungeonmanager.session.Session - Deleted creature creature_1. New selection: null
+2026-04-22 23:58:46.693 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.695 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.697 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.697 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.699 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.701 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.701 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.701 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.702 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.703 [main] DEBUG dungeonmanager.session.Session - Selection ignored for unknown creature unknown-id
+2026-04-22 23:58:46.707 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.709 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.711 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.712 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.713 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.715 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.715 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.715 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.716 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.717 [main] DEBUG dungeonmanager.session.Session - Cleared creature selection
+2026-04-22 23:58:46.719 [main] DEBUG dungeonmanager.session.Session - Loading shared content packs from C:\Users\jonas/DungeonManager/library/
+2026-04-22 23:58:46.720 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: homebrew
+2026-04-22 23:58:46.722 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'dummy' from test_1.json
+2026-04-22 23:58:46.723 [main] DEBUG dungeonmanager.session.Session - Loading workspace content pack from /data/test/
+2026-04-22 23:58:46.725 [main] DEBUG d.contentPack.PackLoader - Loading features from pack: test
+2026-04-22 23:58:46.728 [main] DEBUG d.contentPack.PackLoader - Loaded feature 'test_feature' from test_feature_1.json
+2026-04-22 23:58:46.728 [main] DEBUG dungeonmanager.session.Session - Content pack loading complete: 2 features loaded
+2026-04-22 23:58:46.729 [main] DEBUG dungeonmanager.session.Session - Session initialized
+2026-04-22 23:58:46.730 [main] INFO  dungeonmanager.session.Session - Created creature creature_1 named 'Hero1' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.730 [main] INFO  dungeonmanager.session.Session - Created creature creature_2 named 'Hero2' as type base:dungeonmanager.creature:default
+2026-04-22 23:58:46.730 [main] INFO  dungeonmanager.session.Session - Deleted creature creature_2. New selection: creature_1

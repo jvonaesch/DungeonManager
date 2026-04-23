@@ -1,7 +1,6 @@
-package dungeonmanager.contentPack;
+package dungeonmanager.contentpack;
 
 import dungeonmanager.feature.Feature;
-import dungeonmanager.registry.Registries;
 import dungeonmanager.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +9,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.function.BiConsumer;
+import java.util.function.BiFunction;
+import java.util.function.Consumer;
 import java.util.stream.Stream;
+
+import static org.apache.commons.io.FilenameUtils.removeExtension;
 
 /**
  * Loads data from Content Packs.
@@ -32,13 +36,13 @@ public class PackLoader {
     }
 
     /**
-     * Load all packs in a library directory
+     * Load all packs in a library directory to the PackLoader's session
      * @param libraryPath the path to the DungeonManagerLibrary directory
      */
     public void loadLibrary(String libraryPath) {
         Path libDir = Paths.get(libraryPath);
 
-        if (!checkDirectory(libDir)) return;
+        if (!checkOrMakeDir(libDir)) return;
 
         try (Stream<Path> packDirs = Files.list(libDir)) {
             packDirs.filter(Files::isDirectory)
@@ -51,77 +55,52 @@ public class PackLoader {
         }
     }
 
-    public void loadFromPack(String packPath) {
-        Path packDir = Paths.get(packPath);
-        if (!Files.exists(packDir)) {
-            LOG.warn("Pack directory does not exist: {}", packDir.toAbsolutePath());
-            return;
-        }
-
-        if (!Files.isDirectory(packDir)) {
-            LOG.warn("Pack path is not a directory: {}", packDir.toAbsolutePath());
-            return;
-        }
-
-        loadPack(packDir);
-    }
-
     /**
-     * Load all features from a single pack's 'features' subdirectory.
-     *
+     * Load a content pack to the PackLoader's session
      * @param packDir the path to a pack directory
      */
     private void loadPack(Path packDir) {
         Path featuresDir = packDir.resolve("features");
 
-        if (!Files.exists(featuresDir)) {
-            LOG.debug("Pack '{}' has no features directory, skipping", packDir.getFileName());
-            return;
+        if (checkDir(featuresDir, "skipping features for this pack")) {
+            LOG.debug("Loading features from pack: {}", packDir.getFileName());
+            loadRecursive(featuresDir, (Path filePath) -> {
+                loadFromFile(filePath, (String featureId, String json) -> {
+                    session.registerFeature(featureId, () -> Feature.fromJson(featureId, json));
+                }, "feature");
+            });
         }
-
-        if (!Files.isDirectory(featuresDir)) {
-            LOG.debug("Features path in pack '{}' is not a directory, skipping", packDir.getFileName());
-            return;
-        }
-
-        LOG.debug("Loading features from pack: {}", packDir.getFileName());
-        loadFeaturesRecursive(featuresDir);
     }
 
     /**
-     * Recursively load all JSON files from a directory and its subdirectories.
-     *
-     * @param dir the directory to scan
+     * Recursively walk a directory and apply a load consumer to each JSON file found
+     * @param dir the directory to walk
+     * @param fileConsumer a consumer that takes a Path to a JSON file and loads it into the session
      */
-    private void loadFeaturesRecursive(Path dir) {
+    private void loadRecursive(Path dir, Consumer<Path> fileConsumer) {
         try (Stream<Path> files = Files.walk(dir)) {
             files.filter(Files::isRegularFile)
                     .filter(path -> path.toString().endsWith(".json"))
-                    .forEach(this::loadFeatureFromFile);
+                    .forEach(fileConsumer);
         } catch (IOException e) {
             LOG.error("Error walking directory: {}", dir.toAbsolutePath(), e);
         }
     }
 
-    /**
-     * Load a single feature from a JSON file and register it.
-     *
-     * @param filePath the path to the JSON file
-     */
-    private void loadFeatureFromFile(Path filePath) {
+    private void loadFromFile(Path filePath, BiConsumer<String, String> registrar, String contentType) {
         try {
             String json = Files.readString(filePath);
-            Feature feature = Feature.fromJson(json);
-            session.registerFeature(feature);
-            LOG.debug("Loaded feature '{}' from {}", feature.getId(), filePath.getFileName());
+            String featureId = removeExtension(filePath.getFileName().toString());
+            registrar.accept(featureId, json);
+            LOG.debug("Loaded {} '{}' from {}", contentType, featureId, filePath);
         } catch (IOException e) {
-            LOG.error("Error reading feature file: {}", filePath.toAbsolutePath(), e);
+            LOG.error("Error reading {} file: {}", contentType, filePath.toAbsolutePath(), e);
         } catch (Exception e) {
-            LOG.error("Error loading feature from {}: {}", filePath.toAbsolutePath(), e.getMessage(), e);
+            LOG.error("Error loading {} from {}: {}", contentType, filePath.toAbsolutePath(), e.getMessage(), e);
         }
     }
 
-    public static boolean checkDirectory(Path filePath, String failureMessage, String notADirectoryMessage) {
+    public static boolean checkOrMakeDir(Path filePath, String failureMessage, String notADirectoryMessage) {
         if (!Files.exists(filePath)) {
             try {
                 Files.createDirectories(filePath);
@@ -137,12 +116,24 @@ public class PackLoader {
         return true;
     }
 
-    public static boolean checkDirectory(Path filePath) {
-        return checkDirectory(
+    public static boolean checkOrMakeDir(Path filePath) {
+        return checkOrMakeDir(
                 filePath,
                 "Failed to create directory: {}",
                 "Expected a directory but found a file: {}"
         );
+    }
+
+    public static boolean checkDir(Path dirPath, String absentActionName) {
+        if (!Files.exists(dirPath)) {
+            LOG.debug("Directory '{}' not found. {}", dirPath.getFileName(), absentActionName);
+            return false;
+        }
+        if (!Files.isDirectory(dirPath)) {
+            LOG.debug("'{}' is not a directory. {}", dirPath.getFileName(), absentActionName);
+            return false;
+        }
+        return true;
     }
 }
 

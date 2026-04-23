@@ -1,7 +1,7 @@
 package dungeonmanager.session;
 
 import dungeonmanager.DungeonManagerApp;
-import dungeonmanager.contentPack.PackLoader;
+import dungeonmanager.contentpack.PackLoader;
 import dungeonmanager.creature.Creature;
 import dungeonmanager.creature.CreatureType;
 import dungeonmanager.creature.IntegratedCreatureType;
@@ -15,6 +15,7 @@ import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.util.*;
+import java.util.function.Supplier;
 
 import static dungeonmanager.DungeonManagerApp.LIB_PATH;
 
@@ -46,8 +47,9 @@ public class Session {
 
         LOG.debug("Loading shared content packs from {}", LIB_PATH);
         packLoader.loadLibrary(LIB_PATH);
+        // TODO: Instead load selected content into working directory if absent on initial population.
         LOG.debug("Loading workspace content pack from {}", workingDirectory);
-        packLoader.loadFromPack(workingDirectory);
+        packLoader.loadLibrary(workingDirectory);
         LOG.debug("Content pack loading complete: {} features loaded", registry.feature.getSize());
         LOG.debug("Session initialized");
     }
@@ -216,6 +218,10 @@ public class Session {
     public synchronized void registerFeature(@NotNull Feature feature) {
         String featureId = normalizeId(feature.getId());
         registry.feature.register(featureId, feature);
+    }
+
+    public synchronized void registerFeature(String featureId, @NotNull Supplier<Feature> featureSupplier) {
+        registry.feature.register(featureId, featureSupplier);
     }
 
     public synchronized Set<String> getFeatureIDs() {

@@ -85,15 +85,9 @@ public class Feature implements JsonSerializable {
         }
     }
 
-    /**
-     * Deserialize a Feature from JSON.
-     * @param json the JSON string representation of the feature
-     * @return the deserialized Feature, or null if deserialization fails
-     */
-    public static Feature fromJson(String json) {
+    public static Feature fromJson(String featureId, String json) {
         try {
             JsonNode obj = MAPPER.readTree(json);
-            String featureId = obj.path("id").asText();
             String featureName = obj.path("name").asText();
             String featureDesc = obj.path("description").asText();
 
