@@ -12,7 +12,7 @@ import java.util.List;
 
 public class Feature implements JsonSerializable {
 
-    public static final ObjectMapper MAPPER = new ObjectMapper();
+    static final ObjectMapper MAPPER = new ObjectMapper();
 
     private final String id;
     private String name;

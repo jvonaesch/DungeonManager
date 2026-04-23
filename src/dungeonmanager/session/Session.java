@@ -45,8 +45,8 @@ public class Session {
         this.workingDirectory = Path.of(workingDirectory);
         this.packLoader = new PackLoader(this);
 
-        LOG.debug("Loading shared content packs from {}", LIB_PATH);
-        packLoader.loadLibrary(LIB_PATH);
+        // LOG.debug("Loading shared content packs from {}", LIB_PATH);
+        // packLoader.loadLibrary(LIB_PATH);
         // TODO: Instead load selected content into working directory if absent on initial population.
         LOG.debug("Loading workspace content pack from {}", workingDirectory);
         packLoader.loadLibrary(workingDirectory);
@@ -235,6 +235,10 @@ public class Session {
     public synchronized void registerStat(@NotNull Stat stat) {
         String statId = normalizeId(stat.getID());
         registry.stat.register(statId, stat);
+    }
+
+    public synchronized Set<String> getStatIDs() {
+        return registry.stat.getAllKeys();
     }
 
     public synchronized Stat getStat(String statId) {

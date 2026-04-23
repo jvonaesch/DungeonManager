@@ -1,11 +1,12 @@
 package test;
 
 import dungeonmanager.DungeonManagerApp;
+import dungeonmanager.contentpack.PackLoader;
 import dungeonmanager.feature.Feature;
-import dungeonmanager.feature.FeatureSerializer;
 import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.session.Session;
 import dungeonmanager.stat.StandardStat;
+import dungeonmanager.stat.Stat;
 import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -13,6 +14,9 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.Set;
+
+import static dungeonmanager.contentpack.PackLoader.writeToFile;
 
 public abstract class AppTest {
 
@@ -26,14 +30,14 @@ public abstract class AppTest {
     @BeforeAll
     static void beforeAll() {
         LOG.info("Setting up test environment...");
-        registerStandardStats(setupSession);
+        // registerStandardStats(setupSession);
         generateTestData();
     }
 
     @BeforeEach
     void setUp() {
         session = app.getSession(TEST_WORKSPACE_PATH);
-        registerStandardStats(session);
+        // registerStandardStats(session);
     }
 
     static void registerStandardStats(Session session) {
@@ -43,6 +47,7 @@ public abstract class AppTest {
     }
 
     static void generateTestData() {
+        registerStandardStats(setupSession);
         Feature testFeature = new Feature(
                 "test_feature_1",
                 "Test Feature",
@@ -54,11 +59,15 @@ public abstract class AppTest {
                 "A stat modifier for testing.",
                 new StatModifier().setValue(setupSession.getStat("STR"), 2)
         ));
-        String featureTargetPath = TEST_WORKSPACE_PATH + "test_pack_1/features/test_feature_1.json";
         try {
-            FeatureSerializer.writeToFile(featureTargetPath, testFeature.toJson());
+            writeToFile(
+                    TEST_WORKSPACE_PATH + "test_pack_1/stats.json",
+                    Stat.toJson(Set.of(StandardStat.values())));
+            writeToFile(
+                    TEST_WORKSPACE_PATH + "test_pack_1/features/test_feature_1.json",
+                    testFeature.toJson());
         } catch (IOException e) {
-            LOG.error("Failed to create test feature file: {}", featureTargetPath, e);
+            LOG.error("Failed to create test files: e", e);
         }
     }
 }

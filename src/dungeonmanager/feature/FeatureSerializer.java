@@ -4,14 +4,9 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.StandardOpenOption;
-
 public class FeatureSerializer {
 
-    protected static final ObjectMapper MAPPER = new ObjectMapper();
+    static final ObjectMapper MAPPER = new ObjectMapper();
 
     /**
      * Helper method to deserialize a FeatureSection from JSON based on its type.
@@ -38,10 +33,4 @@ public class FeatureSerializer {
         return null;
     }
 
-    public static void writeToFile(String pathStr, String content) throws IOException {
-        Path path = Path.of(pathStr);
-        Path parent = path.getParent();
-        if (parent != null) Files.createDirectories(parent);
-        Files.writeString(path, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
-    }
 }

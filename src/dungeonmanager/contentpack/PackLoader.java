@@ -1,16 +1,20 @@
 package dungeonmanager.contentpack;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.session.Session;
+import dungeonmanager.stat.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardOpenOption;
+import java.util.Set;
 import java.util.function.BiConsumer;
-import java.util.function.BiFunction;
 import java.util.function.Consumer;
 import java.util.stream.Stream;
 
@@ -27,12 +31,20 @@ import static org.apache.commons.io.FilenameUtils.removeExtension;
  * Features are registered into Registries.get().feature for global access.
  */
 public class PackLoader {
+    public static final ObjectMapper MAPPER = new ObjectMapper();
 
     private static final Logger LOG = LoggerFactory.getLogger(PackLoader.class);
     private final Session session;
 
     public PackLoader(Session session) {
         this.session = session;
+    }
+
+    public static void writeToFile(String pathStr, String content) throws IOException {
+        Path path = Path.of(pathStr);
+        Path parent = path.getParent();
+        if (parent != null) Files.createDirectories(parent);
+        Files.writeString(path, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);
     }
 
     /**
@@ -57,10 +69,25 @@ public class PackLoader {
 
     /**
      * Load a content pack to the PackLoader's session
+     * Sequence does not matter since registration is lazy and only reads JSON when accessed
      * @param packDir the path to a pack directory
      */
     private void loadPack(Path packDir) {
+        String packName = packDir.getFileName().toString();
         Path featuresDir = packDir.resolve("features");
+
+        Path statsPath = packDir.resolve("stats.json");
+        File statsFile = statsPath.toFile();
+        if (statsFile.exists() && statsFile.isFile() && statsFile.getName().endsWith(".json")) {
+            LOG.debug("Loading stats from pack: {}", packName);
+            try {
+                String json = Files.readString(statsPath);
+                Set<Stat> stats = Stat.fromJson(json, packName);
+                stats.forEach(session::registerStat);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         if (checkDir(featuresDir, "skipping features for this pack")) {
             LOG.debug("Loading features from pack: {}", packDir.getFileName());
