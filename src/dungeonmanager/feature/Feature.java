@@ -60,7 +60,7 @@ public class Feature implements JsonSerializable {
     @Override
     public String toJson() {
         ObjectNode obj = MAPPER.createObjectNode();
-        obj.put("id", id);
+        // obj.put("id", id);
         obj.put("name", name);
         obj.put("description", description);
 
