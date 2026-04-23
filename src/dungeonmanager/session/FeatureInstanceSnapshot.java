@@ -1,7 +1,6 @@
 package dungeonmanager.session;
 
 import dungeonmanager.feature.FeatureInstance;
-import dungeonmanager.stat.Stat;
 import dungeonmanager.stat.StatModifier;
 
 import java.util.Collections;

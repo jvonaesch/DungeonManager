@@ -1,8 +1,8 @@
 package test.session;
 
-import dungeonmanager.stat.CustomStat;
-import dungeonmanager.stat.StandardStat;
 import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.StandardStat;
+import dungeonmanager.stat.IStat;
 import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -26,13 +26,13 @@ public class SessionStatModifierTest extends AppTest {
     @Test
     @DisplayName("Registering a custom stat")
     void stat_modifier_with_string_id_registers_custom_stat() {
-        Stat fire = new CustomStat("FIRE", "Fire", "other");
+        IStat fire = new Stat("FIRE", "Fire", "other");
         session.registerStat(fire);
 
         StatModifier modifier = new StatModifier();
         modifier.setValue(fire, 3);
 
-        Stat read_stat = session.getStat("FIRE");
+        IStat read_stat = session.getStat("FIRE");
         assertEquals(fire, read_stat, "Expected session to return registered FIRE stat");
         assertEquals(3, modifier.getValue(read_stat), "Expected modifier to store FIRE +3");
     }

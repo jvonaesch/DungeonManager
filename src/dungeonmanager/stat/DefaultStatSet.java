@@ -8,11 +8,11 @@ import java.util.Set;
  */
 public class DefaultStatSet implements StatSet {
 
-    protected Map<String, Stat> specified;
+    protected Map<String, IStat> specified;
     private static DefaultStatSet INSTANCE;
 
-    private DefaultStatSet(Set<Stat> specified) {
-        this.specified = specified.stream().collect(java.util.stream.Collectors.toMap(Stat::getId, stat -> stat));
+    private DefaultStatSet(Set<IStat> specified) {
+        this.specified = specified.stream().collect(java.util.stream.Collectors.toMap(IStat::getId, stat -> stat));
     }
 
     /**

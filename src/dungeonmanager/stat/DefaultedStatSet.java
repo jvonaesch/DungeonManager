@@ -53,7 +53,7 @@ public class DefaultedStatSet extends ModifiableStatSet {
     }
 
     @Override
-    public void resetBaseValue(Stat stat) {
+    public void resetBaseValue(IStat stat) {
         this.removed.remove(stat.getId());
         this.baseValues.remove(stat.getId());
         this.reloadValues();

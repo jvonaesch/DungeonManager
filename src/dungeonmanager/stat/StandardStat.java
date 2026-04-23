@@ -1,14 +1,7 @@
 package dungeonmanager.stat;
 
-/**
- * Enumeration of standard stat provided by the system.
- * Provides predefined stat with standard names, IDs, and default values.
- * All standard stat are automatically registered with the global stat registry.
- * 
- * @see dungeonmanager.stat.CustomStat for user-defined stat
- * @see dungeonmanager.DungeonManagerApp#initialize() for registration
- */
-public enum StandardStat implements Stat {
+
+public enum StandardStat implements IStat {
     STR("STR", "strength", "ability"),
     CON("CON", "constitution", "ability"),
     DEX("DEX", "dexterity", "ability"),
@@ -18,13 +11,13 @@ public enum StandardStat implements Stat {
 
     MAX_HP("MAX_HP", "maximum health points");
 
-    private String name;
-    private String ID;
-    private String origin_identifier;
-    private String type;
-    private int default_value;
+    private final String name;
+    private final String ID;
+    private final String origin_identifier;
+    private final String type;
+    private final int default_value;
 
-    private StandardStat(String ID, String name, String type, int default_value, String origin_identifier) {
+    StandardStat(String ID, String name, String type, int default_value, String origin_identifier) {
         this.origin_identifier = origin_identifier;
         this.name = name;
         this.ID = ID;
@@ -32,19 +25,15 @@ public enum StandardStat implements Stat {
         this.default_value = default_value;
     }
 
-    private StandardStat(String ID, String name, String type, int default_value) {
+    StandardStat(String ID, String name, String type, int default_value) {
         this(ID, name, type, default_value, "standard:dungeonmanager.stat." + type + ':' + ID);
     }
 
-    private StandardStat(String ID, String name, String type) {
+    StandardStat(String ID, String name, String type) {
         this(ID, name, type, type.equals("ability") ? 10 : 0);
     }
 
-    private StandardStat(String ID, String name, int default_value) {
-        this(ID, name, "base_stat", default_value);
-    }
-
-    private StandardStat(String ID, String name) {
+    StandardStat(String ID, String name) {
         this(ID, name, "base_stat");
     }
 

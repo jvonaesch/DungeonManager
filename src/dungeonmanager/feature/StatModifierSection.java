@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dungeonmanager.stat.ModifiableStatSet;
-import dungeonmanager.stat.Stat;
 import dungeonmanager.stat.StatModifier;
 
 import java.util.Map;

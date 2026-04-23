@@ -69,7 +69,7 @@ public class ModifiableStatSet implements WriteableStatSet {
     }
 
     @Override
-    public void resetBaseValue(Stat stat) {
+    public void resetBaseValue(IStat stat) {
         setBaseValue(stat.getId(), stat.getDefaultValue());
     }
 

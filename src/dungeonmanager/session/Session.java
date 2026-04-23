@@ -8,7 +8,7 @@ import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.FeatureInstance;
 import dungeonmanager.registry.Registries;
-import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.IStat;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -237,7 +237,7 @@ public class Session {
         return registry.feature.get(normalizeId(featureId));
     }
 
-    public synchronized void registerStat(@NotNull Stat stat) {
+    public synchronized void registerStat(@NotNull IStat stat) {
         String statId = normalizeId(stat.getId());
         registry.stat.register(statId, stat);
     }
@@ -246,7 +246,7 @@ public class Session {
         return registry.stat.getAllKeys();
     }
 
-    public synchronized Stat getStat(String statId) {
+    public synchronized IStat getStat(String statId) {
         return registry.stat.get(normalizeId(statId));
     }
 
@@ -311,7 +311,7 @@ public class Session {
         
         // Apply base stat overrides
         for (Map.Entry<String, Integer> override : creatureSnapshot.getBaseStatOverrides().entrySet()) {
-            Stat stat = registry.stat.get(normalizeId(override.getKey()));
+            IStat stat = registry.stat.get(normalizeId(override.getKey()));
             creature.getStatSet().setBaseValue(stat, override.getValue());
         }
 
@@ -364,7 +364,7 @@ public class Session {
 
     private void applyBaseStats(Creature creature, @NotNull Map<String, Integer> baseStats) {
         for (Map.Entry<String, Integer> entry : baseStats.entrySet()) {
-            Stat stat = registry.stat.get(normalizeId(entry.getKey()));
+            IStat stat = registry.stat.get(normalizeId(entry.getKey()));
             if (stat == null) {
                 throw new IllegalArgumentException("Stat not found: " + entry.getKey());
             }

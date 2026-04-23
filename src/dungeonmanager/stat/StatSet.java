@@ -14,7 +14,7 @@ public interface StatSet {
         return value != null ? value : defaultValue;
     }
 
-    default int getValue(Stat stat) {
+    default int getValue(IStat stat) {
         return getValue(stat.getId(), stat.getDefaultValue());
     }
 

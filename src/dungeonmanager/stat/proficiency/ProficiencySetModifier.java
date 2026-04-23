@@ -1,6 +1,6 @@
 package dungeonmanager.stat.proficiency;
 
-import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.IStat;
 
 import java.util.HashMap;
 
@@ -27,5 +27,5 @@ public class ProficiencySetModifier {
         values.remove(prof_id);
     }
 
-    public int getValue (Stat stat) {return values.get(stat); }
+    public int getValue (IStat stat) {return values.get(stat); }
 }

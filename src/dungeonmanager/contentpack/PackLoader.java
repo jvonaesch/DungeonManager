@@ -3,7 +3,7 @@ package dungeonmanager.contentpack;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.session.Session;
-import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.IStat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -11,7 +11,6 @@ import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.nio.file.StandardOpenOption;
 import java.util.Set;
 import java.util.function.BiConsumer;
@@ -81,7 +80,7 @@ public class PackLoader {
             LOG.debug("Loading stats from pack: {}", packName);
             try {
                 String json = Files.readString(statsPath);
-                Set<Stat> stats = Stat.fromJson(json, packName);
+                Set<IStat> stats = IStat.fromJson(json, packName);
                 stats.forEach(session::registerStat);
             } catch (IOException e) {
                 throw new RuntimeException(e);
@@ -90,11 +89,9 @@ public class PackLoader {
 
         if (checkDir(featuresDir, "skipping features for this pack")) {
             LOG.debug("Loading features from pack: {}", packDir.getFileName());
-            loadRecursive(featuresDir, (Path filePath) -> {
-                loadFromFile(filePath, (String featureId, String json) -> {
-                    session.registerFeature(featureId, () -> Feature.fromJson(featureId, json));
-                }, "feature");
-            });
+            loadRecursive(featuresDir, (Path filePath) -> loadFromFile(filePath,
+                    (String featureId, String json) -> session.registerFeature(featureId,
+                            () -> Feature.fromJson(featureId, json)), "feature"));
         }
     }
 
@@ -113,7 +110,7 @@ public class PackLoader {
         }
     }
 
-    private void loadFromFile(Path filePath, BiConsumer<String, String> registrar, String contentType) {
+    public void loadFromFile(Path filePath, BiConsumer<String, String> registrar, String contentType) {
         try {
             String json = Files.readString(filePath);
             String featureId = removeExtension(filePath.getFileName().toString());

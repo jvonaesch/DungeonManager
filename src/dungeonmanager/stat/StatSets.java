@@ -18,7 +18,7 @@ public class StatSets {
     public static Map<String, Map<String, Integer>> getByType(StatSet set, Session session) {
         TreeMap<String, Map<String, Integer>> map = new TreeMap<>();
         for (String statId: set.getSpecifiedStats()) {
-            Stat stat = session.getStat(statId);
+            IStat stat = session.getStat(statId);
             if (!map.containsKey(stat.getType())) map.put(stat.getType(), new TreeMap<> ());
             map.get(stat.getType()).put(statId, set.getValue(statId));
         }

@@ -3,12 +3,11 @@ package test.app;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.stat.StandardStat;
-import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.IStat;
 import org.junit.jupiter.api.*;
 import test.AppTest;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Content Pack Tests")
 public class ContentPackTest extends AppTest {
@@ -16,7 +15,7 @@ public class ContentPackTest extends AppTest {
     @Test
     @DisplayName("Check that standard stats were loaded from generated test content pack")
     void testLoadStandardStats() {
-        for (Stat stat: StandardStat.values()) {
+        for (IStat stat: StandardStat.values()) {
             assertTrue(session.getStatIDs().contains(stat.getId()), "Expected standard stat '" + stat.getId() + "' to be registered");
         }
     }
@@ -28,12 +27,10 @@ public class ContentPackTest extends AppTest {
         Feature feature = session.getFeature("test_feature_1");
 
         assertEquals(1, feature.getSections().size(), "Expected 'test_feature_1' to have 1 section");
-        assertTrue(feature.getSections().get(0) instanceof StatModifierSection, "Expected section to be a StatModifierSection");
-        StatModifierSection section = (StatModifierSection) feature.getSections().get(0);
+        assertInstanceOf(StatModifierSection.class, feature.getSections().getFirst(), "Expected section to be a StatModifierSection");
+        StatModifierSection section = (StatModifierSection) feature.getSections().getFirst();
         assertEquals(2, section.getModifier().getValue(session.getStat("STR")), "Expected STR modifier to be 2");
 
-        session.getFeatureIDs().forEach(key -> {
-            LOG.debug("found feature: " + key);
-        });
+        session.getFeatureIDs().forEach(key -> LOG.debug("found feature: {}", key));
     }
 }

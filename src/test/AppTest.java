@@ -1,12 +1,11 @@
 package test;
 
 import dungeonmanager.DungeonManagerApp;
-import dungeonmanager.contentpack.PackLoader;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.session.Session;
 import dungeonmanager.stat.StandardStat;
-import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.IStat;
 import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -63,7 +62,7 @@ public abstract class AppTest {
         try {
             writeToFile(
                     TEST_WORKSPACE_PATH + "test_pack_1/stats.json",
-                    Stat.toJson(Set.of(StandardStat.values())));
+                    IStat.toJson(Set.of(StandardStat.values())));
             writeToFile(
                     TEST_WORKSPACE_PATH + "test_pack_1/features/test_feature_1.json",
                     testFeature.toJson());

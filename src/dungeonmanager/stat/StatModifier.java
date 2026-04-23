@@ -28,7 +28,7 @@ public class StatModifier {
         return values.get(statId);
     }
 
-    public int getValue(@NotNull Stat stat) {
+    public int getValue(@NotNull IStat stat) {
         return values.get(stat.getId());
     }
 
@@ -40,7 +40,7 @@ public class StatModifier {
         return this;
     }
 
-    public StatModifier setValue (Stat stat, int value) {
+    public StatModifier setValue (IStat stat, int value) {
         return this.setValue(stat.getId(), value);
     }
 
