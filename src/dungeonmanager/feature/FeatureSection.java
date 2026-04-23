@@ -1,6 +1,6 @@
 package dungeonmanager.feature;
 
-import dungeonmanager.session.JsonSerializable;
+import dungeonmanager.contentpack.JsonSerializable;
 import dungeonmanager.stat.ModifiableStatSet;
 
 /**

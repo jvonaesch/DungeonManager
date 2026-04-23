@@ -177,8 +177,8 @@ public class SessionJsonSerializer {
                 creatureFiles.add(new PersistedCreature(
                         creature.getId(),
                         creature.getName(),
-                        creature.getTypeId(),
-                        creature.getTypeName(),
+                        creature.getSourceId(),
+                        creature.getSourceName(),
                         creature.getStats(),
                         creature.getBaseStatOverrides(),
                         featureInstanceIds

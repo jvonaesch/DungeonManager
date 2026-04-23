@@ -303,9 +303,9 @@ public class Session {
         String creatureId = creatureSnapshot.getId();
         
         // Look up creature type from registry
-        CreatureBasis type = registry.entityType.get(creatureSnapshot.getTypeId());
+        CreatureBasis type = registry.entityType.get(creatureSnapshot.getSourceId());
         if (type == null) {
-            throw new IllegalArgumentException("Creature type not registered: " + creatureSnapshot.getTypeId());
+            throw new IllegalArgumentException("Creature type not registered: " + creatureSnapshot.getSourceId());
         }
 
         // Create creature with type

@@ -1,11 +1,13 @@
 package dungeonmanager.creature;
 
+import dungeonmanager.contentpack.JsonSerializable;
 import dungeonmanager.feature.Features;
+import dungeonmanager.session.CreatureSnapshot;
 import dungeonmanager.session.Session;
 import dungeonmanager.stat.*;
 import dungeonmanager.feature.FeatureSet;
 
-public class Creature implements CreatureBasis {
+public class Creature implements CreatureBasis, JsonSerializable {
 
     private final String id;
     private String name;
@@ -62,5 +64,14 @@ public class Creature implements CreatureBasis {
 
     public FeatureSet getFeatureSet() {
         return feature;
+    }
+
+    @Override
+    public String toJson() {
+        return "";
+    }
+
+    public static Creature fromJson(String creatureId, String json) {
+        return null;
     }
 }

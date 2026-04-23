@@ -30,8 +30,8 @@ import static org.apache.commons.io.FilenameUtils.removeExtension;
  * Features are registered into Registries.get().feature for global access.
  */
 public class PackLoader {
-    public static final ObjectMapper MAPPER = new ObjectMapper();
 
+    public static final ObjectMapper MAPPER = new ObjectMapper();
     private static final Logger LOG = LoggerFactory.getLogger(PackLoader.class);
     private final Session session;
 
@@ -39,8 +39,7 @@ public class PackLoader {
         this.session = session;
     }
 
-    public static void writeToFile(String pathStr, String content) throws IOException {
-        Path path = Path.of(pathStr);
+    public static void writeToFile(Path path, String content) throws IOException {
         Path parent = path.getParent();
         if (parent != null) Files.createDirectories(parent);
         Files.writeString(path, content, StandardOpenOption.CREATE, StandardOpenOption.TRUNCATE_EXISTING);

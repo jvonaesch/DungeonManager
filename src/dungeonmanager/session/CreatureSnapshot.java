@@ -8,8 +8,8 @@ import java.util.*;
 public class CreatureSnapshot {
     private final String id;
     private final String name;
-    private final String typeId;
-    private final String typeName;
+    private final String sourceId;
+    private final String sourceName;
     private final Map<String, Integer> stats;
     private final Map<String, Integer> baseStatOverrides;
     private final List<FeatureInstanceSnapshot> features;
@@ -17,16 +17,16 @@ public class CreatureSnapshot {
     CreatureSnapshot(
             String id,
             String name,
-            String typeId,
-            String typeName,
+            String sourceId,
+            String sourceName,
             Map<String, Integer> stats,
             Map<String, Integer> baseStatOverrides,
             List<FeatureInstanceSnapshot> features)
     {
         this.id = id;
         this.name = name;
-        this.typeId = typeId;
-        this.typeName = typeName;
+        this.sourceId = sourceId;
+        this.sourceName = sourceName;
         this.stats = Collections.unmodifiableMap(new LinkedHashMap<>(stats));
         this.baseStatOverrides = Collections.unmodifiableMap(new LinkedHashMap<>(baseStatOverrides));
         this.features = List.copyOf(features);
@@ -73,12 +73,12 @@ public class CreatureSnapshot {
         return name;
     }
 
-    public String getTypeId() {
-        return typeId;
+    public String getSourceId() {
+        return sourceId;
     }
 
-    public String getTypeName() {
-        return typeName;
+    public String getSourceName() {
+        return sourceName;
     }
 
     public Map<String, Integer> getStats() {

@@ -26,7 +26,7 @@ public class SessionCreatureTest extends AppTest {
 
         assertNotNull(creature, "Expected creature to be created");
         assertEquals("Ranger", creature.getName(), "Expected creature name to match");
-        assertEquals(IntegratedCreatureType.DEFAULT.getID(), creature.getTypeId(), "Expected default type");
+        assertEquals(IntegratedCreatureType.DEFAULT.getID(), creature.getSourceId(), "Expected default type");
         assertNotNull(creature.getId(), "Expected creature to have an ID");
         assertEquals(creature.getId(), session.getSelectedCreatureId(), "Expected new creature to be auto-selected");
     }
@@ -38,7 +38,7 @@ public class SessionCreatureTest extends AppTest {
 
         assertNotNull(creature, "Expected creature to be created");
         assertEquals("Bear", creature.getName(), "Expected creature name to match");
-        assertEquals(IntegratedCreatureType.OWLBEAR.getID(), creature.getTypeId(), "Expected OWLBEAR type");
+        assertEquals(IntegratedCreatureType.OWLBEAR.getID(), creature.getSourceId(), "Expected OWLBEAR type");
     }
 
     @Test
@@ -78,7 +78,7 @@ public class SessionCreatureTest extends AppTest {
 
         CreatureSnapshot changed = session.changeCreatureType(creatureId, IntegratedCreatureType.DWARF);
 
-        assertEquals(IntegratedCreatureType.DWARF.getID(), changed.getTypeId(), "Expected creature type to change");
+        assertEquals(IntegratedCreatureType.DWARF.getID(), changed.getSourceId(), "Expected creature type to change");
         assertEquals(created.getId(), changed.getId(), "Expected ID to remain unchanged");
         
         // Verify that DWARF's base stat were applied

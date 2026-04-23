@@ -3,10 +3,13 @@ package dungeonmanager.feature;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 public class FeatureSerializer {
 
     static final ObjectMapper MAPPER = new ObjectMapper();
+    static final Logger LOG = LoggerFactory.getLogger(FeatureSerializer.class);
 
     /**
      * Helper method to deserialize a FeatureSection from JSON based on its type.
