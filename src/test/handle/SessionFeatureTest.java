@@ -1,4 +1,4 @@
-package test.session;
+package test.handle;
 
 import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
@@ -10,7 +10,6 @@ import dungeonmanager.stat.StandardStat;
 import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import test.AppTest;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -20,16 +19,16 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Session Feature Tests")
-public class SessionFeatureTest extends AppTest {
+public class SessionFeatureTest extends SessionHandleTest {
 
     @Test
     @DisplayName("Registers a feature")
     void registers_feature() {
         Feature feat = buildCharismaBoostFeature();
 
-        session.registerFeature(feat);
+        handle.registerFeature(feat);
 
-        assertTrue(session.hasFeature(feat.getId()), "Expected feature to be registered");
+        assertTrue(handle.hasFeature(feat.getId()), "Expected feature to be registered");
     }
 
     @Test
@@ -38,10 +37,10 @@ public class SessionFeatureTest extends AppTest {
         CreatureSnapshot created = createHero();
 
         Feature feat = buildCharismaBoostFeature();
-        session.registerFeature(feat);
-        assertTrue(session.hasFeature(feat.getId()), "Expected feature to be registered in session catalog");
+        handle.registerFeature(feat);
+        assertTrue(handle.hasFeature(feat.getId()), "Expected feature to be registered in handle catalog");
 
-        CreatureSnapshot afterFeat = session.addFeature(created.getId(), feat.getId());
+        CreatureSnapshot afterFeat = handle.addFeature(created.getId(), feat.getId());
         assertNotNull(afterFeat, "Expected feature to be added");
         assertEquals(10, afterFeat.getStat("CHA"), "Expected CHA 10 after feature add");
         assertEquals(1, afterFeat.getFeatures().size(), "Expected one feature in snapshot");
@@ -50,7 +49,7 @@ public class SessionFeatureTest extends AppTest {
         assertNotNull(featSnapshot, "Expected feature snapshot lookup by instance ID");
         assertEquals(feat.getId(), featSnapshot.getFeatureId(), "Expected source feature ID to match registered feature ID");
 
-        CreatureSnapshot afterRemoval = session.removeFeature(created.getId(), feat.getId());
+        CreatureSnapshot afterRemoval = handle.removeFeature(created.getId(), feat.getId());
         assertNotNull(afterRemoval, "Expected feature removal to succeed");
         assertEquals(8, afterRemoval.getStat("CHA"), "Expected CHA 8 after feature removal");
     }
@@ -61,9 +60,9 @@ public class SessionFeatureTest extends AppTest {
         CreatureSnapshot created = createHero();
 
         Feature selectableFeat = buildElementalAffinityFeature();
-        session.registerFeature(selectableFeat);
+        handle.registerFeature(selectableFeat);
 
-        CreatureSnapshot afterSelectableFeat = session.addFeature(created.getId(), selectableFeat.getId());
+        CreatureSnapshot afterSelectableFeat = handle.addFeature(created.getId(), selectableFeat.getId());
         assertNotNull(afterSelectableFeat, "Expected selectable feature to be added");
 
         FeatureInstanceSnapshot selectableSnapshot = afterSelectableFeat.getFeature(selectableFeat.getId());
@@ -81,13 +80,13 @@ public class SessionFeatureTest extends AppTest {
 
         Feature feat1 = buildCharismaBoostFeature();
         Feature feat2 = buildElementalAffinityFeature();
-        session.registerFeature(feat1);
-        session.registerFeature(feat2);
+        handle.registerFeature(feat1);
+        handle.registerFeature(feat2);
 
-        CreatureSnapshot afterFeat1 = session.addFeature(created.getId(), feat1.getId());
+        CreatureSnapshot afterFeat1 = handle.addFeature(created.getId(), feat1.getId());
         assertEquals(1, afterFeat1.getFeatures().size(), "Expected one feature");
 
-        CreatureSnapshot afterFeat2 = session.addFeature(created.getId(), feat2.getId());
+        CreatureSnapshot afterFeat2 = handle.addFeature(created.getId(), feat2.getId());
         assertEquals(2, afterFeat2.getFeatures().size(), "Expected two features");
     }
 
@@ -95,7 +94,7 @@ public class SessionFeatureTest extends AppTest {
         Map<String, Integer> baseStats = new HashMap<>();
         baseStats.put("STR", 15);
         baseStats.put("CHA", 8);
-        return session.createCreature("Hero", IntegratedCreatureType.DEFAULT, baseStats);
+        return handle.createCreature("Hero", IntegratedCreatureType.DEFAULT, baseStats);
     }
 
     private Feature buildCharismaBoostFeature() {

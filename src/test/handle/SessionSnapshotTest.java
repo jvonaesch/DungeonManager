@@ -1,17 +1,13 @@
-package test.session;
+package test.handle;
 
 import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.SelectionSection;
 import dungeonmanager.feature.StatModifierSection;
-import dungeonmanager.session.CreatureSnapshot;
-import dungeonmanager.session.FeatureInstanceSnapshot;
-import dungeonmanager.session.Session;
-import dungeonmanager.session.SessionSnapshot;
+import dungeonmanager.session.*;
 import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import test.AppTest;
 
 import java.util.HashMap;
 import java.util.List;
@@ -22,41 +18,41 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Session Snapshot Tests")
-public class SessionSnapshotTest extends AppTest {
+public class SessionSnapshotTest extends SessionHandleTest {
 
     @Test
     @DisplayName("Session snapshot metadata is correct")
     void snapshot_metadata_is_correct() {
-        CreatureSnapshot created = createHero(session);
+        CreatureSnapshot created = createHero(handle);
 
         Feature selectableFeat = buildElementalAffinityFeature();
-        session.registerFeature(selectableFeat);
-        CreatureSnapshot withSelectable = session.addFeature(created.getId(), selectableFeat.getId());
+        handle.registerFeature(selectableFeat);
+        CreatureSnapshot withSelectable = handle.addFeature(created.getId(), selectableFeat.getId());
         assertNotNull(withSelectable, "Expected selectable feature to be added");
 
         FeatureInstanceSnapshot selectableSnapshot = withSelectable.getFeature(selectableFeat.getId());
         assertNotNull(selectableSnapshot, "Expected selectable feature snapshot");
 
-        SessionSnapshot snapshot = session.snapshot();
+        SessionSnapshot snapshot = handle.snapshot();
         assertEquals(SessionSnapshot.CURRENT_SCHEMA_VERSION, snapshot.getSchemaVersion(), "Unexpected schema version");
-        assertEquals(1, snapshot.getCreatureCount(), "Expected one creature in session snapshot");
+        assertEquals(1, snapshot.getCreatureCount(), "Expected one creature in handle snapshot");
         assertNotNull(snapshot.getCreature(created.getId()), "Expected creature lookup by ID in snapshot");
     }
 
     @Test
     @DisplayName("Session snapshot collections are immutable")
     void snapshot_collections_are_immutable() {
-        CreatureSnapshot created = createHero(session);
+        CreatureSnapshot created = createHero(handle);
 
         Feature selectableFeat = buildElementalAffinityFeature();
-        session.registerFeature(selectableFeat);
-        CreatureSnapshot withSelectable = session.addFeature(created.getId(), selectableFeat.getId());
+        handle.registerFeature(selectableFeat);
+        CreatureSnapshot withSelectable = handle.addFeature(created.getId(), selectableFeat.getId());
         assertNotNull(withSelectable, "Expected selectable feature to be added");
 
         FeatureInstanceSnapshot selectableSnapshot = withSelectable.getFeature(selectableFeat.getId());
         assertNotNull(selectableSnapshot, "Expected selectable feature snapshot");
 
-        SessionSnapshot snapshot = session.snapshot();
+        SessionSnapshot snapshot = handle.snapshot();
 
         assertThrows(UnsupportedOperationException.class,
                 () -> snapshot.getCreatures().add(created),
@@ -82,7 +78,7 @@ public class SessionSnapshotTest extends AppTest {
     @Test
     @DisplayName("Creature snapshot stat map is immutable")
     void creature_snapshot_stats_immutable() {
-        CreatureSnapshot created = createHero(session);
+        CreatureSnapshot created = createHero(handle);
 
         assertThrows(UnsupportedOperationException.class,
                 () -> created.getStats().put("DEX", 50),
@@ -100,7 +96,7 @@ public class SessionSnapshotTest extends AppTest {
     @Test
     @DisplayName("Creature snapshot base overrides map is immutable")
     void creature_snapshot_base_overrides_immutable() {
-        CreatureSnapshot created = createHero(session);
+        CreatureSnapshot created = createHero(handle);
 
         assertThrows(UnsupportedOperationException.class,
                 () -> created.getBaseStatOverrides().put("CON", 20),
@@ -118,11 +114,11 @@ public class SessionSnapshotTest extends AppTest {
     @Test
     @DisplayName("Feature instance snapshot config is immutable")
     void feature_instance_snapshot_config_immutable() {
-        CreatureSnapshot created = createHero(session);
+        CreatureSnapshot created = createHero(handle);
 
         Feature selectableFeat = buildElementalAffinityFeature();
-        session.registerFeature(selectableFeat);
-        CreatureSnapshot withFeature = session.addFeature(created.getId(), selectableFeat.getId());
+        handle.registerFeature(selectableFeat);
+        CreatureSnapshot withFeature = handle.addFeature(created.getId(), selectableFeat.getId());
 
         FeatureInstanceSnapshot featSnapshot = withFeature.getFeature(selectableFeat.getId());
         assertNotNull(featSnapshot, "Expected feature snapshot");
@@ -143,11 +139,11 @@ public class SessionSnapshotTest extends AppTest {
     @Test
     @DisplayName("Feature snapshot selection lists are immutable")
     void feature_snapshot_selection_lists_immutable() {
-        CreatureSnapshot created = createHero(session);
+        CreatureSnapshot created = createHero(handle);
 
         Feature selectableFeat = buildElementalAffinityFeature();
-        session.registerFeature(selectableFeat);
-        CreatureSnapshot withFeature = session.addFeature(created.getId(), selectableFeat.getId());
+        handle.registerFeature(selectableFeat);
+        CreatureSnapshot withFeature = handle.addFeature(created.getId(), selectableFeat.getId());
 
         FeatureInstanceSnapshot featSnapshot = withFeature.getFeature(selectableFeat.getId());
         assertNotNull(featSnapshot, "Expected feature snapshot");
@@ -165,10 +161,10 @@ public class SessionSnapshotTest extends AppTest {
     @Test
     @DisplayName("Session snapshot creatures list is immutable")
     void session_snapshot_creatures_list_immutable() {
-        CreatureSnapshot c1 = session.createCreature("Hero1");
-        CreatureSnapshot c2 = session.createCreature("Hero2");
+        CreatureSnapshot c1 = handle.createCreature("Hero1");
+        CreatureSnapshot c2 = handle.createCreature("Hero2");
 
-        SessionSnapshot snapshot = session.snapshot();
+        SessionSnapshot snapshot = handle.snapshot();
 
         assertThrows(UnsupportedOperationException.class,
                 () -> snapshot.getCreatures().add(c1),
@@ -186,10 +182,10 @@ public class SessionSnapshotTest extends AppTest {
     @Test
     @DisplayName("Snapshot reflects multiple creatures")
     void snapshot_reflects_multiple_creatures() {
-        CreatureSnapshot c1 = session.createCreature("Hero1");
-        CreatureSnapshot c2 = session.createCreature("Hero2");
+        CreatureSnapshot c1 = handle.createCreature("Hero1");
+        CreatureSnapshot c2 = handle.createCreature("Hero2");
 
-        SessionSnapshot snapshot = session.snapshot();
+        SessionSnapshot snapshot = handle.snapshot();
 
         assertEquals(2, snapshot.getCreatureCount(), "Expected two creatures in snapshot");
         assertNotNull(snapshot.getCreature(c1.getId()), "Expected first creature in snapshot");
@@ -199,20 +195,20 @@ public class SessionSnapshotTest extends AppTest {
     @Test
     @DisplayName("Snapshot preserves selected creature ID")
     void snapshot_preserves_selected_creature_id() {
-        CreatureSnapshot c1 = session.createCreature("Hero1");
-        session.createCreature("Hero2");
-        session.selectCreature(c1.getId());
+        CreatureSnapshot c1 = handle.createCreature("Hero1");
+        handle.createCreature("Hero2");
+        handle.selectCreature(c1.getId());
 
-        SessionSnapshot snapshot = session.snapshot();
+        SessionSnapshot snapshot = handle.snapshot();
 
         assertEquals(c1.getId(), snapshot.getSelectedCreatureId(), "Expected selected creature ID in snapshot");
     }
 
-    private CreatureSnapshot createHero(Session session) {
+    private CreatureSnapshot createHero(SessionHandle handle) {
         Map<String, Integer> baseStats = new HashMap<>();
         baseStats.put("STR", 15);
         baseStats.put("CHA", 8);
-        return session.createCreature("Hero", IntegratedCreatureType.DEFAULT, baseStats);
+        return handle.createCreature("Hero", IntegratedCreatureType.DEFAULT, baseStats);
     }
 
     private Feature buildElementalAffinityFeature() {

@@ -1,7 +1,13 @@
 package dungeonmanager.stat;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import dungeonmanager.session.Session;
+
 import java.util.HashSet;
 import java.util.Set;
+
+import static dungeonmanager.contentpack.PackLoader.MAPPER;
 
 /**
  * StatSet implementation that inherits values from a parent stat set.
@@ -98,5 +104,20 @@ public class DefaultedStatSet extends ModifiableStatSet {
         this.parent = null;
         this.parentSet = newParentSet;
         this.reloadValues();
+    }
+
+
+    @Override
+    public StatSet jsonPopulate(String json, Session session) throws JsonProcessingException {
+        JsonNode node = MAPPER.readTree(json);
+        this.changeParent(session.getCreature(node.get("parent").asText()));
+        JsonNode values = node.get("values");
+        super.jsonPopulate(MAPPER.writeValueAsString(values), session);
+        return this;
+    }
+
+    @Override
+    public String toJson() {
+        return "";
     }
 }

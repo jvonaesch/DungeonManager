@@ -1,4 +1,4 @@
-package test;
+package test.app;
 
 import dungeonmanager.DungeonManagerApp;
 import dungeonmanager.feature.Feature;
@@ -17,7 +17,6 @@ import java.nio.file.Path;
 import java.util.Set;
 
 import static dungeonmanager.contentpack.PackLoader.writeToFile;
-import static dungeonmanager.contentpack.JsonSerializable.storeSerializable;
 
 public abstract class AppTest {
 
@@ -25,7 +24,7 @@ public abstract class AppTest {
     protected static final Path TEST_WORKSPACE_PATH = Path.of("test/");
 
     protected static final DungeonManagerApp app = new DungeonManagerApp();
-    protected static final Session setupSession = app.getSession(TEST_WORKSPACE_PATH);
+    protected static final Session setupSession = newSession();
     protected Session session;
 
     @BeforeAll
@@ -36,7 +35,7 @@ public abstract class AppTest {
 
     @BeforeEach
     void setUp() {
-        session = app.getSession(TEST_WORKSPACE_PATH);
+        session = newSession();
     }
 
     static void generateTestData() {
@@ -62,5 +61,9 @@ public abstract class AppTest {
         } catch (IOException e) {
             LOG.error("Failed to create test files: e", e);
         }
+    }
+
+    public static Session newSession() {
+        return new Session(app, TEST_WORKSPACE_PATH);
     }
 }

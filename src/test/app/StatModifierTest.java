@@ -1,4 +1,4 @@
-package test.session;
+package test.app;
 
 import dungeonmanager.stat.Stat;
 import dungeonmanager.stat.StandardStat;
@@ -6,13 +6,12 @@ import dungeonmanager.stat.IStat;
 import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import test.AppTest;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @DisplayName("Session Stat Modifier Tests")
-public class SessionStatModifierTest extends AppTest {
+public class StatModifierTest extends AppTest {
 
     @Test
     @DisplayName("Stat modifier correctly adds value to stat")
@@ -33,7 +32,7 @@ public class SessionStatModifierTest extends AppTest {
         modifier.setValue(fire, 3);
 
         IStat read_stat = session.getStat("FIRE");
-        assertEquals(fire, read_stat, "Expected session to return registered FIRE stat");
+        assertEquals(fire, read_stat, "Expected handle to return registered FIRE stat");
         assertEquals(3, modifier.getValue(read_stat), "Expected modifier to store FIRE +3");
     }
 

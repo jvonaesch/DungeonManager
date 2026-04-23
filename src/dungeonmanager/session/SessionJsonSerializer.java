@@ -53,7 +53,7 @@ public class SessionJsonSerializer {
         Path sessionPath = SESSIONS_DIR.resolve(normalizedName);
         MAPPER.writeValue(sessionPath.toFile(), file.toPersistedSession());
 
-        LOG.info("Saved session JSON {} with {} creature(s) and {} feature file(s)",
+        LOG.info("Saved handle JSON {} with {} creature(s) and {} feature file(s)",
                 sessionPath,
                 file.creatures.size(),
                 file.featuresById.size());
@@ -70,7 +70,7 @@ public class SessionJsonSerializer {
         SessionFile sessionFile = SessionFile.fromPersistedSession(persisted);
         SessionSnapshot snapshot = sessionFile.toSnapshot();
 
-        LOG.info("Loaded session JSON {} with {} creature(s)", sessionPath, snapshot.getCreatureCount());
+        LOG.info("Loaded handle JSON {} with {} creature(s)", sessionPath, snapshot.getCreatureCount());
         return snapshot;
     }
 
@@ -109,7 +109,7 @@ public class SessionJsonSerializer {
             }
         }
 
-        LOG.info("Deleted session JSON {} and referenced feature JSON files", sessionPath);
+        LOG.info("Deleted handle JSON {} and referenced feature JSON files", sessionPath);
         return true;
     }
 

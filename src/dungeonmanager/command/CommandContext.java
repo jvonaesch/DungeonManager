@@ -1,7 +1,7 @@
 package dungeonmanager.command;
 
 import dungeonmanager.DungeonManagerApp;
-import dungeonmanager.registry.Registries;
+import dungeonmanager.registry.SessionRegistry;
 
 import java.util.Scanner;
 
@@ -9,9 +9,9 @@ public class CommandContext {
 
     protected final DungeonManagerApp app;
     protected final Scanner input;
-    protected final Registries registries;
+    protected final SessionRegistry registries;
 
-    public CommandContext(DungeonManagerApp app, Scanner input, Registries registries) {
+    public CommandContext(DungeonManagerApp app, Scanner input, SessionRegistry registries) {
         this.app = app;
         this.input = input;
         this.registries = registries;

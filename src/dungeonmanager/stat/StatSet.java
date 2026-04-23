@@ -1,11 +1,15 @@
 package dungeonmanager.stat;
 
+import dungeonmanager.contentpack.JsonLoadable;
+
+import java.util.Map;
 import java.util.Set;
+import java.util.TreeMap;
 
 /**
  * Interface for read-only access to a set of defined stat and their values.
  */
-public interface StatSet {
+public interface StatSet extends JsonLoadable<StatSet> {
 
     Integer getValue(String statId);
 
@@ -16,6 +20,12 @@ public interface StatSet {
 
     default int getValue(IStat stat) {
         return getValue(stat.getId(), stat.getDefaultValue());
+    }
+
+    default Map<String, Integer> getValues() {
+        Map<String, Integer> values = new TreeMap<>();
+        for (String statId : getSpecifiedStats()) values.put(statId, this.getValue(statId));
+        return values;
     }
 
     Set<String> getSpecifiedStats();

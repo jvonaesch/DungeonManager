@@ -46,7 +46,7 @@ public class PackLoader {
     }
 
     /**
-     * Load all packs in a library directory to the PackLoader's session
+     * Load all packs in a library directory to the PackLoader's handle
      * @param libraryPath the path to the DungeonManagerLibrary directory
      */
     public void loadLibrary(Path libraryPath) {
@@ -65,7 +65,7 @@ public class PackLoader {
     }
 
     /**
-     * Load a content pack to the PackLoader's session
+     * Load a content pack to the PackLoader's handle
      * Sequence does not matter since registration is lazy and only reads JSON when accessed
      * @param packDir the path to a pack directory
      */
@@ -89,7 +89,7 @@ public class PackLoader {
         if (checkDir(featuresDir, "skipping features for this pack")) {
             LOG.debug("Loading features from pack: {}", packDir.getFileName());
             loadRecursive(featuresDir, (Path filePath) -> loadFromFile(filePath,
-                    (String featureId, String json) -> session.registerFeature(featureId,
+                    (String featureId, String json) -> session.registry.feature.register(featureId,
                             () -> Feature.fromJson(featureId, json)), "feature"));
         }
     }
@@ -97,7 +97,7 @@ public class PackLoader {
     /**
      * Recursively walk a directory and apply a load consumer to each JSON file found
      * @param dir the directory to walk
-     * @param fileConsumer a consumer that takes a Path to a JSON file and loads it into the session
+     * @param fileConsumer a consumer that takes a Path to a JSON file and loads it into the handle
      */
     private void loadRecursive(Path dir, Consumer<Path> fileConsumer) {
         try (Stream<Path> files = Files.walk(dir)) {

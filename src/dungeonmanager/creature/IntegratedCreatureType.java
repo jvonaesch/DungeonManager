@@ -14,7 +14,7 @@ public enum IntegratedCreatureType implements CreatureBasis {
     IntegratedCreatureType(String id, String name) {
         this.id = "base:dungeonmanager.creature:" + id;
         this.name = name;
-        this.statSet = new DefaultedStatSet(DefaultStatSet.get());
+        this.statSet = new DefaultedStatSet(new BaseStatSet());
     }
 
     IntegratedCreatureType(String id, String name, int STR, int DEX, int CON, int INT, int WIS, int CHA) {

@@ -1,6 +1,7 @@
 package dungeonmanager;
 
 import dungeonmanager.session.Session;
+import dungeonmanager.session.SessionHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -39,16 +40,18 @@ public class DungeonManagerApp {
         LOG.info("Quitting DungeonManager application");
     }
 
-    public Session getSession(Path workspacePath) {
-        return new Session(this, workspacePath);
+    public SessionHandle getSessionHandle(Path workspacePath) {
+        Session session = new Session(this, workspacePath);
+        return new SessionHandle(session);
     }
 
-    public Session getSession() {
-        return new Session(this, DEFAULT_WORKSPACE_PATH);
+    public SessionHandle getSessionHandle() {
+        return getSessionHandle(DEFAULT_WORKSPACE_PATH);
     }
 
-    public Session getSession(Path workspacePath, Set<String> contentPacks) {
-        return new Session(this, workspacePath, contentPacks);
+    public SessionHandle getSessionHandle(Path workspacePath, Set<String> contentPacks) {
+        Session session = new Session(this, workspacePath, contentPacks);
+        return new SessionHandle(session);
     }
 
     public void shutdown() {

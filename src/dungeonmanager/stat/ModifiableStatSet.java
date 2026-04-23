@@ -1,10 +1,18 @@
 package dungeonmanager.stat;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
+import dungeonmanager.session.Session;
+
 import java.util.*;
+
+import static dungeonmanager.contentpack.PackLoader.MAPPER;
 
 /**
  * Mutable implementation of StatSet that supports base values and modifiers.
  * Manages the core stat calculation logic: base_value + modifier_total = final_score.
+ * Stores only base values when serialized
  * 
  * @see dungeonmanager.stat.StatSet for read-only interface
  * @see dungeonmanager.stat.DefaultedStatSet for inheritance-based delegation
