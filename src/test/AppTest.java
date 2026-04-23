@@ -30,24 +30,18 @@ public abstract class AppTest {
     @BeforeAll
     static void beforeAll() {
         LOG.info("Setting up test environment...");
-        // registerStandardStats(setupSession);
         generateTestData();
     }
 
     @BeforeEach
     void setUp() {
         session = app.getSession(TEST_WORKSPACE_PATH);
-        // registerStandardStats(session);
-    }
-
-    static void registerStandardStats(Session session) {
-        for (StandardStat stat : StandardStat.values()) {
-            session.registerStat(stat);
-        }
     }
 
     static void generateTestData() {
-        registerStandardStats(setupSession);
+        for (StandardStat stat : StandardStat.values()) {
+            AppTest.setupSession.registerStat(stat);
+        }
         Feature testFeature = new Feature(
                 "test_feature_1",
                 "Test Feature",
