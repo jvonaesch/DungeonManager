@@ -1,7 +1,7 @@
 package dungeonmanager.stat;
 
 
-public enum StandardStat implements IStat {
+public enum StandardStat implements Stat {
     STR("STR", "strength", "ability"),
     CON("CON", "constitution", "ability"),
     DEX("DEX", "dexterity", "ability"),

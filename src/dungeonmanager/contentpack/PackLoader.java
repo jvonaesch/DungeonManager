@@ -3,7 +3,7 @@ package dungeonmanager.contentpack;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.session.Session;
-import dungeonmanager.stat.IStat;
+import dungeonmanager.stat.Stat;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -79,7 +79,7 @@ public class PackLoader {
             LOG.debug("Loading stats from pack: {}", packName);
             try {
                 String json = Files.readString(statsPath);
-                Set<IStat> stats = IStat.fromJson(json, packName);
+                Set<Stat> stats = Stat.fromJson(json, packName);
                 stats.forEach(session::registerStat);
             } catch (IOException e) {
                 throw new RuntimeException(e);

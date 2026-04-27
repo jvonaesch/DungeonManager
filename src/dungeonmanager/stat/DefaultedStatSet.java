@@ -59,7 +59,7 @@ public class DefaultedStatSet extends ModifiableStatSet {
     }
 
     @Override
-    public void resetBaseValue(IStat stat) {
+    public void resetBaseValue(Stat stat) {
         this.removed.remove(stat.getId());
         this.baseValues.remove(stat.getId());
         this.reloadValues();
@@ -119,5 +119,10 @@ public class DefaultedStatSet extends ModifiableStatSet {
     @Override
     public String toJson() {
         return "";
+    }
+
+    @Override
+    public boolean hasStat(String statId) {
+        return getSpecifiedStats().contains(statId);
     }
 }

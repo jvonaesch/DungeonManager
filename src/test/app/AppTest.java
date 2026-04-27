@@ -5,7 +5,7 @@ import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.session.Session;
 import dungeonmanager.stat.StandardStat;
-import dungeonmanager.stat.IStat;
+import dungeonmanager.stat.Stat;
 import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,7 +56,7 @@ public abstract class AppTest {
         try {
             writeToFile(
                     TEST_WORKSPACE_PATH.resolve("test_pack_1/stats.json"),
-                    IStat.toJson(Set.of(StandardStat.values())));
+                    Stat.toJson(Set.of(StandardStat.values())));
             testFeature.storeTo(TEST_WORKSPACE_PATH.resolve("test_pack_1/features/test_feature_1.json"));
         } catch (IOException e) {
             LOG.error("Failed to create test files: e", e);

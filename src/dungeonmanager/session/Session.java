@@ -3,19 +3,15 @@ package dungeonmanager.session;
 import dungeonmanager.DungeonManagerApp;
 import dungeonmanager.contentpack.PackLoader;
 import dungeonmanager.creature.Creature;
-import dungeonmanager.creature.CreatureBasis;
-import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
-import dungeonmanager.feature.FeatureInstance;
 import dungeonmanager.registry.SessionRegistry;
-import dungeonmanager.stat.IStat;
+import dungeonmanager.stat.Stat;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.nio.file.Path;
 import java.util.*;
-import java.util.function.Supplier;
 
 import static dungeonmanager.DungeonManagerApp.LIB_PATH;
 
@@ -84,7 +80,7 @@ public class Session {
         return registry.feature.get(normalizeId(featureId));
     }
 
-    public void registerStat(@NotNull IStat stat) {
+    public void registerStat(@NotNull Stat stat) {
         String statId = normalizeId(stat.getId());
         registry.stat.register(statId, stat);
     }
@@ -93,7 +89,7 @@ public class Session {
         return registry.stat.getAllKeys();
     }
 
-    public IStat getStat(String statId) {
+    public Stat getStat(String statId) {
         return registry.stat.get(normalizeId(statId));
     }
 }

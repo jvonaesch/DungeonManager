@@ -6,7 +6,7 @@ import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.FeatureInstance;
 import dungeonmanager.registry.SessionRegistry;
-import dungeonmanager.stat.IStat;
+import dungeonmanager.stat.Stat;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +16,7 @@ import java.util.function.Supplier;
 
 import static dungeonmanager.session.Session.normalizeId;
 import static dungeonmanager.session.Session.normalizeName;
+import static java.util.Collections.unmodifiableMap;
 
 /**
  * Since the handle gives direct access to its creatures/features, migrate synchronized front-end access
@@ -64,6 +65,14 @@ public class SessionHandle {
 
         LOG.info("Created creature {} named '{}' as type {}", creatureId, creature.getName(), creature.getType().getID());
         return snapshotCreature(creatureId);
+    }
+
+    public synchronized Map<String, Integer> getStatDefaults() {
+        Map<String, Integer> defaults = new TreeMap<>();
+        for (String statId : registry.stat.getAllKeys()) {
+            defaults.put(statId, registry.stat.get(statId).getDefaultValue());
+        }
+        return unmodifiableMap(defaults);
     }
 
     public synchronized boolean selectCreature(String creatureId) {
@@ -169,7 +178,7 @@ public class SessionHandle {
     public synchronized SessionSnapshot snapshot() {
         List<CreatureSnapshot> creatureSnapshots = new ArrayList<>();
         for (CreatureEntry entry : creatures.values()) {
-            creatureSnapshots.add(toCreatureSnapshot(entry));
+            creatureSnapshots.add(CreatureSnapshot.fromCreature(entry.creature));
         }
         return new SessionSnapshot(
                 SessionSnapshot.CURRENT_SCHEMA_VERSION,
@@ -215,7 +224,7 @@ public class SessionHandle {
 
         // Apply base stat overrides
         for (Map.Entry<String, Integer> override : creatureSnapshot.getBaseStatOverrides().entrySet()) {
-            IStat stat = registry.stat.get(normalizeId(override.getKey()));
+            Stat stat = registry.stat.get(normalizeId(override.getKey()));
             creature.getStatSet().setBaseValue(stat, override.getValue());
         }
 
@@ -259,15 +268,7 @@ public class SessionHandle {
 
     private CreatureSnapshot snapshotCreature(String creatureId) {
         CreatureEntry entry = requireCreature(creatureId);
-        return toCreatureSnapshot(entry);
-    }
-
-    private CreatureSnapshot toCreatureSnapshot(CreatureEntry entry) {
-        return CreatureSnapshot.fromCreature(entry.id, entry.creature);
-    }
-
-    private String nextCreatureId() {
-        return "creature_" + nextCreatureNumber++;
+        return CreatureSnapshot.fromCreature(entry.creature);
     }
 
     private FeatureInstance addFeatureInstance(String creatureId, String featureInstanceId) {
@@ -308,10 +309,9 @@ public class SessionHandle {
                 creatures.size(), selectedCreatureId);
     }
 
-
     private void applyBaseStats(Creature creature, @NotNull Map<String, Integer> baseStats) {
         for (Map.Entry<String, Integer> entry : baseStats.entrySet()) {
-            IStat stat = registry.stat.get(normalizeId(entry.getKey()));
+            Stat stat = registry.stat.get(normalizeId(entry.getKey()));
             if (stat == null) {
                 throw new IllegalArgumentException("Stat not found: " + entry.getKey());
             }

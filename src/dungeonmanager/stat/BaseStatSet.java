@@ -1,13 +1,6 @@
 package dungeonmanager.stat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import dungeonmanager.session.Session;
-
 import java.util.*;
-
-import static dungeonmanager.contentpack.PackLoader.MAPPER;
 
 /**
  * Singleton class representing the default set of stat for a creature.
@@ -23,7 +16,7 @@ public class BaseStatSet implements WriteableStatSet {
     public BaseStatSet(Map<String, Integer> values) {
         if (values == null) {
             this.values = new TreeMap<>();
-            for (IStat stat: StandardStat.values()) {
+            for (Stat stat: StandardStat.values()) {
                 this.values.put(stat.getId(), stat.getDefaultValue());
             }
         }
@@ -41,12 +34,17 @@ public class BaseStatSet implements WriteableStatSet {
     }
 
     @Override
+    public boolean hasStat(String statId) {
+        return values.containsKey(statId);
+    }
+
+    @Override
     public void setBaseValue(String statId, Integer value) {
         values.put(statId, value);
     }
 
     @Override
-    public void resetBaseValue(IStat stat) {
+    public void resetBaseValue(Stat stat) {
         values.put(stat.getId(), stat.getDefaultValue());
     }
 

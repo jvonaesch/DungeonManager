@@ -84,7 +84,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertNotNull(changed.getStats(), "Expected stat map to exist");
         for (StandardStat stat : StandardStat.values()) {
             int expectedStat = IntegratedCreatureType.DWARF.getStatSet().getValue(stat.getId(), stat.getDefaultValue());
-            int actualStat = changed.getStat(stat.getId());
+            int actualStat = changed.getStat(stat.getId(), handle.getStatDefaults());
             assertEquals(expectedStat, actualStat, "Expected " + stat.getId() + " to match DWARF type: " + expectedStat);
         }
     }

@@ -11,7 +11,7 @@ import java.util.Comparator;
  */
 public class Stats {
 
-    public static String toString(IStat ability) {
+    public static String toString(Stat ability) {
         return ability.getId();
     }
 
@@ -19,11 +19,11 @@ public class Stats {
      * Enumeration providing stat comparison functionality.
      * Used for consistent ordering of stat in collections (TreeSet, TreeMap).
      */
-    public enum AbilityComparator implements Comparator<IStat> {
+    public enum AbilityComparator implements Comparator<Stat> {
         DEFAULT;
 
         @Override
-        public int compare(IStat o1, IStat o2) {
+        public int compare(Stat o1, Stat o2) {
             return o1.getId().compareTo(o2.getId());
         }
     }
@@ -33,7 +33,7 @@ public class Stats {
      * @return comparator that orders stat alphabetically by ID
      * @see dungeonmanager.stat.Stats.AbilityComparator for implementation
      */
-    public static Comparator<? super IStat> getDefaultComparator () {
+    public static Comparator<? super Stat> getDefaultComparator () {
         return AbilityComparator.DEFAULT;
     }
 }

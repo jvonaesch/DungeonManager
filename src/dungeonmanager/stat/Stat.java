@@ -1,66 +1,64 @@
 package dungeonmanager.stat;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 
-public class Stat implements IStat {
+import java.util.HashSet;
+import java.util.Set;
 
-    private final String originIdentifier;
-    private final String name;
-    private final String ID;
-    private final String type;
-    private final int default_value;
+import static dungeonmanager.contentpack.PackLoader.MAPPER;
 
-    public Stat(String ID, String name, String type, int default_value, String originIdentifier) {
-        this.originIdentifier = originIdentifier;
-        this.name = name;
-        this.ID = ID;
-        this.type = type;
-        this.default_value = default_value;
+
+public interface Stat {
+
+    static String toJson(Set<Stat> stats) {
+        ArrayNode root = MAPPER.createArrayNode();
+        root.addAll(stats.stream().map(stat -> {
+            ObjectNode statNode = MAPPER.createObjectNode();
+            statNode.put("id", stat.getId());
+            statNode.put("name", stat.getName());
+            statNode.put("type", stat.getType());
+            statNode.put("default_value", stat.getDefaultValue());
+            return statNode;
+        }).toList());
+        try {
+            return MAPPER.writeValueAsString(root);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Failed to serialize CustomStat set to JSON", e);
+        }
     }
 
-    public Stat(String ID, String name, String type, int default_value) {
-        this(ID, name, type, default_value, "custom:dungeonmanager.stat." + type + ':' + ID);
+    static Set<Stat> fromJson(String json, String originIdIn) {
+        Set<Stat> stats = new HashSet<>();
+        try {
+            JsonNode node = MAPPER.readTree(json);
+            if (!node.isArray()) {
+                throw new IllegalArgumentException("Expected JSON array for CustomStat, got: " + json);
+            }
+            for (JsonNode statNode : node) {
+                String id = statNode.path("id").asText();
+                String name = statNode.path("name").asText();
+                String type = statNode.path("type").asText("base_stat");
+                int defaultValue = statNode.path("default_value").asInt(0);
+                String originIdentifier = originIdIn + ":" + type + ':' + id;
+                DynamicStat stat = new DynamicStat(id, name, type, defaultValue, originIdentifier);
+                stats.add(stat);
+            }
+            return stats;
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException("Invalid JSON for CustomStat: " + json, e);
+        }
     }
 
-    public Stat(String ID, String name, String type) {
-        this(ID, name, type, 0, "custom:dungeonmanager.stat." + type + ':' + ID);
-    }
+    String getName();
+    String getId();
 
-    public Stat(String ID, String name) {
-        this(ID, name, "base_stat", 0,"custom:dungeonmanager.stat:" + ID);
-    }
+    @SuppressWarnings("unused")
+    String getOriginIdentifier();
 
-    @Override
-    public String getName() {
-        return name;
-    }
+    String getType();
 
-    @Override
-    public String getId() {
-        return ID;
-    }
-
-    @Override
-    public String getOriginIdentifier() {
-        return originIdentifier;
-    }
-
-    @Override
-    public String getType() {
-        return type;
-    }
-
-    @Override
-    public int getDefaultValue() {
-        return default_value;
-    }
-
-    @Override
-    public int hashCode() {
-        return ID.hashCode();
-    }
-
-    @Override
-    public String toString() {
-        return this.ID;
-    }
+    int getDefaultValue();
 }

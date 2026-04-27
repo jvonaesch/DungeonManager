@@ -1,13 +1,6 @@
 package dungeonmanager.stat;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ObjectNode;
-import dungeonmanager.session.Session;
-
 import java.util.*;
-
-import static dungeonmanager.contentpack.PackLoader.MAPPER;
 
 /**
  * Mutable implementation of StatSet that supports base values and modifiers.
@@ -77,13 +70,15 @@ public class ModifiableStatSet implements WriteableStatSet {
     }
 
     @Override
-    public void resetBaseValue(IStat stat) {
+    public void resetBaseValue(Stat stat) {
         setBaseValue(stat.getId(), stat.getDefaultValue());
     }
 
     @Override
     public Set<String> getSpecifiedStats() {
-        return new HashSet<>(baseValues.keySet());
+        Set <String> specified = new HashSet<>(baseValues.keySet());
+        specified.addAll(modifierValues.keySet());
+        return specified;
     }
 
     public void reloadValues() {
@@ -120,5 +115,10 @@ public class ModifiableStatSet implements WriteableStatSet {
             string.append("\n > ").append(statId).append(": ").append(getValue(statId));
         }
         return string.toString();
+    }
+
+    @Override
+    public boolean hasStat(String statId) {
+        return values.containsKey(statId);
     }
 }

@@ -14,11 +14,12 @@ public interface StatSet extends JsonLoadable<StatSet> {
     Integer getValue(String statId);
 
     default int getValue(String statId, int defaultValue) {
+        if (!hasStat(statId)) return 0;
         Integer value = getValue(statId);
         return value != null ? value : defaultValue;
     }
 
-    default int getValue(IStat stat) {
+    default int getValue(Stat stat) {
         return getValue(stat.getId(), stat.getDefaultValue());
     }
 
@@ -29,4 +30,6 @@ public interface StatSet extends JsonLoadable<StatSet> {
     }
 
     Set<String> getSpecifiedStats();
+
+    boolean hasStat(String statId);
 }

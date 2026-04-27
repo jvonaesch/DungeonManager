@@ -3,7 +3,7 @@ package test.app;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.stat.StandardStat;
-import dungeonmanager.stat.IStat;
+import dungeonmanager.stat.Stat;
 import org.junit.jupiter.api.*;
 
 import java.util.Set;
@@ -16,7 +16,7 @@ public class ContentPackTest extends AppTest {
     @Test
     @DisplayName("Check that standard stats were loaded from generated test content pack")
     void testLoadStandardStats() {
-        for (IStat stat: StandardStat.values()) {
+        for (Stat stat: StandardStat.values()) {
             assertTrue(session.getStatIDs().contains(stat.getId()), "Expected standard stat '" + stat.getId() + "' to be registered");
         }
     }

@@ -2,6 +2,7 @@ package dungeonmanager.session;
 
 import dungeonmanager.creature.Creature;
 import dungeonmanager.feature.FeatureInstance;
+import dungeonmanager.stat.Stat;
 
 import java.util.*;
 
@@ -32,7 +33,8 @@ public class CreatureSnapshot {
         this.features = List.copyOf(features);
     }
 
-    static CreatureSnapshot fromCreature(String id, Creature creature) {
+    static CreatureSnapshot fromCreature(Creature creature) {
+        String id = creature.getID();
         Map<String, Integer> statValues = new LinkedHashMap<>();
         List<String> statIds = new ArrayList<>(creature.getStatSet().getSpecifiedStats());
         statIds.sort(String::compareTo);
@@ -89,12 +91,17 @@ public class CreatureSnapshot {
         return baseStatOverrides;
     }
 
-    public int getStat(String statId) {
+    public Integer getStat(String statId) {
         Integer value = stats.get(statId);
-        if (value == null) {
-            throw new IllegalArgumentException("Stat not present in snapshot: " + statId);
-        }
         return value;
+    }
+
+    public int getStat(String statId, Map<String, Integer> defaults) {
+        if (!stats.containsKey(statId) || stats.get(statId) == null) {
+            Integer value = defaults.get(statId);
+            return value == null ? 0 : value;
+        }
+        return stats.get(statId);
     }
 
     public List<FeatureInstanceSnapshot> getFeatures() {
