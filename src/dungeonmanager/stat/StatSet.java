@@ -11,6 +11,11 @@ import java.util.TreeMap;
  */
 public interface StatSet extends JsonLoadable<StatSet> {
 
+    /**
+     * Get the value of a stat by its ID. Returns null if the stat is not defined in this set.
+     * @param statId the ID of the stat to retrieve
+     * @return the value of the stat, or null if not defined
+     */
     Integer getValue(String statId);
 
     default int getValue(String statId, int defaultValue) {

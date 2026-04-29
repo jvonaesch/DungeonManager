@@ -2,7 +2,6 @@ package dungeonmanager.session;
 
 import dungeonmanager.creature.Creature;
 import dungeonmanager.feature.FeatureInstance;
-import dungeonmanager.stat.Stat;
 
 import java.util.*;
 
@@ -92,8 +91,7 @@ public class CreatureSnapshot {
     }
 
     public Integer getStat(String statId) {
-        Integer value = stats.get(statId);
-        return value;
+        return stats.get(statId);
     }
 
     public int getStat(String statId, Map<String, Integer> defaults) {

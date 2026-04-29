@@ -13,16 +13,6 @@ public class BaseStatSet implements WriteableStatSet {
         this.values = new TreeMap<>();
     }
 
-    public BaseStatSet(Map<String, Integer> values) {
-        if (values == null) {
-            this.values = new TreeMap<>();
-            for (Stat stat: StandardStat.values()) {
-                this.values.put(stat.getId(), stat.getDefaultValue());
-            }
-        }
-        else this.values = new TreeMap<> (values);
-    }
-
     @Override
     public Integer getValue(String statId) {
         return values.get(statId);

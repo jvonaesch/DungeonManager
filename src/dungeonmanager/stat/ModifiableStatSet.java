@@ -17,15 +17,11 @@ public class ModifiableStatSet implements WriteableStatSet {
     public Map<String, Integer> modifierValues;
     public Map<String, Integer> values;
 
-    public ModifiableStatSet(Map<String, Integer> baseStatValues) {
-        this.modifiers = new HashSet<>();
-        this.baseValues = new HashMap<>(baseStatValues);
-        this.modifierValues = new HashMap<>();
-        this.values = new HashMap<>(baseStatValues);
-    }
-
     public ModifiableStatSet() {
-        this(new HashMap<>());
+        this.modifiers = new HashSet<>();
+        this.baseValues = new HashMap<>();
+        this.modifierValues = new HashMap<>();
+        this.values = new HashMap<>();
     }
 
     @Override

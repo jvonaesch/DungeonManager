@@ -1,15 +1,15 @@
 package dungeonmanager.registry;
 
-import java.util.HashMap;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Supplier;
 
 public class HashRegistry<T> implements Registry<T> {
 
-    private HashMap<String, T> map;
+    private ConcurrentHashMap<String, T> map;
 
     public HashRegistry() {
-        this.map = new HashMap<>();
+        this.map = new ConcurrentHashMap<>();
     }
 
     @Override
