@@ -218,7 +218,7 @@ public class SessionSnapshotTest extends SessionHandleTest {
                                 "fire_affinity",
                                 "Fire Affinity",
                                 "FIRE +1",
-                                new StatModifier().setValue("FIRE", 1),
+                                new StatModifier("FIRE").setBaseValue(1),
                                 false
                         )));
     }

@@ -51,7 +51,7 @@ public abstract class AppTest {
                 "test_modifier",
                 "Test Modifier",
                 "A stat modifier for testing.",
-                new StatModifier().setValue(setupSession.getStat("STR"), 2)
+                new StatModifier("STR").setBaseValue(2)
         ));
         try {
             writeToFile(

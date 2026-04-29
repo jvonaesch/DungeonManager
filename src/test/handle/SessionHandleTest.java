@@ -52,13 +52,13 @@ public abstract class SessionHandleTest {
                 "test_modifier",
                 "Test Modifier",
                 "A stat modifier for testing.",
-                new StatModifier().setValue(setupSession.getStat("STR"), 2)
+                new StatModifier("STR").setBaseValue(2)
         ));
         try {
             writeToFile(
-                    TEST_WORKSPACE_PATH.resolve("test_pack_1/stats.json"),
+                    TEST_WORKSPACE_PATH.resolve("/test_pack_1/stats.json"),
                     Stat.toJson(Set.of(StandardStat.values())));
-            testFeature.storeTo(TEST_WORKSPACE_PATH.resolve("test_pack_1/features/test_feature_1.json"));
+            testFeature.storeTo(TEST_WORKSPACE_PATH.resolve("/test_pack_1/features/test_feature_1.json"));
         } catch (IOException e) {
             LOG.error("Failed to create test files: e", e);
         }

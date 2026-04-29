@@ -6,11 +6,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dungeonmanager.stat.ModifiableStatSet;
 import dungeonmanager.stat.StatModifier;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
 
 /**
- * A FeatureSection that contains a score modifier.
+ * A FeatureSection that contains a score modifier
  */
 public class StatModifierSection implements FeatureSection {
 
@@ -26,7 +27,7 @@ public class StatModifierSection implements FeatureSection {
         this(id, name, description, modifier, true);
     }
 
-    public StatModifierSection(String id, String name, String description, StatModifier modifier, boolean visible) {
+    public StatModifierSection(String id, String name, String description, @NotNull StatModifier modifier, boolean visible) {
         this.id = id;
         this.name = name;
         this.description = description;
@@ -34,9 +35,9 @@ public class StatModifierSection implements FeatureSection {
         this.visible = visible;
     }
 
-    public StatModifierSection(String id, String name, String description) {
-        this(id, name, description, new StatModifier(), true);
-    }
+    /*public StatModifierSection(String id, String name, String description) {
+        this(id, name, description, null, true);
+    }*/
 
     @Override
     public String getID() {
@@ -77,12 +78,16 @@ public class StatModifierSection implements FeatureSection {
 
     @Override
     public void onAdd(ModifiableStatSet statSet) {
-        statSet.addModifier(modifier);
+        if (modifier != null) {
+            statSet.addModifier(modifier);
+        }
     }
 
     @Override
     public void onRemove(ModifiableStatSet statSet) {
-        statSet.removeModifier(modifier);
+        if (modifier != null) {
+            statSet.removeModifier(modifier);
+        }
     }
 
     @Override
@@ -104,11 +109,19 @@ public class StatModifierSection implements FeatureSection {
         obj.put("description", description);
         obj.put("visible", visible);
 
-        ObjectNode modifierNode = MAPPER.createObjectNode();
-        for (Map.Entry<String, Integer> entry : modifier.getValues().entrySet()) {
-            modifierNode.put(entry.getKey(), entry.getValue());
+        if (modifier != null) {
+            ObjectNode modifierNode = MAPPER.createObjectNode();
+            modifierNode.put("targetStat", modifier.getTargetStatId());
+            modifierNode.put("baseValue", modifier.getBaseValue());
+            
+            ObjectNode dependenciesNode = MAPPER.createObjectNode();
+            for (Map.Entry<String, Float> entry : modifier.getDependencies().entrySet()) {
+                dependenciesNode.put(entry.getKey(), entry.getValue());
+            }
+            modifierNode.set("dependencies", dependenciesNode);
+            
+            obj.set("modifier", modifierNode);
         }
-        obj.set("modifier", modifierNode);
 
         try {
             return MAPPER.writeValueAsString(obj);
@@ -130,12 +143,27 @@ public class StatModifierSection implements FeatureSection {
         String sectionDesc = obj.path("description").asText();
         boolean sectionVisible = obj.path("visible").asBoolean(true);
 
-        StatModifier mod = new StatModifier();
+        StatModifier modifier;
         JsonNode modifierData = obj.path("modifier");
         if (modifierData.isObject()) {
-            modifierData.fields().forEachRemaining(entry -> mod.setValue(entry.getKey(), entry.getValue().asInt()));
+            String targetStat = modifierData.path("targetStat").asText();
+            if (!targetStat.isEmpty()) {
+                modifier = new StatModifier(targetStat);
+                modifier.setBaseValue(modifierData.path("baseValue").asInt(0));
+                
+                JsonNode dependenciesNode = modifierData.path("dependencies");
+                if (dependenciesNode.isObject()) {
+                    dependenciesNode.fields().forEachRemaining(entry -> 
+                        modifier.setDependency(entry.getKey(), (float) entry.getValue().asDouble())
+                    );
+                }
+            } else {
+                modifier = null;
+            }
+        } else {
+            modifier = null;
         }
 
-        return new StatModifierSection(sectionId, sectionName, sectionDesc, mod, sectionVisible);
+        return new StatModifierSection(sectionId, sectionName, sectionDesc, modifier, sectionVisible);
     }
 }

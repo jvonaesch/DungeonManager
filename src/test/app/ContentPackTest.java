@@ -31,7 +31,8 @@ public class ContentPackTest extends AppTest {
         assertEquals(1, feature.getSections().size(), "Expected 'test_feature_1' to have 1 section");
         assertInstanceOf(StatModifierSection.class, feature.getSections().getFirst(), "Expected section to be a StatModifierSection");
         StatModifierSection section = (StatModifierSection) feature.getSections().getFirst();
-        assertEquals(2, section.getModifier().getValue(session.getStat("STR")), "Expected STR modifier to be 2");
+        assertEquals(section.getModifier().getTargetStatId(), "STR", "Expected STR to be the target stat");
+        assertEquals(section.getModifier().getBaseValue(), 2, "Expected base value to be 2");
 
         allKeys.forEach(key -> LOG.debug("found feature: {}", key));
     }

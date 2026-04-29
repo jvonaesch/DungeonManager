@@ -103,7 +103,7 @@ public class SessionFeatureTest extends SessionHandleTest {
                         "cha_bonus",
                         "CHA Bonus",
                         "CHA +2",
-                        new StatModifier().setValue(StandardStat.CHA, 2),
+                        new StatModifier(StandardStat.CHA.getId()).setBaseValue(2),
                         false
                 ));
     }
@@ -115,7 +115,7 @@ public class SessionFeatureTest extends SessionHandleTest {
                                 "fire_affinity",
                                 "Fire Affinity",
                                 "FIRE +1",
-                                new StatModifier().setValue("FIRE", 1),
+                                new StatModifier("FIRE").setBaseValue(1),
                                 false
                         )));
     }

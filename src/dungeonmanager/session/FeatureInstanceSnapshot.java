@@ -44,10 +44,8 @@ public class FeatureInstanceSnapshot {
     static FeatureInstanceSnapshot fromInstance(FeatureInstance instance) {
         Map<String, Integer> modifierTotals = new LinkedHashMap<>();
         for (StatModifier modifier : instance.getStatModifiers()) {
-            for (Map.Entry<String, Integer> entry : modifier.getValues().entrySet()) {
-                String statId = entry.getKey();
-                modifierTotals.put(statId, modifierTotals.getOrDefault(statId, 0) + entry.getValue());
-            }
+            String statId = modifier.getTargetStatId();
+            modifierTotals.put(statId, modifierTotals.getOrDefault(statId, 0) + modifier.getBaseValue());
         }
         return new FeatureInstanceSnapshot(
                 instance.ID,
