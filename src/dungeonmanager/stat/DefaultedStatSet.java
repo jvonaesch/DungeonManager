@@ -4,8 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import dungeonmanager.session.Session;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 import static dungeonmanager.contentpack.PackLoader.MAPPER;
 
@@ -38,10 +37,8 @@ public class DefaultedStatSet extends ModifiableStatSet {
      */
     @Override
     public void setBaseValue(String statId, Integer value) {
-        if (value == null) this.removeBaseValue(statId);
-        else super.setBaseValue(statId, value);
+        super.setBaseValue(statId, value);
         this.removed.remove(statId);
-        this.reloadValues();
     }
 
     /**
@@ -53,62 +50,55 @@ public class DefaultedStatSet extends ModifiableStatSet {
     @Override
     public void removeBaseValue(String statId) {
         super.removeBaseValue(statId);
-        values.remove(statId);
         removed.add(statId);
-        this.reloadValues();
     }
 
     @Override
     public void resetBaseValue(Stat stat) {
+        super.resetBaseValue(stat);
         this.removed.remove(stat.getId());
-        this.baseValues.remove(stat.getId());
-        this.reloadValues();
     }
 
     @Override
     public Integer getBaseValue(String statId) {
-        if (removed.contains(statId)) return parentSet.getValue(statId);
-        else if (baseValues.containsKey(statId)) return baseValues.get(statId);
-        return (parentSet.getValue(statId));
-    }
-
-    @Override
-    public Integer getValue(String statId) {
-        if (removed.contains(statId)) return parentSet.getValue(statId);
-        if (baseValues.containsKey(statId)) return values.get(statId);
-        else return (parentSet.getValue(statId) + this.getModifierTotal(statId));
+        if (baseValues.containsKey(statId)) return baseValues.get(statId);
+        return parentSet.getValue(statId);
     }
 
     @Override
     public Set<String> getSpecifiedStats() {
-        Set<String> a = new HashSet<>(parentSet.getSpecifiedStats());
-        a.addAll(super.getSpecifiedStats());
-        a.removeAll(removed);
-        return a;
+        Set<String> specified = super.getSpecifiedStats();
+        specified.addAll(parentSet.getSpecifiedStats());
+        specified.removeAll(removed);
+        return specified;
     }
 
     @Override
-    public void reloadValues() {
-        if (parent != null && parent.getStatSet() != parentSet) parentSet = parent.getStatSet();
-        super.reloadValues();
+    public Map<String, Integer> getBaseValues() {
+        Map<String, Integer> values = new HashMap<>(parentSet.getValues());
+        values.putAll(baseValues);
+        for (String statId : removed) {
+            values.remove(statId);
+        }
+        return Collections.unmodifiableMap(values);
     }
 
     public void changeParent(HasStatSet newParent) {
         this.parent = newParent;
         this.parentSet = newParent.getStatSet();
-        this.reloadValues();
+        this.dirtyStats.addAll(getSpecifiedStats());
     }
 
     @Deprecated
     public void changeParent(StatSet newParentSet) {
         this.parent = null;
         this.parentSet = newParentSet;
-        this.reloadValues();
+        this.dirtyStats.addAll(getSpecifiedStats());
     }
-
 
     @Override
     public StatSet jsonPopulate(String json, Session session) throws JsonProcessingException {
+        // TODO: populate from parent set
         JsonNode node = MAPPER.readTree(json);
         this.changeParent(session.getCreature(node.get("parent").asText()));
         JsonNode values = node.get("values");
@@ -118,11 +108,7 @@ public class DefaultedStatSet extends ModifiableStatSet {
 
     @Override
     public String toJson() {
+        // TODO: implement json serialization
         return "";
-    }
-
-    @Override
-    public boolean hasStat(String statId) {
-        return getSpecifiedStats().contains(statId);
     }
 }

@@ -13,8 +13,8 @@ public interface JsonSerializable{
     static final Logger LOG = LoggerFactory.getLogger(JsonSerializable.class);
 
     static boolean storeSerializable(JsonSerializable serializable, Path path) {
-        if (!path.endsWith(".json")) {
-            LOG.warn("Target file for storeFeature has to be of type json");
+        if (!org.apache.commons.io.FilenameUtils.isExtension(path.toString(), "json")) {
+            LOG.warn("Target file for storeFeature has to be of type json {}", path);
             return false;
         }
         try {

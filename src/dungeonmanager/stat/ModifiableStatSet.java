@@ -1,41 +1,47 @@
 package dungeonmanager.stat;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 /**
  * Mutable implementation of StatSet that supports base values and modifiers.
  * Manages the core stat calculation logic: base_value + modifier_total = final_score.
  * Stores only base values when serialized
- * 
  * Modifiers are organized by target stat and evaluated using depth-first search.
  * Circular dependencies are detected and throw an exception.
- * 
  * @see dungeonmanager.stat.StatSet for read-only interface
  * @see dungeonmanager.stat.DefaultedStatSet for inheritance-based delegation
  */
 public class ModifiableStatSet implements WriteableStatSet {
 
-    // Map of targetStat -> Set of modifiers that modify that stat
     final Map<String, Set<StatModifier>> modifiers;
+    final Map<String, Set<String>> dependencyChildren;
+
     final Map<String, Integer> baseValues;
-    Map<String, Integer> values;
+    final Map<String, Integer> modifierValues;
+    final Set<String> dirtyStats;
 
     public ModifiableStatSet() {
         this.modifiers = new HashMap<>();
+        this.dependencyChildren = new HashMap<>();
         this.baseValues = new HashMap<>();
-        this.values = new HashMap<>();
+        this.modifierValues = new HashMap<>();
+        this.dirtyStats = new HashSet<>();
     }
 
     @Override
     public void setBaseValue(String statId, Integer value) {
-        if (value == null) this.baseValues.remove(statId);
-        else this.baseValues.put(statId, value);
-        this.reloadValues();
+        if (value == null) {
+            this.removeBaseValue(statId);
+            return;
+        }
+        this.baseValues.put(statId, value);
+        this.markDirty(statId);
     }
 
     public Integer getBaseValue(String statId) {
-        if (baseValues.containsKey(statId)) return baseValues.get(statId);
-        return null;
+        return getBaseValues().get(statId);
     }
 
     @Deprecated
@@ -45,130 +51,110 @@ public class ModifiableStatSet implements WriteableStatSet {
     }
 
     public Map<String, Integer> getBaseValues() {
-        return new HashMap<>(baseValues);
-    }
-
-    @Override
-    public Integer getValue(String stat) {
-        if (values.containsKey(stat)) return values.get(stat);
-        else if (baseValues.containsKey(stat)) return baseValues.get(stat);
-        return null;
-    }
-
-    /**
-     * Compute the total modifier value for a given stat, assuming all dependencies are already computed.
-     */
-    public int getModifierTotal(String statId) {
-        if (!modifiers.containsKey(statId)) return 0;
-        int total = 0;
-        Set<StatModifier> statsModifiers = modifiers.get(statId);
-
-        for (StatModifier modifier : statsModifiers) {
-            total += modifier.getBaseValue();
-            for (Map.Entry<String, Float> dep : modifier.getDependencies().entrySet()) {
-                String dependentStat = dep.getKey();
-                float factor = dep.getValue();
-                Integer summand = getValue(dependentStat);
-                if (summand != null) {
-                    total += (int) Math.floorDiv((long)(summand * factor), 1L);
-                }
-            }
-        }
-        return total;
+        return Collections.unmodifiableMap(baseValues);
     }
 
     @Override
     public void removeBaseValue(String statId) {
         baseValues.remove(statId);
-        this.reloadValues();
+        this.markDirty(statId);
     }
 
     @Override
     public void resetBaseValue(Stat stat) {
         setBaseValue(stat.getId(), stat.getDefaultValue());
+        markDirty(stat.getId());
+    }
+
+    public Integer getModifierValue(String statId) {
+        return getValue(statId, new HashSet<> ());
+    }
+
+    public int getModifierValue(String statId, Set<String> visiting) {
+        if (!dirtyStats.contains(statId) && modifierValues.containsKey(statId))
+            return modifierValues.get(statId);
+        if (visiting.contains(statId)) {
+            throw new IllegalArgumentException("Circular dependency found involving stat: " + statId);
+        }
+        
+        visiting.add(statId);
+        int modifierTotal = 0;
+
+        Set<StatModifier> modifierSet = modifiers.get(statId);
+        if (modifierSet != null) for (StatModifier modifier: modifierSet) {
+            modifierTotal += modifier.getBaseValue();
+            for (String sourceId : modifier.getDependencies().keySet()) {
+                int sourceValue = getValue(sourceId, visiting);
+                float factor = modifier.getDependencyFactor(sourceId);
+                modifierTotal += (int) Math.floor(sourceValue * factor);
+            }
+        }
+
+        visiting.remove(statId);
+        modifierValues.put(statId, modifierTotal);
+        dirtyStats.remove(statId);
+        return modifierTotal;
+    }
+
+    @Override
+    public Integer getValue(String statId) {
+        return getValue(statId, new HashSet<> ());
+    }
+
+    public Integer getValue(String statId, Set<String> visiting) {
+        return getBaseValue(statId) + getModifierValue(statId, visiting);
     }
 
     @Override
     public Set<String> getSpecifiedStats() {
-        Set<String> specified = new HashSet<>(baseValues.keySet());
+        Set<String> specified = new HashSet<>(getBaseValues().keySet());
         specified.addAll(modifiers.keySet());
         return specified;
     }
 
-    public void reloadValues() {
-        values.clear();
-        Set<String> allStats = getSpecifiedStats();
-
-        for (String statId : allStats) {
-            if (!values.containsKey(statId)) {
-                computeStatValue(statId, new HashSet <> ());
-            }
-        }
-    }
-
-    /**
-     * DFS stat computation, no cycles
-     *
-     * @param statId  the ID of the stat to compute
-     * @param visiting the set of stats currently being visited (for cycle detection)
-     * @throws IllegalStateException if a circular dependency is detected
-     */
-    private void computeStatValue(String statId, Set<String> visiting) {
-        if (visiting.contains(statId)) throw new IllegalStateException(
-                "Circular dependency detected involving stat: " + statId);
-        if (values.containsKey(statId)) return;
-        
-        visiting.add(statId);
-        
-        int baseValue = baseValues.getOrDefault(statId, 0);
-        int modifierTotal = 0;
-        
-        Set<StatModifier> statsModifiers = modifiers.getOrDefault(statId, Set.of());
-        for (StatModifier modifier : statsModifiers) {
-            modifierTotal += modifier.getBaseValue();
-            
-            for (Map.Entry<String, Float> dependency : modifier.getDependencies().entrySet()) {
-                String dependentStat = dependency.getKey();
-                float factor = dependency.getValue();
-                
-                if (!values.containsKey(dependentStat)) {
-                    computeStatValue(dependentStat, visiting);
-                }
-                
-                Integer depValue = values.get(dependentStat);
-                if (depValue != null) {
-                    modifierTotal += (int)Math.floor(depValue * factor);
-                }
-            }
-        }
-        
-        visiting.remove(statId);
-        values.put(statId, baseValue + modifierTotal);
-    }
-
-    public void addModifier(StatModifier modifier) {
+    public void addModifier(@NotNull StatModifier modifier) {
         String targetStatId = modifier.getTargetStatId();
-        if (!modifiers.containsKey(targetStatId)) {
-            Set<StatModifier> targetModifiers = new HashSet<>();
-            targetModifiers.add(modifier);
-            modifiers.put(targetStatId, targetModifiers);
+
+        modifiers.computeIfAbsent(targetStatId, k -> new HashSet<>()).add(modifier);
+
+        for (String sourceId : modifier.getDependencies().keySet()) {
+            dependencyChildren.computeIfAbsent(sourceId, k -> new HashSet<>()).add(targetStatId);
         }
-        modifiers.get(targetStatId).add(modifier);
-        this.reloadValues();
+
+        markDirty(targetStatId);
     }
 
-    public boolean removeModifier(StatModifier modifier) {
+    public boolean removeModifier(@NotNull StatModifier modifier) {
         String targetStatId = modifier.getTargetStatId();
+
         Set<StatModifier> targetModifiers = modifiers.get(targetStatId);
-        if (targetModifiers != null) {
-            boolean found = targetModifiers.remove(modifier);
-            if (targetModifiers.isEmpty()) {
-                modifiers.remove(targetStatId);
-            }
-            this.reloadValues();
-            return found;
+        if (targetModifiers == null || !targetModifiers.remove(modifier)) {
+            return false;
         }
-        return false;
+        if (targetModifiers.isEmpty()) modifiers.remove(targetStatId);
+
+        Set<String> children = dependencyChildren.computeIfAbsent(targetStatId, k -> new HashSet<> ());
+        children.clear();
+
+        for (StatModifier targetModifier : targetModifiers) {
+            children.addAll(targetModifier.getDependencies().keySet());
+        }
+
+        markDirty(targetStatId);
+        return true;
+    }
+
+    void markDirty(String statId) {
+        if (dirtyStats.contains(statId)) return;
+        dirtyStats.add(statId);
+        modifierValues.remove(statId);
+
+        Set<String> children = dependencyChildren.get(statId);
+        if (children != null) {
+            for (String childId : new HashSet<>(children)) {
+                markDirty(childId);
+            }
+        }
     }
 
     @Override
@@ -178,10 +164,5 @@ public class ModifiableStatSet implements WriteableStatSet {
             string.append("\n > ").append(statId).append(": ").append(getValue(statId));
         }
         return string.toString();
-    }
-
-    @Override
-    public boolean hasStat(String statId) {
-        return values.containsKey(statId);
     }
 }

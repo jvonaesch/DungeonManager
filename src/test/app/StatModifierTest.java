@@ -1,6 +1,7 @@
 package test.app;
 
 import dungeonmanager.stat.DynamicStat;
+import dungeonmanager.stat.ModifiableStatSet;
 import dungeonmanager.stat.StandardStat;
 import dungeonmanager.stat.Stat;
 import dungeonmanager.stat.StatModifier;
@@ -9,6 +10,7 @@ import org.junit.jupiter.api.Test;
 
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Session Stat Modifier Tests")
 public class StatModifierTest extends AppTest {
@@ -83,6 +85,39 @@ public class StatModifierTest extends AppTest {
         modifier.setBaseValue(0);
 
         assertEquals(0, modifier.getBaseValue(), "Expected modifier to store STR 0");
+    }
+
+    @Test
+    @DisplayName("Stat modifier dependency contributes from another stat")
+    void stat_modifier_dependency_applies() {
+        ModifiableStatSet stats = new ModifiableStatSet();
+        stats.setBaseValue(StandardStat.STR.getId(), 10);
+        stats.setBaseValue(StandardStat.DEX.getId(), 4);
+
+        StatModifier modifier = new StatModifier(StandardStat.STR.getId());
+        modifier.setBaseValue(1);
+        modifier.setDependency(StandardStat.DEX.getId(), 0.5f);
+
+        stats.addModifier(modifier);
+
+        assertEquals(13, stats.getValue(StandardStat.STR.getId()), "Expected DEX contribution to add +2 and base +1");
+    }
+
+    @Test
+    @DisplayName("Circular stat dependencies are rejected")
+    void circular_dependencies_throw() {
+        ModifiableStatSet stats = new ModifiableStatSet();
+        stats.setBaseValue("A", 1);
+        stats.setBaseValue("B", 2);
+
+        StatModifier a = new StatModifier("A");
+        a.setDependency("B", 1.0f);
+
+        StatModifier b = new StatModifier("B");
+        b.setDependency("A", 1.0f);
+
+        stats.addModifier(a);
+        assertThrows(IllegalStateException.class, () -> stats.addModifier(b));
     }
 }
 

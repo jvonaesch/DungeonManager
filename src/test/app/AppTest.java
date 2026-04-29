@@ -18,10 +18,7 @@ import java.util.Set;
 
 import static dungeonmanager.contentpack.PackLoader.writeToFile;
 
-public abstract class AppTest {
-
-    protected static final Logger LOG = LoggerFactory.getLogger(AppTest.class);
-    protected static final Path TEST_WORKSPACE_PATH = Path.of("test/");
+public abstract class AppTest extends test.AbstractTest {
 
     protected static final DungeonManagerApp app = new DungeonManagerApp();
     protected static final Session setupSession = newSession();
@@ -36,31 +33,6 @@ public abstract class AppTest {
     @BeforeEach
     void setUp() {
         session = newSession();
-    }
-
-    static void generateTestData() {
-        for (StandardStat stat : StandardStat.values()) {
-            AppTest.setupSession.registerStat(stat);
-        }
-        Feature testFeature = new Feature(
-                "test_feature_1",
-                "Test Feature",
-                "A feature for testing purposes."
-        );
-        testFeature.addSection(new StatModifierSection(
-                "test_modifier",
-                "Test Modifier",
-                "A stat modifier for testing.",
-                new StatModifier("STR").setBaseValue(2)
-        ));
-        try {
-            writeToFile(
-                    TEST_WORKSPACE_PATH.resolve("test_pack_1/stats.json"),
-                    Stat.toJson(Set.of(StandardStat.values())));
-            testFeature.storeTo(TEST_WORKSPACE_PATH.resolve("test_pack_1/features/test_feature_1.json"));
-        } catch (IOException e) {
-            LOG.error("Failed to create test files: e", e);
-        }
     }
 
     public static Session newSession() {

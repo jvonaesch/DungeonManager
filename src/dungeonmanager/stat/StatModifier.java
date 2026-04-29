@@ -78,6 +78,10 @@ public class StatModifier {
         return new HashMap<>(dependencies);
     }
 
+    public Float getDependencyFactor(@NotNull String dependentStatId) {
+        return dependencies.get(dependentStatId);
+    }
+
     @Override
     public String toString() {
         return "Modifier{" +

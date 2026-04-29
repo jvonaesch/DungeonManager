@@ -150,20 +150,18 @@ public class StatModifierSection implements FeatureSection {
             if (!targetStat.isEmpty()) {
                 modifier = new StatModifier(targetStat);
                 modifier.setBaseValue(modifierData.path("baseValue").asInt(0));
-                
+
                 JsonNode dependenciesNode = modifierData.path("dependencies");
                 if (dependenciesNode.isObject()) {
-                    dependenciesNode.fields().forEachRemaining(entry -> 
-                        modifier.setDependency(entry.getKey(), (float) entry.getValue().asDouble())
+                    dependenciesNode.fields().forEachRemaining(entry ->
+                            modifier.setDependency(entry.getKey(), (float) entry.getValue().asDouble())
                     );
                 }
-            } else {
-                modifier = null;
+                return new StatModifierSection(sectionId, sectionName, sectionDesc, modifier, sectionVisible);
             }
-        } else {
-            modifier = null;
+            throw new IllegalArgumentException("Stat modifier section JSON must include a target stat");
         }
+        throw new IllegalArgumentException("could not parse stat modifier section from JSON");
 
-        return new StatModifierSection(sectionId, sectionName, sectionDesc, modifier, sectionVisible);
     }
 }

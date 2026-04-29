@@ -36,5 +36,7 @@ public interface StatSet extends JsonLoadable<StatSet> {
 
     Set<String> getSpecifiedStats();
 
-    boolean hasStat(String statId);
+    default boolean hasStat(String statId) {
+        return getValue(statId) != null;
+    };
 }
