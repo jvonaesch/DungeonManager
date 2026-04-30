@@ -17,13 +17,6 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Jackson-based persistence for {@link SessionSnapshot}.
- *
- * Session files store creature/selection metadata and reference feature instances by ID.
- * Feature instance payloads are stored separately under the features subfolder.
- */
-@Deprecated
 public class SessionJsonSerializer {
 
     private static final Logger LOG = LoggerFactory.getLogger(SessionJsonSerializer.class);
@@ -34,92 +27,6 @@ public class SessionJsonSerializer {
 
     private static final ObjectMapper MAPPER = new ObjectMapper()
             .enable(SerializationFeature.INDENT_OUTPUT);
-
-    private SessionJsonSerializer() {
-    }
-
-    public static void saveSessionToFile(SessionSnapshot snapshot, String filename) throws IOException {
-        Requires.requireNonNull(snapshot, "Session snapshot");
-        String normalizedName = normalizeSessionFilename(filename);
-        ensureDirectoriesExist();
-
-        SessionFile file = SessionFile.fromSnapshot(snapshot);
-
-        for (FeatureFile featureFile : file.featuresById.values()) {
-            Path featurePath = getFeaturePath(featureFile.instanceId);
-            MAPPER.writeValue(featurePath.toFile(), featureFile);
-        }
-
-        Path sessionPath = SESSIONS_DIR.resolve(normalizedName);
-        MAPPER.writeValue(sessionPath.toFile(), file.toPersistedSession());
-
-        LOG.info("Saved handle JSON {} with {} creature(s) and {} feature file(s)",
-                sessionPath,
-                file.creatures.size(),
-                file.featuresById.size());
-    }
-
-    public static SessionSnapshot loadSessionFromFile(String filename) throws IOException {
-        String normalizedName = normalizeSessionFilename(filename);
-        Path sessionPath = SESSIONS_DIR.resolve(normalizedName);
-        if (!Files.exists(sessionPath)) {
-            throw new IOException("Session file not found: " + sessionPath);
-        }
-
-        PersistedSession persisted = MAPPER.readValue(sessionPath.toFile(), PersistedSession.class);
-        SessionFile sessionFile = SessionFile.fromPersistedSession(persisted);
-        SessionSnapshot snapshot = sessionFile.toSnapshot();
-
-        LOG.info("Loaded handle JSON {} with {} creature(s)", sessionPath, snapshot.getCreatureCount());
-        return snapshot;
-    }
-
-    public static String[] listSessionFiles() throws IOException {
-        ensureDirectoriesExist();
-        List<String> files = new ArrayList<>();
-        try (DirectoryStream<Path> stream = Files.newDirectoryStream(SESSIONS_DIR, "*.json")) {
-            for (Path path : stream) {
-                if (!path.getFileName().toString().equals("features.json")) {
-                    files.add(path.getFileName().toString());
-                }
-            }
-        }
-        return files.toArray(String[]::new);
-    }
-
-    public static boolean deleteSessionFile(String filename) throws IOException {
-        String normalizedName = normalizeSessionFilename(filename);
-        Path sessionPath = SESSIONS_DIR.resolve(normalizedName);
-        if (!Files.exists(sessionPath)) {
-            return false;
-        }
-
-        PersistedSession persisted = MAPPER.readValue(sessionPath.toFile(), PersistedSession.class);
-        Files.delete(sessionPath);
-
-        if (persisted != null && persisted.creatures != null) {
-            for (PersistedCreature creature : persisted.creatures) {
-                if (creature.featureInstanceIds == null) {
-                    continue;
-                }
-                for (String instanceId : creature.featureInstanceIds) {
-                    Path featurePath = getFeaturePath(instanceId);
-                    Files.deleteIfExists(featurePath);
-                }
-            }
-        }
-
-        LOG.info("Deleted handle JSON {} and referenced feature JSON files", sessionPath);
-        return true;
-    }
-
-    public static String getSessionsDirectory() {
-        return SESSIONS_DIR.toString();
-    }
-
-    public static String getFeaturesDirectory() {
-        return FEATURES_DIR.toString();
-    }
 
     private static void ensureDirectoriesExist() throws IOException {
         Files.createDirectories(FEATURES_DIR);
