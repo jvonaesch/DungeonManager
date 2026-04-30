@@ -1,7 +1,7 @@
 package test.handle;
 
-import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.session.CreatureSnapshot;
+import dungeonmanager.stat.DefaultStatSet;
 import dungeonmanager.stat.StandardStat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -25,7 +25,7 @@ public class SessionCreatureTest extends SessionHandleTest {
 
         assertNotNull(creature, "Expected creature to be created");
         assertEquals("Ranger", creature.getName(), "Expected creature name to match");
-        assertEquals(IntegratedCreatureType.DEFAULT.getID(), creature.getSourceId(), "Expected default type");
+        assertEquals("default", creature.getSourceId(), "Expected default type");
         assertNotNull(creature.getId(), "Expected creature to have an ID");
         assertEquals(creature.getId(), handle.getSelectedCreatureId(), "Expected new creature to be auto-selected");
     }
@@ -33,11 +33,14 @@ public class SessionCreatureTest extends SessionHandleTest {
     @Test
     @DisplayName("Creates creature with specified type")
     void creates_creature_with_specified_type() {
-        CreatureSnapshot creature = handle.createCreature("Bear", IntegratedCreatureType.OWLBEAR);
+        CreatureSnapshot baseOwlbear = handle.createCreature("Base Owlbear", "default", new HashMap<>());
+        String baseId = baseOwlbear.getId();
+
+        CreatureSnapshot creature = handle.createCreature("Bear", baseId);
 
         assertNotNull(creature, "Expected creature to be created");
         assertEquals("Bear", creature.getName(), "Expected creature name to match");
-        assertEquals(IntegratedCreatureType.OWLBEAR.getID(), creature.getSourceId(), "Expected OWLBEAR type");
+        assertEquals(baseId, creature.getSourceId(), "Expected OWLBEAR type");
     }
 
     @Test
@@ -48,7 +51,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         baseStats.put("DEX", 10);
         baseStats.put("CON", 16);
 
-        CreatureSnapshot creature = handle.createCreature("Barbarian", IntegratedCreatureType.DEFAULT, baseStats);
+        CreatureSnapshot creature = handle.createCreature("Barbarian", "default", baseStats);
 
         assertNotNull(creature, "Expected creature to be created");
         assertEquals(18, creature.getStat("STR"), "Expected STR 18");
@@ -72,18 +75,23 @@ public class SessionCreatureTest extends SessionHandleTest {
     @Test
     @DisplayName("Changes creature type")
     void changes_creature_type() {
-        CreatureSnapshot created = handle.createCreature("Beast", IntegratedCreatureType.DEFAULT);
+        CreatureSnapshot created = handle.createCreature("Beast");
+
+        Map<String, Integer> dwarf_stats = new HashMap<>();
+        dwarf_stats.put("STR", 12);
+        dwarf_stats.put("MAX_HP", 30);
+        CreatureSnapshot baseDwarf = handle.createCreature("Base Dwarf", "default", dwarf_stats);
+
         String creatureId = created.getId();
+        String basisId = baseDwarf.getId();
+        CreatureSnapshot changed = handle.changeCreatureType(creatureId, basisId);
 
-        CreatureSnapshot changed = handle.changeCreatureType(creatureId, IntegratedCreatureType.DWARF);
-
-        assertEquals(IntegratedCreatureType.DWARF.getID(), changed.getSourceId(), "Expected creature type to change");
+        assertEquals(basisId, changed.getSourceId(), "Expected creature type to change");
         assertEquals(created.getId(), changed.getId(), "Expected ID to remain unchanged");
         
-        // Verify that DWARF's base stat were applied
         assertNotNull(changed.getStats(), "Expected stat map to exist");
         for (StandardStat stat : StandardStat.values()) {
-            int expectedStat = IntegratedCreatureType.DWARF.getStatSet().getValue(stat.getId(), stat.getDefaultValue());
+            int expectedStat = dwarf_stats.getOrDefault(stat.getId(), stat.getDefaultValue());
             int actualStat = changed.getStat(stat.getId(), handle.getStatDefaults());
             assertEquals(expectedStat, actualStat, "Expected " + stat.getId() + " to match DWARF type: " + expectedStat);
         }
@@ -106,7 +114,7 @@ public class SessionCreatureTest extends SessionHandleTest {
     void resets_base_stat() {
         Map<String, Integer> baseStats = new HashMap<>();
         baseStats.put("STR", 18);
-        CreatureSnapshot created = handle.createCreature("Knight", IntegratedCreatureType.DEFAULT, baseStats);
+        CreatureSnapshot created = handle.createCreature("Knight", "default", baseStats);
         String creatureId = created.getId();
 
         CreatureSnapshot reset = handle.resetBaseStat(creatureId, "STR");
@@ -119,7 +127,7 @@ public class SessionCreatureTest extends SessionHandleTest {
     void removes_base_stat() {
         Map<String, Integer> baseStats = new HashMap<>();
         baseStats.put("STR", 18);
-        CreatureSnapshot created = handle.createCreature("Paladin", IntegratedCreatureType.DEFAULT, baseStats);
+        CreatureSnapshot created = handle.createCreature("Paladin", "default", baseStats);
         String creatureId = created.getId();
 
         CreatureSnapshot removed = handle.removeBaseStat(creatureId, "STR");

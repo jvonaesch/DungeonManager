@@ -18,13 +18,13 @@ public class DefaultedStatSet extends ModifiableStatSet {
     private StatSet parentSet;
     private final Set<String> removed;
 
-    public DefaultedStatSet(HasStatSet parent) {
-        this(parent.getStatSet());
+    public DefaultedStatSet(StatContext statContext, HasStatSet parent) {
+        this(statContext, parent.getStatSet());
         this.parent = parent;
     }
 
-    public DefaultedStatSet(StatSet parentSet) {
-        super();
+    public DefaultedStatSet(StatContext statContext, StatSet parentSet) {
+        super(statContext);
         this.parentSet = parentSet;
         this.removed = new HashSet<>();
     }
@@ -60,7 +60,7 @@ public class DefaultedStatSet extends ModifiableStatSet {
     }
 
     @Override
-    public Integer getBaseValue(String statId) {
+    public int getBaseValue(String statId) {
         if (baseValues.containsKey(statId)) return baseValues.get(statId);
         return parentSet.getValue(statId);
     }
@@ -75,8 +75,8 @@ public class DefaultedStatSet extends ModifiableStatSet {
 
     @Override
     public Map<String, Integer> getBaseValues() {
-        Map<String, Integer> values = new HashMap<>(parentSet.getValues());
-        values.putAll(baseValues);
+        Map<String, Integer> values = new HashMap<>(baseValues);
+        // values.putAll(parentSet.getValues());
         for (String statId : removed) {
             values.remove(statId);
         }
@@ -89,7 +89,6 @@ public class DefaultedStatSet extends ModifiableStatSet {
         this.dirtyStats.addAll(getSpecifiedStats());
     }
 
-    @Deprecated
     public void changeParent(StatSet newParentSet) {
         this.parent = null;
         this.parentSet = newParentSet;

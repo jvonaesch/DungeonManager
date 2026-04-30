@@ -7,15 +7,20 @@ import java.util.*;
  */
 public class BaseStatSet implements WriteableStatSet {
 
+    private final StatContext statContext;
     protected Map<String, Integer> values;
 
-    public BaseStatSet() {
+    public BaseStatSet(StatContext statContext) {
         this.values = new TreeMap<>();
+        this.statContext = statContext;
     }
 
     @Override
-    public Integer getValue(String statId) {
-        return values.get(statId);
+    public int getValue(String statId) {
+        Integer value = values.get(statId);
+        Stat stat = statContext.getStat(statId);
+        if (value == null) return stat == null ? 0 : stat.getDefaultValue();
+        return value;
     }
 
     @Override

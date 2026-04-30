@@ -5,7 +5,10 @@ import dungeonmanager.contentpack.PackLoader;
 import dungeonmanager.creature.Creature;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.registry.SessionRegistry;
+import dungeonmanager.registry.StatRegistry;
+import dungeonmanager.stat.DefaultStatSet;
 import dungeonmanager.stat.Stat;
+import dungeonmanager.stat.StatContext;
 import org.jetbrains.annotations.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,16 +26,23 @@ public class Session {
     private final PackLoader packLoader;
     private final DungeonManagerApp app;
     public final SessionRegistry registry = new SessionRegistry();
+    private final StatContext statContext;
 
 
     public Session(DungeonManagerApp app, Path workspacePath) {
         this.app = app;
         this.workingDirectory = workspacePath;
         this.packLoader = new PackLoader(this);
+        this.statContext = new StatContext(registry.stat);
 
         LOG.debug("Loading workspace content pack from {}", workspacePath);
         packLoader.loadLibrary(workspacePath);
         LOG.debug("Content pack loading complete: {} features loaded", registry.feature.getSize());
+        registry.creature.register("default", new Creature(
+                statContext,
+                "default",
+                "Default Creature",
+                null));
         LOG.debug("Session initialized");
     }
 
@@ -91,5 +101,9 @@ public class Session {
 
     public Stat getStat(String statId) {
         return registry.stat.get(normalizeId(statId));
+    }
+
+    public StatContext getStatContext() {
+        return statContext;
     }
 }

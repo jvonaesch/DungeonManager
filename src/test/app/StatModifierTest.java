@@ -90,7 +90,7 @@ public class StatModifierTest extends AppTest {
     @Test
     @DisplayName("Stat modifier dependency contributes from another stat")
     void stat_modifier_dependency_applies() {
-        ModifiableStatSet stats = new ModifiableStatSet();
+        ModifiableStatSet stats = new ModifiableStatSet(session.getStatContext());
         stats.setBaseValue(StandardStat.STR.getId(), 10);
         stats.setBaseValue(StandardStat.DEX.getId(), 4);
 
@@ -106,7 +106,7 @@ public class StatModifierTest extends AppTest {
     @Test
     @DisplayName("Circular stat dependencies are rejected")
     void circular_dependencies_throw() {
-        ModifiableStatSet stats = new ModifiableStatSet();
+        ModifiableStatSet stats = new ModifiableStatSet(session.getStatContext());
         stats.setBaseValue("A", 1);
         stats.setBaseValue("B", 2);
 

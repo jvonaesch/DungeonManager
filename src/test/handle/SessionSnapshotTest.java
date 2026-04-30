@@ -1,6 +1,5 @@
 package test.handle;
 
-import dungeonmanager.creature.IntegratedCreatureType;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.feature.SelectionSection;
 import dungeonmanager.feature.StatModifierSection;
@@ -208,7 +207,7 @@ public class SessionSnapshotTest extends SessionHandleTest {
         Map<String, Integer> baseStats = new HashMap<>();
         baseStats.put("STR", 15);
         baseStats.put("CHA", 8);
-        return handle.createCreature("Hero", IntegratedCreatureType.DEFAULT, baseStats);
+        return handle.createCreature("Hero", baseStats);
     }
 
     private Feature buildElementalAffinityFeature() {

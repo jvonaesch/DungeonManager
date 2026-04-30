@@ -6,15 +6,15 @@ import java.util.function.Supplier;
 
 public class HashRegistry<T> implements Registry<T> {
 
-    private ConcurrentHashMap<String, T> map;
+    protected ConcurrentHashMap<String, T> entries;
 
     public HashRegistry() {
-        this.map = new ConcurrentHashMap<>();
+        this.entries = new ConcurrentHashMap<>();
     }
 
     @Override
     public void register(String ID, T element) {
-        map.put(ID, element);
+        entries.put(ID, element);
     }
 
     @Override
@@ -24,16 +24,16 @@ public class HashRegistry<T> implements Registry<T> {
 
     @Override
     public T get(String ID) {
-        return map.get(ID);
+        return entries.get(ID);
     }
 
     @Override
     public int getSize() {
-        return map.size();
+        return entries.size();
     }
 
     @Override
     public Set<String> getAllKeys() {
-        return map.keySet();
+        return entries.keySet();
     }
 }

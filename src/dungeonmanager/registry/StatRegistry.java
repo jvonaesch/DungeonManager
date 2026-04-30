@@ -23,4 +23,8 @@ public class StatRegistry extends HashRegistry<Stat> {
     public Map<String, Integer> getDefaultValues() {
         return Collections.unmodifiableMap(defaultValues);
     }
+
+    public Map<String, Stat> getAll() {
+        return Collections.unmodifiableMap(entries);
+    }
 }

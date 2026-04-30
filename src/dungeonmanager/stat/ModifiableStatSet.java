@@ -21,18 +21,21 @@ public class ModifiableStatSet implements WriteableStatSet {
     final Map<String, Integer> baseValues;
     final Map<String, Integer> modifierValues;
     final Set<String> dirtyStats;
+    protected final StatContext statContext;
 
-    public ModifiableStatSet() {
+    public ModifiableStatSet(StatContext statContext) {
         this.modifiers = new HashMap<>();
         this.dependencyChildren = new HashMap<>();
         this.baseValues = new HashMap<>();
         this.modifierValues = new HashMap<>();
         this.dirtyStats = new HashSet<>();
+        this.statContext = statContext;
     }
 
     @Override
     public void setBaseValue(String statId, Integer value) {
-        if (value == null) {
+        Stat stat = statContext.getStat(statId);
+        if (value == null || (stat != null && value.equals(stat.getDefaultValue()))) {
             this.removeBaseValue(statId);
             return;
         }
@@ -40,14 +43,9 @@ public class ModifiableStatSet implements WriteableStatSet {
         this.markDirty(statId);
     }
 
-    public Integer getBaseValue(String statId) {
-        return getBaseValues().get(statId);
-    }
-
-    @Deprecated
-    public int getBaseValue(String statId, int defaultValue) {
-        Integer value = getBaseValue(statId);
-        return (value == null) ? defaultValue : value;
+    public int getBaseValue(String statId) {
+        Integer value = getBaseValues().get(statId);
+        return value == null ? statContext.getStatDefault(statId) : value;
     }
 
     public Map<String, Integer> getBaseValues() {
@@ -62,8 +60,8 @@ public class ModifiableStatSet implements WriteableStatSet {
 
     @Override
     public void resetBaseValue(Stat stat) {
-        setBaseValue(stat.getId(), stat.getDefaultValue());
-        markDirty(stat.getId());
+        baseValues.remove(stat.getId());
+        this.markDirty(stat.getId());
     }
 
     public Integer getModifierValue(String statId) {
@@ -74,7 +72,7 @@ public class ModifiableStatSet implements WriteableStatSet {
         if (!dirtyStats.contains(statId) && modifierValues.containsKey(statId))
             return modifierValues.get(statId);
         if (visiting.contains(statId)) {
-            throw new IllegalArgumentException("Circular dependency found involving stat: " + statId);
+            throw new IllegalStateException("Circular dependency found involving stat: " + statId);
         }
         
         visiting.add(statId);
@@ -97,11 +95,11 @@ public class ModifiableStatSet implements WriteableStatSet {
     }
 
     @Override
-    public Integer getValue(String statId) {
+    public int getValue(String statId) {
         return getValue(statId, new HashSet<> ());
     }
 
-    public Integer getValue(String statId, Set<String> visiting) {
+    public int getValue(String statId, Set<String> visiting) {
         return getBaseValue(statId) + getModifierValue(statId, visiting);
     }
 
@@ -109,6 +107,7 @@ public class ModifiableStatSet implements WriteableStatSet {
     public Set<String> getSpecifiedStats() {
         Set<String> specified = new HashSet<>(getBaseValues().keySet());
         specified.addAll(modifiers.keySet());
+        LOG.debug("specified stats on creature snapshot creation: {}", specified);
         return specified;
     }
 
@@ -122,6 +121,7 @@ public class ModifiableStatSet implements WriteableStatSet {
         }
 
         markDirty(targetStatId);
+        getValue(targetStatId); // trigger calculation to detect circular dependencies immediately
     }
 
     public boolean removeModifier(@NotNull StatModifier modifier) {

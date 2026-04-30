@@ -2,29 +2,33 @@ package dungeonmanager.creature;
 
 import dungeonmanager.contentpack.JsonSerializable;
 import dungeonmanager.feature.Features;
-import dungeonmanager.session.CreatureSnapshot;
 import dungeonmanager.session.Session;
 import dungeonmanager.stat.*;
 import dungeonmanager.feature.FeatureSet;
+import org.jetbrains.annotations.NotNull;
 
 public class Creature implements CreatureBasis, JsonSerializable {
 
     private final String id;
     private String name;
     private CreatureBasis type;
-    private final DefaultedStatSet stats;
+    private final DefaultedStatSet statSet;
     private final FeatureSet feature;
+    private final StatContext statContext;
 
-    public Creature(String id, String name, CreatureBasis type) {
+    public Creature(@NotNull StatContext statContext, String id, String name, CreatureBasis type) {
         this.id = id;
         this.name = name;
         this.type = type;
-        this.stats = new DefaultedStatSet(this.type);
-        this.feature = new FeatureSet(this.stats);
+        this.statSet = new DefaultedStatSet(statContext, new DefaultStatSet(statContext));
+        this.feature = new FeatureSet(this.statSet);
+        this.statContext = statContext;
+
+        this.changeType(type);
     }
 
-    public Creature(String id, String name) {
-        this(id, name, IntegratedCreatureType.DEFAULT);
+    public Creature(@NotNull StatContext statContext, String id, String name) {
+        this(statContext, id, name, null);
     }
 
     public String getName() {
@@ -39,7 +43,7 @@ public class Creature implements CreatureBasis, JsonSerializable {
     public String toString(Session session) {
         return "\n\"%s\":\n %s%s".formatted(
                 name,
-                StatSets.toString(stats, 1, session),
+                StatSets.toString(statSet, 1, session),
                 Features.toString(feature, 1)
         );
     }
@@ -49,8 +53,9 @@ public class Creature implements CreatureBasis, JsonSerializable {
     }
 
     public void changeType(CreatureBasis type) {
+        if (type == null) this.statSet.changeParent(new DefaultStatSet(this.statContext));
+        else this.statSet.changeParent(type);
         this.type = type;
-        this.stats.changeParent(type);
     }
 
     public void rename(String name) {
@@ -59,7 +64,7 @@ public class Creature implements CreatureBasis, JsonSerializable {
 
     @Override
     public ModifiableStatSet getStatSet() {
-        return stats;
+        return statSet;
     }
 
     public FeatureSet getFeatureSet() {

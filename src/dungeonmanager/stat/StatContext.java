@@ -9,11 +9,11 @@ import java.util.Set;
 /**
  * Immutable class representing all registered stats and their default values.
  */
-public class SessionStatContext {
+public class StatContext {
 
     private final StatRegistry statRegistry;
 
-    public SessionStatContext(StatRegistry statRegistry) {
+    public StatContext(StatRegistry statRegistry) {
         this.statRegistry = statRegistry;
     }
 
@@ -27,5 +27,13 @@ public class SessionStatContext {
 
     public Set<String> getAllIDs() {
         return statRegistry.getAllKeys();
+    }
+
+    public Map<String, Stat> getAllStats() {
+        return statRegistry.getAll();
+    }
+
+    public int getStatDefault(String statId) {
+        return statRegistry.getDefaultValues().getOrDefault(statId, 0);
     }
 }

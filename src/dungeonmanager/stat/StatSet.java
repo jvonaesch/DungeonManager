@@ -16,7 +16,7 @@ public interface StatSet extends JsonLoadable<StatSet> {
      * @param statId the ID of the stat to retrieve
      * @return the value of the stat, or null if not defined
      */
-    Integer getValue(String statId);
+    int getValue(String statId);
 
     default int getValue(String statId, int defaultValue) {
         if (!hasStat(statId)) return 0;
@@ -37,6 +37,6 @@ public interface StatSet extends JsonLoadable<StatSet> {
     Set<String> getSpecifiedStats();
 
     default boolean hasStat(String statId) {
-        return getValue(statId) != null;
+        return getSpecifiedStats().contains(statId);
     };
 }
