@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.Map;
 
 @Deprecated
-// TODO: get rid of this. Sessions will re-hydrate over their workspace directory
 public class SessionJsonSerializer {
 
     private static final Logger LOG = LoggerFactory.getLogger(SessionJsonSerializer.class);

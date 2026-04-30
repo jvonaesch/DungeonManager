@@ -20,23 +20,43 @@ public class DungeonManagerApp {
 
     public static void main(String[] args) {
         DungeonManagerApp app = new DungeonManagerApp();
-        app.run();
+        try {
+            app.run();
+        } finally {
+            app.shutdown();
+        }
     }
 
     public DungeonManagerApp() {
         LOG.info("Starting DungeonManager application");
-        File dir = LIB_PATH.toFile();
-        if (!dir.exists()) {
-            if (!dir.mkdirs()) throw new RuntimeException(
-                    "Path to library could not be created! Running without library");
-            LOG.info("Created library directory at {}", dir.getAbsolutePath());
-        }
+        ensureDirectory(LIB_PATH, "library");
+        ensureDirectory(DEFAULT_WORKSPACE_PATH, "default workspace");
         LOG.info("Initialization complete");
     }
 
-    public void run () {
-        LOG.info("Running DungeonManager application");
-        // TODO: main application loop
+    private void ensureDirectory(Path path, String label) {
+        File dir = path.toFile();
+        if (dir.exists()) {
+            if (!dir.isDirectory()) {
+                throw new RuntimeException("Path to " + label + " is a file: " + dir.getAbsolutePath());
+            }
+            return;
+        }
+        if (!dir.mkdirs()) {
+            throw new RuntimeException("Path to " + label + " could not be created! Running without " + label);
+        }
+        LOG.info("Created {} directory at {}", label, dir.getAbsolutePath());
+    }
+
+    public synchronized void run() {
+        run(DEFAULT_WORKSPACE_PATH);
+    }
+
+    public synchronized void run(Path workspacePath) {
+        LOG.info("Running DungeonManager application for workspace {}", workspacePath);
+        SessionHandle activeSessionHandle = getSessionHandle(workspacePath);
+        LOG.info("Active session initialized. Selected creature: {}", activeSessionHandle.getSelectedCreatureId());
+        // TODO: main application loop / backend host
         LOG.info("Quitting DungeonManager application");
     }
 
@@ -44,11 +64,8 @@ public class DungeonManagerApp {
         Session session = new Session(this, workspacePath);
         return new SessionHandle(session);
     }
-
-    public SessionHandle getSessionHandle() {
-        return getSessionHandle(DEFAULT_WORKSPACE_PATH);
-    }
-
+    
+    @SuppressWarnings("unused")
     public SessionHandle getSessionHandle(Path workspacePath, Set<String> contentPacks) {
         Session session = new Session(this, workspacePath, contentPacks);
         return new SessionHandle(session);

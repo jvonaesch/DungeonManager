@@ -1,7 +1,6 @@
 package test.handle;
 
 import dungeonmanager.session.CreatureSnapshot;
-import dungeonmanager.stat.DefaultStatSet;
 import dungeonmanager.stat.StandardStat;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
