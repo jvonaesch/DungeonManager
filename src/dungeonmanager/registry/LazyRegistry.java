@@ -44,6 +44,17 @@ public class LazyRegistry<T> implements Registry<T> {
         return registerMap.keySet();
     }
 
+    @Override
+    public boolean containsKey(String creatureId) {
+        return registerMap.containsKey(creatureId);
+    }
+
+    @Override
+    public T unregister(String creatureId) {
+        RegistryObject<T> item = registerMap.remove(creatureId);
+        return item == null ? null : item.get();
+    }
+
     private class LazyRegistryObject implements RegistryObject <T> {
 
         private AtomicReference<T> item;

@@ -229,8 +229,8 @@ public class SessionCreatureTest extends SessionHandleTest {
     }
 
     @Test
-    @DisplayName("Deleting selected creature selects next available")
-    void deleting_selected_creature_selects_next_available() {
+    @DisplayName("Deleting selected creature clears selection when multiple creatures exist")
+    void deleting_selected_creature_clears_selection_multiple() {
         CreatureSnapshot first = handle.createCreature("Hero1");
         CreatureSnapshot second = handle.createCreature("Hero2");
         String secondId = second.getId();
@@ -238,8 +238,7 @@ public class SessionCreatureTest extends SessionHandleTest {
 
         handle.deleteCreature(secondId);
 
-        assertNotNull(handle.getSelectedCreatureId(), "Expected selection to be reassigned");
-        assertEquals(first.getId(), handle.getSelectedCreatureId(), "Expected first creature to be selected after second deleted");
+        assertNull(handle.getSelectedCreatureId(), "Expected selection to be cleared");
     }
 
     @Test

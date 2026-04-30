@@ -36,4 +36,14 @@ public class HashRegistry<T> implements Registry<T> {
     public Set<String> getAllKeys() {
         return entries.keySet();
     }
+
+    @Override
+    public boolean containsKey(String creatureId) {
+        return entries.containsKey(creatureId);
+    }
+
+    @Override
+    public T unregister(String creatureId) {
+        return entries.remove(creatureId);
+    }
 }

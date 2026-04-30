@@ -15,7 +15,6 @@ import java.util.function.Supplier;
 
 import static dungeonmanager.session.Session.normalizeId;
 import static dungeonmanager.session.Session.normalizeName;
-import static java.util.Collections.unmodifiableMap;
 
 /**
  * Since the handle gives direct access to its creatures/features, migrate synchronized front-end access
@@ -28,7 +27,7 @@ public class SessionHandle {
     private final SessionRegistry registry;
 
     private record CreatureEntry(String id, Creature creature) {}
-    private final Map<String, CreatureEntry> creatures;
+    // private final Map<String, CreatureEntry> creatures;
     /**
      * The ID of the currently selected creature. This is null if no creature is selected.
      * <br><b>Note:</b> <i>Always</i> handle null values!
@@ -39,7 +38,7 @@ public class SessionHandle {
     public SessionHandle(Session session) {
         this.session = session;
         this.registry = session.registry;
-        this.creatures = new LinkedHashMap<>();
+        // this.creatures = new LinkedHashMap<>();
         this.nextCreatureNumber = 1L;
     }
 
@@ -53,7 +52,10 @@ public class SessionHandle {
 
     public synchronized CreatureSnapshot createCreature(String name, @NotNull CreatureBasis type, Map<String, Integer> baseStats) {
         String creatureId = normalizeName(name).toLowerCase().replaceAll("\\s+", "_");
-        if (creatures.containsKey(creatureId)) creatureId += "_" + nextCreatureNumber++;
+        // if (creatures.containsKey(creatureId)) creatureId += "_" + nextCreatureNumber++;
+        if (registry.creature.containsKey(creatureId)) {
+            creatureId += "_" + nextCreatureNumber++;
+        }
 
         Creature creature = new Creature(
                 session.getStatContext(),
@@ -63,7 +65,7 @@ public class SessionHandle {
         if (baseStats != null) applyBaseStats(creature, baseStats);
 
         CreatureEntry entry = new CreatureEntry(creatureId, creature);
-        creatures.put(creatureId, entry);
+        // creatures.put(creatureId, entry);
         registry.creature.register(creatureId, creature);
         selectedCreatureId = creatureId;
 
@@ -90,7 +92,7 @@ public class SessionHandle {
 
     public synchronized boolean selectCreature(String creatureId) {
         creatureId = normalizeId(creatureId);
-        if (!creatures.containsKey(creatureId)) {
+        if (!registry.creature.containsKey(creatureId)) {
             LOG.debug("Selection ignored for unknown creature {}", creatureId);
             return false;
         }
@@ -120,7 +122,7 @@ public class SessionHandle {
     }
 
     public synchronized boolean hasCreature(String creatureId) {
-        return creatures.containsKey(normalizeId(creatureId));
+        return registry.creature.containsKey(normalizeId(creatureId));
     }
 
     public synchronized CreatureSnapshot renameCreature(String creatureId, String name) {
@@ -151,13 +153,13 @@ public class SessionHandle {
 
     public synchronized boolean deleteCreature(String creatureId) {
         creatureId = normalizeId(creatureId);
-        CreatureEntry removed = creatures.remove(creatureId);
+        Creature removed = registry.creature.unregister(creatureId);
         if (removed == null) {
             LOG.debug("Delete ignored for unknown creature {}", creatureId);
             return false;
         }
         if (Objects.equals(selectedCreatureId, creatureId)) {
-            selectedCreatureId = creatures.isEmpty() ? null : creatures.keySet().iterator().next();
+            selectedCreatureId = null;
         }
         LOG.info("Deleted creature {}. New selection: {}", creatureId, selectedCreatureId);
         return true;
@@ -200,9 +202,9 @@ public class SessionHandle {
         return removed == null ? null : snapshotCreature(entry.id);
     }
 
-    public synchronized SessionSnapshot snapshot() {
+    /*public synchronized SessionSnapshot snapshot() {
         List<CreatureSnapshot> creatureSnapshots = new ArrayList<>();
-        for (CreatureEntry entry : creatures.values()) {
+        for (Creature creature : registry.creature.get) {
             creatureSnapshots.add(CreatureSnapshot.fromCreature(entry.creature));
         }
         return new SessionSnapshot(
@@ -211,6 +213,11 @@ public class SessionHandle {
                 creatureSnapshots,
                 nextCreatureNumber
         );
+    }*/
+
+    public synchronized boolean saveAll() {
+        // TODO: save the entire library from registry to disk
+        return false;
     }
 
     public synchronized void registerFeature(@NotNull Feature feature) {
@@ -264,7 +271,8 @@ public class SessionHandle {
 
         // Store the creature with its original ID
         CreatureEntry entry = new CreatureEntry(creatureId, creature);
-        creatures.put(creatureId, entry);
+        // creatures.put(creatureId, entry);
+        registry.creature.register(creatureId, creature);
 
         LOG.debug("Loaded creature {} named '{}' with {} features",
                 creatureId, creature.getName(), creatureSnapshot.getFeatures().size());
@@ -307,13 +315,7 @@ public class SessionHandle {
         return entry.creature.getFeatureSet().addFeature(normalizedFeatureId, feature);
     }
 
-    /**
-     * Load a handle from a snapshot. Restores creature IDs, order, selected creature, and nextCreatureNumber.
-     * All creatures and their features/stat are reconstructed from the snapshot data.
-     * @param snapshot the handle snapshot to load from
-     * @throws IllegalArgumentException if a required creature type or feature is not registered
-     */
-    public synchronized void loadFromSnapshot(@NotNull SessionSnapshot snapshot) {
+    /* public synchronized void loadFromSnapshot(@NotNull SessionSnapshot snapshot) {
         if (snapshot.getSchemaVersion() != SessionSnapshot.CURRENT_SCHEMA_VERSION) {
             throw new IllegalArgumentException("Unsupported schema version: " + snapshot.getSchemaVersion());
         }
@@ -336,7 +338,8 @@ public class SessionHandle {
 
         LOG.info("Session restored from snapshot with {} creatures. Selected: {}",
                 creatures.size(), selectedCreatureId);
-    }
+    } */
+    // TODO: loading from workspace directory on startup
 
     private void applyBaseStats(Creature creature, @NotNull Map<String, Integer> baseStats) {
         for (Map.Entry<String, Integer> entry : baseStats.entrySet()) {
@@ -349,11 +352,12 @@ public class SessionHandle {
     }
 
     private CreatureEntry requireCreature(String creatureId) {
-        return Requires.requireById(
-                creatures,
-                creatureId,
-                id -> new IllegalArgumentException("Creature not found: " + id)
-        );
+        String normalizedId = normalizeId(creatureId);
+        Creature creature = registry.creature.get(normalizedId);
+        if (creature == null) {
+            throw new IllegalArgumentException("Creature not found: " + normalizedId);
+        }
+        return new CreatureEntry(normalizedId, creature);
     }
 
     private Feature requireFeature(String featureId) {

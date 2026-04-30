@@ -1,5 +1,7 @@
 package dungeonmanager.registry;
 
+import dungeonmanager.session.SessionHandle;
+
 import java.util.Set;
 import java.util.function.Supplier;
 
@@ -13,4 +15,8 @@ public interface Registry<T> {
     int getSize();
 
     Set<String> getAllKeys();
+
+    boolean containsKey(String creatureId);
+
+    T unregister(String creatureId);
 }
