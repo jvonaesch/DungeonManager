@@ -103,6 +103,22 @@ public class StatModifierTest extends AppTest {
     }
 
     @Test
+    @DisplayName("Stat modifier dependency rounds down to nearest integer")
+    void dependencies_round_down() {
+        ModifiableStatSet stats = new ModifiableStatSet(session.getStatContext());
+        stats.setBaseValue(StandardStat.STR.getId(), 10);
+        stats.setBaseValue(StandardStat.DEX.getId(), 4);
+
+        StatModifier modifier = new StatModifier(StandardStat.STR.getId());
+        modifier.setBaseValue(1);
+        modifier.setDependency(StandardStat.DEX.getId(), 0.4f);
+
+        stats.addModifier(modifier);
+
+        assertEquals(12, stats.getValue(StandardStat.STR.getId()), "Expected DEX contribution to add +1 and base +1");
+    }
+
+    @Test
     @DisplayName("Circular stat dependencies are rejected")
     void circular_dependencies_throw() {
         ModifiableStatSet stats = new ModifiableStatSet(session.getStatContext());
