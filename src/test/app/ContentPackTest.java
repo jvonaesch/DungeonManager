@@ -24,7 +24,7 @@ public class ContentPackTest extends AppTest {
     @Test
     @DisplayName("Check that test_feature_1 was loaded from generated test content pack")
     void testLoadDummyFeature() {
-        Set<String> allKeys = session.registry.feature.getAllKeys();
+        Set<String> allKeys = session.library.feature.getAllKeys();
         assertTrue(allKeys.contains("test_feature_1"), "Expected 'test_feature_1' to be registered");
         Feature feature = session.getFeature("test_feature_1");
 

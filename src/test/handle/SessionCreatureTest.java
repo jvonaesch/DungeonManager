@@ -3,7 +3,7 @@ package test.handle;
 import dungeonmanager.session.CreatureSnapshot;
 import dungeonmanager.stat.StandardStat;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import test.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -15,9 +15,9 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Session Creature Lifecycle Tests")
-public class SessionCreatureTest extends SessionHandleTest {
+public class SessionCreatureTest extends Test {
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Creates creature with default type")
     void creates_creature_with_default_type() {
         CreatureSnapshot creature = handle.createCreature("Ranger");
@@ -29,7 +29,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertEquals(creature.getId(), handle.getSelectedCreatureId(), "Expected new creature to be auto-selected");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Creates creature with specified type")
     void creates_creature_with_specified_type() {
         CreatureSnapshot baseOwlbear = handle.createCreature("Base Owlbear", "default", new HashMap<>());
@@ -42,7 +42,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertEquals(baseId, creature.getSourceId(), "Expected OWLBEAR type");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Creates creature with base stat overrides")
     void creates_creature_with_base_stat_overrides() {
         Map<String, Integer> baseStats = new HashMap<>();
@@ -59,7 +59,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertEquals(Integer.valueOf(18), creature.getBaseStatOverrides().get("STR"), "Expected STR to be overridden");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Renames a creature")
     void renames_creature() {
         CreatureSnapshot created = handle.createCreature("Hero");
@@ -71,7 +71,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertEquals(created.getId(), renamed.getId(), "Expected ID to remain unchanged");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Changes creature type")
     void changes_creature_type() {
         CreatureSnapshot created = handle.createCreature("Beast");
@@ -96,7 +96,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         }
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Sets base stat on creature")
     void sets_base_stat() {
         CreatureSnapshot created = handle.createCreature("Warrior");
@@ -108,7 +108,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertEquals(Integer.valueOf(20), edited.getBaseStatOverrides().get("STR"), "Expected base override to be set");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Resets base stat on creature")
     void resets_base_stat() {
         Map<String, Integer> baseStats = new HashMap<>();
@@ -121,7 +121,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertNull(reset.getBaseStatOverrides().get("STR"), "Expected base override to be reset");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Removes base stat on creature")
     void removes_base_stat() {
         Map<String, Integer> baseStats = new HashMap<>();
@@ -134,7 +134,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertNull(removed.getBaseStatOverrides().get("STR"), "Expected base override to be removed");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Selects a creature by ID")
     void selects_creature_by_id() {
         CreatureSnapshot created = handle.createCreature("Hero");
@@ -145,7 +145,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertEquals(creatureId, handle.getSelectedCreatureId(), "Expected creature to be selected");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Selection fails for unknown creature")
     void selection_fails_for_unknown_creature() {
         handle.createCreature("Hero");
@@ -153,7 +153,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertFalse(handle.selectCreature("unknown-id"), "Expected selection to fail");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Gets selected creature snapshot")
     void gets_selected_creature_snapshot() {
         CreatureSnapshot created = handle.createCreature("Hero");
@@ -164,7 +164,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertEquals(created.getId(), selected.getId(), "Expected correct creature snapshot");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Gets selected creature snapshot when none selected")
     void gets_selected_creature_snapshot_when_none_selected() {
         handle.createCreature("Hero");
@@ -175,7 +175,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertNull(selected, "Expected null when no creature selected");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Gets creature snapshot by ID")
     void gets_creature_snapshot_by_id() {
         CreatureSnapshot created = handle.createCreature("Hero");
@@ -188,7 +188,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertEquals(creatureId, retrieved.getId(), "Expected correct creature snapshot");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Checks if creature exists")
     void checks_if_creature_exists() {
         CreatureSnapshot created = handle.createCreature("Hero");
@@ -198,7 +198,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertFalse(handle.hasCreature("unknown-id"), "Expected unknown creature to not exist");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Deletes a creature")
     void deletes_creature() {
         CreatureSnapshot created = handle.createCreature("Hero");
@@ -208,14 +208,14 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertFalse(handle.hasCreature(creatureId), "Expected creature to be deleted");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Deletion fails for unknown creature")
     void deletion_fails_for_unknown_creature() {
         handle.createCreature("Hero");
         assertFalse(handle.deleteCreature("unknown-id"), "Expected deletion to fail");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Deleting selected creature clears selection")
     void deleting_selected_creature_clears_selection() {
         CreatureSnapshot created = handle.createCreature("Hero");
@@ -227,7 +227,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertNull(handle.getSelectedCreatureId(), "Expected selection to be cleared after deletion");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Deleting selected creature clears selection when multiple creatures exist")
     void deleting_selected_creature_clears_selection_multiple() {
         CreatureSnapshot first = handle.createCreature("Hero1");
@@ -240,7 +240,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertNull(handle.getSelectedCreatureId(), "Expected selection to be cleared");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Clears creature selection")
     void clears_creature_selection() {
         CreatureSnapshot created = handle.createCreature("Hero");
@@ -251,7 +251,7 @@ public class SessionCreatureTest extends SessionHandleTest {
         assertNull(handle.getSelectedCreatureId(), "Expected selection to be cleared");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Multiple creatures can be created and selected independently")
     void multiple_creatures_can_be_created_and_selected() {
         CreatureSnapshot c1 = handle.createCreature("Hero1");

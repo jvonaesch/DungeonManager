@@ -18,6 +18,9 @@ public class DungeonManagerApp {
     public static final Path LIB_PATH = APP_PATH.resolve("library");
     public static final Path DEFAULT_WORKSPACE_PATH = APP_PATH.resolve("workspace/default");
 
+    private SessionHandle activeSessionHandle;
+    private Session activeSession;
+
     public static void main(String[] args) {
         DungeonManagerApp app = new DungeonManagerApp();
         try {
@@ -54,7 +57,7 @@ public class DungeonManagerApp {
 
     public synchronized void run(Path workspacePath) {
         LOG.info("Running DungeonManager application for workspace {}", workspacePath);
-        SessionHandle activeSessionHandle = getSessionHandle(workspacePath);
+        activeSessionHandle = getSessionHandle(workspacePath);
         LOG.info("Active session initialized. Selected creature: {}", activeSessionHandle.getSelectedCreatureId());
         // TODO: main application loop / backend host
         LOG.info("Quitting DungeonManager application");
@@ -62,16 +65,28 @@ public class DungeonManagerApp {
 
     public SessionHandle getSessionHandle(Path workspacePath) {
         Session session = new Session(this, workspacePath);
-        return new SessionHandle(session);
+        this.activeSession = session;
+        SessionHandle handle = new SessionHandle(session);
+        this.activeSessionHandle = handle;
+        return handle;
     }
     
     @SuppressWarnings("unused")
-    public SessionHandle getSessionHandle(Path workspacePath, Set<String> contentPacks) {
-        Session session = new Session(this, workspacePath, contentPacks);
+    public SessionHandle getSessionHandle(Path workspacePath, Path contentPackPath) {
+        Session session = new Session(this, workspacePath, contentPackPath);
         return new SessionHandle(session);
     }
 
     public void shutdown() {
+        if (activeSessionHandle != null) {
+            try {
+                activeSessionHandle.saveWorkspaceSnapshot();
+                LOG.info("Saved active session snapshot");
+            } catch (Exception e) {
+                LOG.warn("Failed to save active session snapshot", e);
+            }
+        }
+
         LOG.info("Shutting down DungeonManager application");
     }
 }

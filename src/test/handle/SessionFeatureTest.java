@@ -8,7 +8,7 @@ import dungeonmanager.session.FeatureInstanceSnapshot;
 import dungeonmanager.stat.StandardStat;
 import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import test.Test;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -18,9 +18,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DisplayName("Session Feature Tests")
-public class SessionFeatureTest extends SessionHandleTest {
+public class SessionFeatureTest extends Test {
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Registers a feature")
     void registers_feature() {
         Feature feat = buildCharismaBoostFeature();
@@ -30,7 +30,7 @@ public class SessionFeatureTest extends SessionHandleTest {
         assertTrue(handle.hasFeature(feat.getId()), "Expected feature to be registered");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Apply and remove a stat modifier feature")
     void applies_and_removes_stat_modifier_feature() {
         CreatureSnapshot created = createHero();
@@ -53,7 +53,7 @@ public class SessionFeatureTest extends SessionHandleTest {
         assertEquals(8, afterRemoval.getStat("CHA"), "Expected CHA 8 after feature removal");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Initialize selection section configuration")
     void initializes_selection_section_config() {
         CreatureSnapshot created = createHero();
@@ -72,7 +72,7 @@ public class SessionFeatureTest extends SessionHandleTest {
                 "Expected empty selection by default");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Apply multiple features to a creature")
     void applies_multiple_features() {
         CreatureSnapshot created = createHero();

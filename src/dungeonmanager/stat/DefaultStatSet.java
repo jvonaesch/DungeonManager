@@ -6,6 +6,8 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Set;
 
+import static dungeonmanager.contentpack.PackLoader.MAPPER;
+
 public class DefaultStatSet implements StatSet {
 
     private final StatContext context;
@@ -31,12 +33,16 @@ public class DefaultStatSet implements StatSet {
     }
 
     @Override
-    public StatSet jsonPopulate(String json, Session session) throws JsonProcessingException {
+    public StatSet jsonPopulate(String json, Session session) {
         return this;
     }
 
     @Override
     public String toJson() {
-        return "";
+        try {
+            return MAPPER.writeValueAsString(context.getDefaults());
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Failed to serialize default stat set", e);
+        }
     }
 }

@@ -6,7 +6,7 @@ import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.session.*;
 import dungeonmanager.stat.StatModifier;
 import org.junit.jupiter.api.DisplayName;
-import org.junit.jupiter.api.Test;
+import test.Test;
 
 import java.util.HashMap;
 import java.util.List;
@@ -17,9 +17,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 @DisplayName("Session Snapshot Tests")
-public class SessionSnapshotTest extends SessionHandleTest {
+public class SessionSnapshotTest extends Test {
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Creature snapshot stat map is immutable")
     void creature_snapshot_stats_immutable() {
         CreatureSnapshot created = createHero(handle);
@@ -37,7 +37,7 @@ public class SessionSnapshotTest extends SessionHandleTest {
                 "Expected creature stat remove to fail");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Creature snapshot base overrides map is immutable")
     void creature_snapshot_base_overrides_immutable() {
         CreatureSnapshot created = createHero(handle);
@@ -55,7 +55,7 @@ public class SessionSnapshotTest extends SessionHandleTest {
                 "Expected base overrides remove to fail");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Feature instance snapshot config is immutable")
     void feature_instance_snapshot_config_immutable() {
         CreatureSnapshot created = createHero(handle);
@@ -80,7 +80,7 @@ public class SessionSnapshotTest extends SessionHandleTest {
                 "Expected feature config remove to fail");
     }
 
-    @Test
+    @org.junit.jupiter.api.Test
     @DisplayName("Feature snapshot selection lists are immutable")
     void feature_snapshot_selection_lists_immutable() {
         CreatureSnapshot created = createHero(handle);

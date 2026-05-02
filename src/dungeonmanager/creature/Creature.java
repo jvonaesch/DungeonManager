@@ -1,13 +1,25 @@
 package dungeonmanager.creature;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dungeonmanager.contentpack.JsonSerializable;
+import dungeonmanager.feature.FeatureInstance;
 import dungeonmanager.feature.Features;
 import dungeonmanager.session.Session;
 import dungeonmanager.stat.*;
 import dungeonmanager.feature.FeatureSet;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collection;
+import java.util.Map;
+import java.util.Set;
+
 public class Creature implements CreatureBasis, JsonSerializable {
+
+    static final ObjectMapper MAPPER = new ObjectMapper();
 
     private final String id;
     private String name;
@@ -36,7 +48,7 @@ public class Creature implements CreatureBasis, JsonSerializable {
     }
 
     @Override
-    public String getID() {
+    public String getId() {
         return id;
     }
 
@@ -48,7 +60,7 @@ public class Creature implements CreatureBasis, JsonSerializable {
         );
     }
 
-    public CreatureBasis getType() {
+    public CreatureBasis getBasis() {
         return type;
     }
 
@@ -73,10 +85,65 @@ public class Creature implements CreatureBasis, JsonSerializable {
 
     @Override
     public String toJson() {
-        return "";
+        ObjectNode obj = MAPPER.createObjectNode();
+        obj.put("name", name);
+        obj.put("typeId", type != null ? type.getId() : null);
+
+        // Serialize base stat overrides
+        ObjectNode baseStatsNode = MAPPER.createObjectNode();
+        Map<String, Integer> baseValues = statSet.getBaseValues();
+        baseValues.forEach(baseStatsNode::put);
+        obj.set("baseStatOverrides", baseStatsNode);
+
+        ArrayNode featureNode = MAPPER.createArrayNode();
+        Collection<FeatureInstance> features = feature.getAllFeatures();
+        for (FeatureInstance feature: features) {
+            featureNode.add(feature.toJson());
+        }
+        // TODO: serialize features
+
+        try {
+            return MAPPER.writeValueAsString(obj);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Failed to serialize creature '" + id + "'", e);
+        }
     }
 
-    public static Creature fromJson(String creatureId, String json) {
-        return null;
+    public static Creature fromJson(String creatureId, String json, StatContext statContext, Session session) {
+        try {
+            JsonNode obj = MAPPER.readTree(json);
+            String name = obj.path("name").asText();
+            String typeId = obj.path("typeId").asText(null);
+
+            // Resolve creature type from session library
+            CreatureBasis creatureType = null;
+            if (typeId != null && !typeId.isEmpty()) {
+                creatureType = session.library.creature.get(typeId);
+                if (creatureType == null) {
+                    throw new IllegalArgumentException("Creature type not found in library: " + typeId);
+                }
+            }
+
+            Creature creature = new Creature(statContext, creatureId, name, creatureType);
+
+            // Restore base stat overrides
+            JsonNode baseStatsNode = obj.path("baseStatOverrides");
+            if (baseStatsNode.isObject()) {
+                baseStatsNode.fields().forEachRemaining(entry -> {
+                    String statId = entry.getKey();
+                    int value = entry.getValue().asInt();
+                    Stat stat = statContext.getStat(statId);
+                    if (stat != null) {
+                        creature.getStatSet().setBaseValue(stat, value);
+                    }
+                });
+            }
+
+            // TODO: restore features
+
+            return creature;
+        } catch (JsonProcessingException e) {
+            throw new IllegalArgumentException("Invalid creature JSON", e);
+        }
     }
 }

@@ -1,6 +1,7 @@
 package dungeonmanager.contentpack;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import dungeonmanager.creature.Creature;
 import dungeonmanager.feature.Feature;
 import dungeonmanager.session.Session;
 import dungeonmanager.stat.Stat;
@@ -12,6 +13,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.StandardOpenOption;
+import java.util.Map;
 import java.util.Set;
 import java.util.function.BiConsumer;
 import java.util.function.Consumer;
@@ -25,7 +27,9 @@ import static org.apache.commons.io.FilenameUtils.removeExtension;
  * Layout:
  * <pre><code>
  *  └─ pack/
- *     └─ features/
+ *     ├─ creatures/
+ *     ├─ features/
+ *     └─ stats.json
  * </code></pre>
  * Features are registered into Registries.get().feature for global access.
  */
@@ -49,9 +53,10 @@ public class PackLoader {
      * Load all packs in a library directory to the PackLoader's handle
      * @param libraryPath the path to the DungeonManagerLibrary directory
      */
-    public void loadLibrary(Path libraryPath) {
+    public void loadPacks(Path libraryPath) {
 
         if (!checkOrMakeDir(libraryPath)) return;
+        LOG.debug("Loading content packs from library: {}", libraryPath.toAbsolutePath());
 
         try (Stream<Path> packDirs = Files.list(libraryPath)) {
             packDirs.filter(Files::isDirectory)
@@ -69,9 +74,13 @@ public class PackLoader {
      * Sequence does not matter since registration is lazy and only reads JSON when accessed
      * @param packDir the path to a pack directory
      */
-    public void loadPack(Path packDir) {
+    public void loadTo(Path packDir,
+                       BiConsumer<String, String> creatureRegistrar,
+                       BiConsumer<String, String> featureRegistrar,
+                       Consumer<Stat> statRegistrar) {
         String packName = packDir.getFileName().toString();
         Path featuresDir = packDir.resolve("features");
+        Path creaturesDir = packDir.resolve("creatures");
 
         Path statsPath = packDir.resolve("stats.json");
         File statsFile = statsPath.toFile();
@@ -80,7 +89,7 @@ public class PackLoader {
             try {
                 String json = Files.readString(statsPath);
                 Set<Stat> stats = Stat.fromJson(json, packName);
-                stats.forEach(session::registerStat);
+                stats.forEach(statRegistrar);
             } catch (IOException e) {
                 throw new RuntimeException(e);
             }
@@ -89,9 +98,36 @@ public class PackLoader {
         if (checkDir(featuresDir, "skipping features for this pack")) {
             LOG.debug("Loading features from pack: {}", packDir.getFileName());
             loadRecursive(featuresDir, (Path filePath) -> loadFromFile(filePath,
-                    (String featureId, String json) -> session.registry.feature.register(featureId,
-                            () -> Feature.fromJson(featureId, json)), "feature"));
+                    featureRegistrar, "feature"));
         }
+
+        if (checkDir(creaturesDir, "skipping creatures for this pack")) {
+            LOG.debug("Loading creatures from pack: {}", packDir.getFileName());
+            loadRecursive(creaturesDir, (Path filePath) -> loadFromFile(filePath,
+                    creatureRegistrar, "creature"));
+        }
+    }
+
+    public void loadPack(Path packPath) {
+        LOG.debug("Loading content pack from {}", packPath.toAbsolutePath());
+        this.loadTo(
+                packPath,
+                (String creatureId, String json) -> session.library.creature.putLocked(creatureId,
+                        () -> Creature.fromJson(creatureId, json, session.getStatContext(), session)),
+                (String featureId, String json) -> session.library.feature.putLocked(featureId,
+                        () -> Feature.fromJson(featureId, json)),
+                session::registerStat);
+    }
+
+    public void loadWorkspace(Path workspacePath) {
+        LOG.debug("Loading content from workspace {}", workspacePath.toAbsolutePath());
+        this.loadTo(
+                workspacePath,
+                (String creatureId, String json) -> session.library.creature.putOwned(creatureId,
+                        () -> Creature.fromJson(creatureId, json, session.getStatContext(), session)),
+                (String featureId, String json) -> session.library.feature.putOwned(featureId,
+                        () -> Feature.fromJson(featureId, json)),
+                session::addStat);
     }
 
     /**
@@ -120,6 +156,46 @@ public class PackLoader {
         } catch (Exception e) {
             LOG.error("Error loading {} from {}: {}", contentType, filePath.toAbsolutePath(), e.getMessage(), e);
         }
+    }
+
+    public static void saveCreaturesToPack(Path packDir, Map<String, Creature> creatures) throws IOException {
+        Path creaturesDir = packDir.resolve("creatures");
+        checkOrMakeDir(creaturesDir);
+
+        for (Map.Entry<String, Creature> entry : creatures.entrySet()) {
+            String creatureId = entry.getKey();
+            Creature creature = entry.getValue();
+            Path creaturePath = creaturesDir.resolve(creatureId + ".json");
+            writeToFile(creaturePath, creature.toJson());
+            LOG.debug("Saved creature '{}' to {}", creatureId, creaturePath);
+        }
+    }
+
+    /**
+     * Save feature templates into the pack under the "features" directory.
+     */
+    public static void saveFeaturesToPack(Path packDir, Map<String, Feature> features) throws IOException {
+        Path featuresDir = packDir.resolve("features");
+        checkOrMakeDir(featuresDir);
+
+        for (Map.Entry<String, Feature> entry : features.entrySet()) {
+            String featureId = entry.getKey();
+            Feature feat = entry.getValue();
+            Path featurePath = featuresDir.resolve(featureId + ".json");
+            writeToFile(featurePath, feat.toJson());
+            LOG.debug("Saved feature '{}' to {}", featureId, featurePath);
+        }
+    }
+
+    /**
+     * Save stat definitions into the pack as a top-level stats.json file.
+     */
+    public static void saveStatsToPack(Path packDir, Map<String, Stat> stats) throws IOException {
+        Path statsPath = packDir.resolve("stats.json");
+        // Convert map values to a Set for Stat.toJson
+        java.util.Set<Stat> statSet = new java.util.HashSet<>(stats.values());
+        writeToFile(statsPath, Stat.toJson(statSet));
+        LOG.debug("Saved {} stats to {}", statSet.size(), statsPath);
     }
 
     public static boolean checkOrMakeDir(Path filePath, String failureMessage, String notADirectoryMessage) {

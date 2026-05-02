@@ -20,7 +20,7 @@ public class CreatureType implements CreatureBasis {
     }
 
     @Override
-    public String getID() {
+    public String getId() {
         return id;
     }
 

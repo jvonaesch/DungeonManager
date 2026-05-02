@@ -1,6 +1,7 @@
 package dungeonmanager.session;
 
 import dungeonmanager.creature.Creature;
+import dungeonmanager.creature.CreatureBasis;
 import dungeonmanager.feature.FeatureInstance;
 
 import java.util.*;
@@ -9,7 +10,6 @@ public class CreatureSnapshot {
     private final String id;
     private final String name;
     private final String sourceId;
-    private final String sourceName;
     private final Map<String, Integer> stats;
     private final Map<String, Integer> baseStatOverrides;
     private final List<FeatureInstanceSnapshot> features;
@@ -18,7 +18,6 @@ public class CreatureSnapshot {
             String id,
             String name,
             String sourceId,
-            String sourceName,
             Map<String, Integer> stats,
             Map<String, Integer> baseStatOverrides,
             List<FeatureInstanceSnapshot> features)
@@ -26,14 +25,13 @@ public class CreatureSnapshot {
         this.id = id;
         this.name = name;
         this.sourceId = sourceId;
-        this.sourceName = sourceName;
         this.stats = Collections.unmodifiableMap(new LinkedHashMap<>(stats));
         this.baseStatOverrides = Collections.unmodifiableMap(new LinkedHashMap<>(baseStatOverrides));
         this.features = List.copyOf(features);
     }
 
     static CreatureSnapshot fromCreature(Creature creature) {
-        String id = creature.getID();
+        String id = creature.getId();
         Map<String, Integer> statValues = new LinkedHashMap<>();
         List<String> statIds = new ArrayList<>(creature.getStatSet().getSpecifiedStats());
         statIds.sort(String::compareTo);
@@ -55,11 +53,13 @@ public class CreatureSnapshot {
         }
         featureSnapshots.sort(Comparator.comparing(FeatureInstanceSnapshot::getInstanceId));
 
+        CreatureBasis basis = creature.getBasis();
+        String basisId = basis == null ? "default" : basis.getId();
+
         return new CreatureSnapshot(
                 id,
                 creature.getName(),
-                creature.getType().getID(),
-                creature.getType().getName(),
+                basisId,
                 statValues,
                 baseOverrides,
                 featureSnapshots
@@ -76,10 +76,6 @@ public class CreatureSnapshot {
 
     public String getSourceId() {
         return sourceId;
-    }
-
-    public String getSourceName() {
-        return sourceName;
     }
 
     public Map<String, Integer> getStats() {

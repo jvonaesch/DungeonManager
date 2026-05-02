@@ -107,7 +107,6 @@ public class ModifiableStatSet implements WriteableStatSet {
     public Set<String> getSpecifiedStats() {
         Set<String> specified = new HashSet<>(getBaseValues().keySet());
         specified.addAll(modifiers.keySet());
-        LOG.debug("specified stats on creature snapshot creation: {}", specified);
         return specified;
     }
 

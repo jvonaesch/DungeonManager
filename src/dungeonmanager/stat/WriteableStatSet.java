@@ -29,8 +29,13 @@ public interface WriteableStatSet extends StatSet {
     @Override
     default StatSet jsonPopulate(String json, Session session) throws JsonProcessingException {
         JsonNode node = MAPPER.readTree(json);
+        if (node == null || !node.isObject()) {
+            throw new IllegalArgumentException("Expected JSON object for stat set");
+        }
+
         Iterator<String> it = node.fieldNames();
-        for (String statId = it.next(); it.hasNext(); statId = it.next()) {
+        while (it.hasNext()) {
+            String statId = it.next();
             this.setBaseValue(statId, node.get(statId).asInt());
         }
         return this;

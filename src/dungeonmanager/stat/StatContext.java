@@ -1,7 +1,9 @@
 package dungeonmanager.stat;
 
-import dungeonmanager.registry.StatRegistry;
+import dungeonmanager.library.StatLibrary;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
@@ -11,29 +13,30 @@ import java.util.Set;
  */
 public class StatContext {
 
-    private final StatRegistry statRegistry;
+    private final StatLibrary library;
 
-    public StatContext(StatRegistry statRegistry) {
-        this.statRegistry = statRegistry;
+    public StatContext(StatLibrary statRegistry) {
+        this.library = statRegistry;
     }
 
     public Map<String, Integer> getDefaults() {
-        return statRegistry.getDefaultValues();
+        return new HashMap<>(library.getDefaultValues());
     }
 
     public Stat getStat(String statId) {
-        return statRegistry.get(statId);
+        return library.get(statId);
     }
 
     public Set<String> getAllIDs() {
-        return statRegistry.getAllKeys();
+        return new HashSet<>(library.getAll().keySet());
     }
 
+    @SuppressWarnings("unused")
     public Map<String, Stat> getAllStats() {
-        return statRegistry.getAll();
+        return library.getAll();
     }
 
     public int getStatDefault(String statId) {
-        return statRegistry.getDefaultValues().getOrDefault(statId, 0);
+        return getDefaults().getOrDefault(statId, 0);
     }
 }

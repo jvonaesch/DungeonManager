@@ -1,4 +1,4 @@
-package dungeonmanager.registry;
+package dungeonmanager.library;
 
 import dungeonmanager.stat.Stat;
 
@@ -6,18 +6,18 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class StatRegistry extends HashRegistry<Stat> {
+public class StatLibrary extends HashLibrary<Stat> {
 
     private final Map<String, Integer> defaultValues;
 
-    public StatRegistry () {
+    public StatLibrary() {
         super();
         this.defaultValues = new TreeMap<>();
     }
 
-    public void register(String ID, Stat stat) {
-        super.register(ID, stat);
-        defaultValues.put(ID, stat.getDefaultValue());
+    public void putLocked(String id, Stat stat) {
+        super.putLocked(id, stat);
+        defaultValues.put(id, stat.getDefaultValue());
     }
 
     public Map<String, Integer> getDefaultValues() {

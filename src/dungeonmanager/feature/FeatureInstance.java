@@ -1,5 +1,7 @@
 package dungeonmanager.feature;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ArrayNode;
 import dungeonmanager.stat.StatModifier;
 import dungeonmanager.stat.ModifiableStatSet;
 
@@ -12,6 +14,8 @@ import java.util.Map;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.TreeSet;
+
+import static dungeonmanager.contentpack.PackLoader.MAPPER;
 
 /**
  * An instance of a {@link Feature} specific to a {@link dungeonmanager.creature.Creature}. It stores creature-specific
@@ -151,5 +155,10 @@ public class FeatureInstance {
                 this.feature.getDescription(),
                 this.getStatModifiers()
         );
+    }
+
+    public JsonNode toJson() {
+        return MAPPER.createObjectNode();
+        // TODO: feature instance serialization
     }
 }

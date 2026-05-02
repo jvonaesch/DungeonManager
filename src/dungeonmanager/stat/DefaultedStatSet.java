@@ -14,13 +14,11 @@ import static dungeonmanager.contentpack.PackLoader.MAPPER;
  */
 public class DefaultedStatSet extends ModifiableStatSet {
 
-    private HasStatSet parent;
     private StatSet parentSet;
     private final Set<String> removed;
 
     public DefaultedStatSet(StatContext statContext, HasStatSet parent) {
         this(statContext, parent.getStatSet());
-        this.parent = parent;
     }
 
     public DefaultedStatSet(StatContext statContext, StatSet parentSet) {
@@ -84,30 +82,38 @@ public class DefaultedStatSet extends ModifiableStatSet {
     }
 
     public void changeParent(HasStatSet newParent) {
-        this.parent = newParent;
         this.parentSet = newParent.getStatSet();
         this.dirtyStats.addAll(getSpecifiedStats());
     }
 
     public void changeParent(StatSet newParentSet) {
-        this.parent = null;
         this.parentSet = newParentSet;
         this.dirtyStats.addAll(getSpecifiedStats());
     }
 
     @Override
     public StatSet jsonPopulate(String json, Session session) throws JsonProcessingException {
-        // TODO: populate from parent set
         JsonNode node = MAPPER.readTree(json);
-        this.changeParent(session.getCreature(node.get("parent").asText()));
-        JsonNode values = node.get("values");
-        super.jsonPopulate(MAPPER.writeValueAsString(values), session);
+        if (node == null || !node.isObject()) {
+            throw new IllegalArgumentException("Expected JSON object for defaulted stat set");
+        }
+
+        baseValues.clear();
+        removed.clear();
+
+        for (Iterator<String> it = node.fieldNames(); it.hasNext(); ) {
+            String statId = it.next();
+            baseValues.put(statId, node.get(statId).asInt());
+        }
         return this;
     }
 
     @Override
     public String toJson() {
-        // TODO: implement json serialization
-        return "";
+        try {
+            return MAPPER.writeValueAsString(baseValues);
+        } catch (JsonProcessingException e) {
+            throw new IllegalStateException("Failed to serialize defaulted stat set", e);
+        }
     }
 }
