@@ -8,6 +8,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dungeonmanager.contentpack.JsonSerializable;
 import dungeonmanager.session.Session;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -83,19 +84,13 @@ public class Feature implements JsonSerializable {
         Feature feature = new Feature(featureId, featureName, featureDesc);
 
         JsonNode sectionsArray = json.path("sections");
-        if (sectionsArray.isArray()) {
-            sectionsArray.forEach(element -> {
-                try {
-                    String sectionJson = MAPPER.writeValueAsString(element);
-                    FeatureSection deserialized = FeatureSerializer.loadSection(sectionJson);
-                    if (deserialized != null) {
-                        feature.addSection(deserialized);
-                    }
-                } catch (JsonProcessingException e) {
-                    throw new IllegalStateException("Failed to deserialize feature section", e);
-                }
-            });
-        }
+        if (!sectionsArray.isArray()) throw new IllegalArgumentException("sections field in json must be an ArrayNode");
+        sectionsArray.forEach(element -> {
+            FeatureSection deserialized = FeatureSerializer.loadSection(element);
+            if (deserialized != null) {
+                feature.addSection(deserialized);
+            }
+        });
 
         return feature;
     }

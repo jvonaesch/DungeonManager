@@ -1,6 +1,8 @@
 package test.handle;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dungeonmanager.DungeonManagerApp;
 import dungeonmanager.contentpack.PackLoader;
 import dungeonmanager.feature.Feature;
@@ -134,8 +136,8 @@ public class SessionPersistenceTest {
                 null,
                 1L
         );
-        String json = MAPPER.writeValueAsString(snapshot.toJson())
-                .replace("\"schemaVersion\" : 1", "\"schemaVersion\" : 99");
+        ObjectNode json = (ObjectNode) snapshot.toJson();
+        json.put("schemaVersion", 99);
 
         assertThrows(IllegalArgumentException.class, () -> SessionSnapshot.fromJson(json),
                 "Expected schema mismatch to fail parsing");

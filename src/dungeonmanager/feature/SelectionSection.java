@@ -123,33 +123,20 @@ public class SelectionSection implements
         return json;
     }
 
-    public static SelectionSection fromJson(String json) {
-        JsonNode obj;
-        try {
-            obj = MAPPER.readTree(json);
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("Invalid selection section JSON", e);
-        }
-
-        String sectionId = obj.path("id").asText();
-        String sectionName = obj.path("name").asText();
-        String sectionDesc = obj.path("description").asText();
-        boolean sectionVisible = obj.path("visible").asBoolean(true);
-        int numSel = obj.path("numSelections").asInt();
+    public static SelectionSection fromJson(JsonNode json) {
+        String sectionId = json.path("id").asText();
+        String sectionName = json.path("name").asText();
+        String sectionDesc = json.path("description").asText();
+        boolean sectionVisible = json.path("visible").asBoolean(true);
+        int numSel = json.path("numSelections").asInt();
 
         SelectionSection section = new SelectionSection(sectionId, sectionName, sectionDesc, numSel, sectionVisible);
 
-        JsonNode optionsArray = obj.path("options");
+        JsonNode optionsArray = json.path("options");
         if (optionsArray.isArray()) {
             optionsArray.forEach(element -> {
                 String optionId = element.path("id").asText();
-                JsonNode sectionObj = element.path("section");
-                String sectionJson;
-                try {
-                    sectionJson = MAPPER.writeValueAsString(sectionObj);
-                } catch (JsonProcessingException e) {
-                    throw new IllegalStateException("Failed to deserialize selection option", e);
-                }
+                JsonNode sectionJson = element.path("section");
 
                 // Deserialize based on type
                 FeatureSection deserialized = FeatureSerializer.loadSection(sectionJson);

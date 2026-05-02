@@ -18,7 +18,7 @@ public final class SessionJsonSerializer {
         return snapshot.toJson();
     }
 
-    public static SessionSnapshot fromJson(String json) {
+    public static SessionSnapshot fromJson(JsonNode json) {
         return SessionSnapshot.fromJson(json);
     }
 

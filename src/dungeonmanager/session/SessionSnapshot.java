@@ -65,7 +65,7 @@ public class SessionSnapshot implements JsonSerializable {
         if (!Files.exists(sessionFile)) {
             return Optional.empty();
         }
-        return Optional.of(fromJson(Files.readString(sessionFile)));
+        return Optional.of(fromJson(MAPPER.readTree(Files.readString(sessionFile))));
     }
 
     public static SessionSnapshot load(Path workspacePath) throws IOException {
@@ -73,7 +73,7 @@ public class SessionSnapshot implements JsonSerializable {
         if (!Files.exists(sessionFile)) {
             throw new IOException("Session snapshot not found: " + sessionFile.toAbsolutePath());
         }
-        return fromJson(Files.readString(sessionFile));
+        return fromJson(MAPPER.readTree(Files.readString(sessionFile)));
     }
 
     @Override
@@ -85,13 +85,9 @@ public class SessionSnapshot implements JsonSerializable {
         }
     }
 
-    public static SessionSnapshot fromJson(String json) {
-        if (json == null || json.isBlank()) {
-            throw new IllegalArgumentException("Session JSON cannot be blank");
-        }
-
+    public static SessionSnapshot fromJson(JsonNode json) {
         try {
-            PersistedSession persisted = MAPPER.readValue(json, PersistedSession.class);
+            PersistedSession persisted = MAPPER.readValue(MAPPER.writeValueAsString(json), PersistedSession.class);
             return persisted.toSnapshot();
         } catch (IOException e) {
             throw new IllegalArgumentException("Invalid session snapshot JSON", e);

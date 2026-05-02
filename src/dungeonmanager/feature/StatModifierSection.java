@@ -125,21 +125,14 @@ public class StatModifierSection implements FeatureSection {
         return json;
     }
 
-    public static StatModifierSection fromJson(String json) {
-        JsonNode obj;
-        try {
-            obj = MAPPER.readTree(json);
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("Invalid stat modifier section JSON", e);
-        }
-
-        String sectionId = obj.path("id").asText();
-        String sectionName = obj.path("name").asText();
-        String sectionDesc = obj.path("description").asText();
-        boolean sectionVisible = obj.path("visible").asBoolean(true);
+    public static StatModifierSection fromJson(JsonNode json) {
+        String sectionId = json.path("id").asText();
+        String sectionName = json.path("name").asText();
+        String sectionDesc = json.path("description").asText();
+        boolean sectionVisible = json.path("visible").asBoolean(true);
 
         StatModifier modifier;
-        JsonNode modifierData = obj.path("modifier");
+        JsonNode modifierData = json.path("modifier");
         if (modifierData.isObject()) {
             String targetStat = modifierData.path("targetStat").asText();
             if (!targetStat.isEmpty()) {
