@@ -109,11 +109,19 @@ public class DefaultedStatSet extends ModifiableStatSet {
     }
 
     @Override
-    public String toJson() {
+    public JsonNode toJson() {
         try {
-            return MAPPER.writeValueAsString(baseValues);
+            return MAPPER.readTree(MAPPER.writeValueAsString(baseValues));
         } catch (JsonProcessingException e) {
             throw new IllegalStateException("Failed to serialize defaulted stat set", e);
         }
+    }
+
+    public static DefaultedStatSet fromJson(String id, JsonNode json, Session session) {
+        if (!json.isObject()) throw new RuntimeException("ModifiableStatSet json must be an ObjectNode");
+        StatContext context = session.getStatContext();
+        DefaultedStatSet statSet = new DefaultedStatSet(context, new DefaultStatSet(context));
+        json.fieldNames().forEachRemaining((String statId) -> statSet.setBaseValue(statId, json.get(statId).intValue()));
+        return statSet;
     }
 }

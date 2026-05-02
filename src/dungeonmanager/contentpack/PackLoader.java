@@ -1,5 +1,6 @@
 package dungeonmanager.contentpack;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dungeonmanager.creature.Creature;
 import dungeonmanager.feature.Feature;
@@ -75,8 +76,8 @@ public class PackLoader {
      * @param packDir the path to a pack directory
      */
     public void loadTo(Path packDir,
-                       BiConsumer<String, String> creatureRegistrar,
-                       BiConsumer<String, String> featureRegistrar,
+                       BiConsumer<String, JsonNode> creatureRegistrar,
+                       BiConsumer<String, JsonNode> featureRegistrar,
                        Consumer<Stat> statRegistrar) {
         String packName = packDir.getFileName().toString();
         Path featuresDir = packDir.resolve("features");
@@ -112,10 +113,10 @@ public class PackLoader {
         LOG.debug("Loading content pack from {}", packPath.toAbsolutePath());
         this.loadTo(
                 packPath,
-                (String creatureId, String json) -> session.library.creature.putLocked(creatureId,
-                        () -> Creature.fromJson(creatureId, json, session.getStatContext(), session)),
-                (String featureId, String json) -> session.library.feature.putLocked(featureId,
-                        () -> Feature.fromJson(featureId, json)),
+                (String creatureId, JsonNode json) -> session.library.creature.putLocked(creatureId,
+                        () -> Creature.fromJson(creatureId, json, session)),
+                (String featureId, JsonNode json) -> session.library.feature.putLocked(featureId,
+                        () -> Feature.fromJson(featureId, json, session)),
                 session::registerStat);
     }
 
@@ -123,10 +124,10 @@ public class PackLoader {
         LOG.debug("Loading content from workspace {}", workspacePath.toAbsolutePath());
         this.loadTo(
                 workspacePath,
-                (String creatureId, String json) -> session.library.creature.putOwned(creatureId,
-                        () -> Creature.fromJson(creatureId, json, session.getStatContext(), session)),
-                (String featureId, String json) -> session.library.feature.putOwned(featureId,
-                        () -> Feature.fromJson(featureId, json)),
+                (String creatureId, JsonNode json) -> session.library.creature.putOwned(creatureId,
+                        () -> Creature.fromJson(creatureId, json, session)),
+                (String featureId, JsonNode json) -> session.library.feature.putOwned(featureId,
+                        () -> Feature.fromJson(featureId, json, session)),
                 session::addStat);
     }
 
@@ -145,9 +146,10 @@ public class PackLoader {
         }
     }
 
-    public void loadFromFile(Path filePath, BiConsumer<String, String> registrar, String contentType) {
+    public void loadFromFile(Path filePath, BiConsumer<String, JsonNode> registrar, String contentType) {
         try {
-            String json = Files.readString(filePath);
+            String json_text = Files.readString(filePath);
+            JsonNode json = MAPPER.readTree(json_text);
             String featureId = removeExtension(filePath.getFileName().toString());
             registrar.accept(featureId, json);
             LOG.debug("Loaded {} '{}' from {}", contentType, featureId, filePath);
@@ -166,7 +168,7 @@ public class PackLoader {
             String creatureId = entry.getKey();
             Creature creature = entry.getValue();
             Path creaturePath = creaturesDir.resolve(creatureId + ".json");
-            writeToFile(creaturePath, creature.toJson());
+            writeToFile(creaturePath, MAPPER.writeValueAsString(creature.toJson()));
             LOG.debug("Saved creature '{}' to {}", creatureId, creaturePath);
         }
     }
@@ -180,9 +182,9 @@ public class PackLoader {
 
         for (Map.Entry<String, Feature> entry : features.entrySet()) {
             String featureId = entry.getKey();
-            Feature feat = entry.getValue();
+            Feature feature = entry.getValue();
             Path featurePath = featuresDir.resolve(featureId + ".json");
-            writeToFile(featurePath, feat.toJson());
+            writeToFile(featurePath, MAPPER.writeValueAsString(feature.toJson()));
             LOG.debug("Saved feature '{}' to {}", featureId, featurePath);
         }
     }

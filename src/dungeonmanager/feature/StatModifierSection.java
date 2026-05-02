@@ -101,13 +101,13 @@ public class StatModifierSection implements FeatureSection {
     }
 
     @Override
-    public String toJson() {
-        ObjectNode obj = MAPPER.createObjectNode();
-        obj.put("type", getType());
-        obj.put("id", id);
-        obj.put("name", name);
-        obj.put("description", description);
-        obj.put("visible", visible);
+    public JsonNode toJson() {
+        ObjectNode json = MAPPER.createObjectNode();
+        json.put("type", getType());
+        json.put("id", id);
+        json.put("name", name);
+        json.put("description", description);
+        json.put("visible", visible);
 
         if (modifier != null) {
             ObjectNode modifierNode = MAPPER.createObjectNode();
@@ -120,14 +120,9 @@ public class StatModifierSection implements FeatureSection {
             }
             modifierNode.set("dependencies", dependenciesNode);
             
-            obj.set("modifier", modifierNode);
+            json.set("modifier", modifierNode);
         }
-
-        try {
-            return MAPPER.writeValueAsString(obj);
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Failed to serialize stat modifier section '" + id + "'", e);
-        }
+        return json;
     }
 
     public static StatModifierSection fromJson(String json) {

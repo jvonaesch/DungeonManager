@@ -1,7 +1,8 @@
 package dungeonmanager.feature;
 
 import com.fasterxml.jackson.databind.JsonNode;
-import com.fasterxml.jackson.databind.node.ArrayNode;
+import dungeonmanager.contentpack.JsonSerializable;
+import dungeonmanager.session.Session;
 import dungeonmanager.stat.StatModifier;
 import dungeonmanager.stat.ModifiableStatSet;
 
@@ -23,7 +24,7 @@ import static dungeonmanager.contentpack.PackLoader.MAPPER;
  * It also provides the name and description of the feature shown in the creature's UI summary, as well as stat
  * modifiers that the feature applies to the creature <i>if active</i>.
  */
-public class FeatureInstance {
+public class FeatureInstance implements JsonSerializable {
 
     private final Feature feature;
     public final String ID;
@@ -157,8 +158,14 @@ public class FeatureInstance {
         );
     }
 
+    @Override
     public JsonNode toJson() {
         return MAPPER.createObjectNode();
         // TODO: feature instance serialization
+    }
+
+    public static FeatureInstance fromJson(String instanceId, JsonNode json, Session session) {
+        return null;
+        // TODO: feature instance deserialization
     }
 }

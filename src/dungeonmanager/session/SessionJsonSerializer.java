@@ -1,5 +1,7 @@
 package dungeonmanager.session;
 
+import com.fasterxml.jackson.databind.JsonNode;
+
 import java.io.IOException;
 import java.nio.file.Path;
 
@@ -12,7 +14,7 @@ public final class SessionJsonSerializer {
     private SessionJsonSerializer() {
     }
 
-    public static String toJson(SessionSnapshot snapshot) {
+    public static JsonNode toJson(SessionSnapshot snapshot) {
         return snapshot.toJson();
     }
 

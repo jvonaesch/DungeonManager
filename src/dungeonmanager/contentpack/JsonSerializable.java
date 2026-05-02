@@ -1,11 +1,14 @@
 package dungeonmanager.contentpack;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import dungeonmanager.session.Session;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
 import java.nio.file.Path;
 
+import static dungeonmanager.contentpack.PackLoader.MAPPER;
 import static dungeonmanager.contentpack.PackLoader.writeToFile;
 
 public interface JsonSerializable{
@@ -18,7 +21,8 @@ public interface JsonSerializable{
             return false;
         }
         try {
-            writeToFile(path, serializable.toJson());
+            writeToFile(path, MAPPER.writeValueAsString(serializable.toJson()));
+            // writeToFile(path, serializable.toJson().asText());
         } catch (IOException e) {
             LOG.warn("Couldn't write serializable {} to {}", serializable, path);
         }
@@ -29,10 +33,9 @@ public interface JsonSerializable{
         return JsonSerializable.storeSerializable(this, path);
     }
 
-    String toJson();
+    JsonNode toJson();
 
-    // Move to another interface and make non-static, only to be used for Feature Sections and other mutable elements
-    static <T> T fromJson(String json) {
+    static <T> T fromJson(String id, JsonNode json, Session session) {
         throw new UnsupportedOperationException("fromJson() must be implemented by the concrete class");
     };
 }

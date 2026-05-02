@@ -99,38 +99,28 @@ public class SelectionSection implements
     }
 
     @Override
-    public String toJson() {
-        ObjectNode obj = MAPPER.createObjectNode();
-        obj.put("type", getType());
-        obj.put("id", id);
-        obj.put("name", name);
-        obj.put("description", description);
-        obj.put("visible", visible);
-        obj.put("numSelections", numSelections);
+    public JsonNode toJson() {
+        ObjectNode json = MAPPER.createObjectNode();
+        json.put("type", getType());
+        json.put("id", id);
+        json.put("name", name);
+        json.put("description", description);
+        json.put("visible", visible);
+        json.put("numSelections", numSelections);
 
         ArrayNode optionsArray = MAPPER.createArrayNode();
         for (Map.Entry<String, FeatureSection> entry : configuration.entrySet()) {
             ObjectNode optionObj = MAPPER.createObjectNode();
             optionObj.put("id", entry.getKey());
-            String sectionJson = entry.getValue().toJson();
+            JsonNode sectionJson = entry.getValue().toJson();
             if (sectionJson == null) {
                 continue;
             }
-            try {
-                optionObj.set("section", MAPPER.readTree(sectionJson));
-            } catch (JsonProcessingException e) {
-                throw new IllegalStateException("Failed to serialize selection option '" + entry.getKey() + "'", e);
-            }
-
+            optionObj.set("section", sectionJson);
             optionsArray.add(optionObj);
         }
-        obj.set("options", optionsArray);
-
-        try {
-            return MAPPER.writeValueAsString(obj);
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Failed to serialize selection section '" + id + "'", e);
-        }
+        json.set("options", optionsArray);
+        return json;
     }
 
     public static SelectionSection fromJson(String json) {

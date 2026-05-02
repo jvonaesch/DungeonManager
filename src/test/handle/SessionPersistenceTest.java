@@ -1,5 +1,6 @@
 package test.handle;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import dungeonmanager.DungeonManagerApp;
 import dungeonmanager.contentpack.PackLoader;
 import dungeonmanager.feature.Feature;
@@ -23,6 +24,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static dungeonmanager.contentpack.JsonSerializable.LOG;
+import static dungeonmanager.contentpack.PackLoader.MAPPER;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertNull;
@@ -126,13 +128,14 @@ public class SessionPersistenceTest {
 
     @Test
     @DisplayName("Fails to parse session snapshots with unsupported schema versions")
-    void fails_to_parse_session_snapshots_with_unsupported_schema_version() {
+    void fails_to_parse_session_snapshots_with_unsupported_schema_version() throws JsonProcessingException {
         SessionSnapshot snapshot = new SessionSnapshot(
                 SessionSnapshot.CURRENT_SCHEMA_VERSION,
                 null,
                 1L
         );
-        String json = snapshot.toJson().replace("\"schemaVersion\" : 1", "\"schemaVersion\" : 99");
+        String json = MAPPER.writeValueAsString(snapshot.toJson())
+                .replace("\"schemaVersion\" : 1", "\"schemaVersion\" : 99");
 
         assertThrows(IllegalArgumentException.class, () -> SessionSnapshot.fromJson(json),
                 "Expected schema mismatch to fail parsing");

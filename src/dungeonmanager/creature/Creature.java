@@ -1,6 +1,5 @@
 package dungeonmanager.creature;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -15,7 +14,6 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
 import java.util.Map;
-import java.util.Set;
 
 public class Creature implements CreatureBasis, JsonSerializable {
 
@@ -84,7 +82,7 @@ public class Creature implements CreatureBasis, JsonSerializable {
     }
 
     @Override
-    public String toJson() {
+    public JsonNode toJson() {
         ObjectNode obj = MAPPER.createObjectNode();
         obj.put("name", name);
         obj.put("typeId", type != null ? type.getId() : null);
@@ -102,48 +100,40 @@ public class Creature implements CreatureBasis, JsonSerializable {
         }
         // TODO: serialize features
 
-        try {
-            return MAPPER.writeValueAsString(obj);
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Failed to serialize creature '" + id + "'", e);
-        }
+        return obj;
     }
 
-    public static Creature fromJson(String creatureId, String json, StatContext statContext, Session session) {
-        try {
-            JsonNode obj = MAPPER.readTree(json);
-            String name = obj.path("name").asText();
-            String typeId = obj.path("typeId").asText(null);
+    public static Creature fromJson(String creatureId, JsonNode json, Session session) {
+        String name = json.path("name").asText();
+        String typeId = json.path("typeId").asText(null);
+        StatContext statContext = session.getStatContext();
 
-            // Resolve creature type from session library
-            CreatureBasis creatureType = null;
-            if (typeId != null && !typeId.isEmpty()) {
-                creatureType = session.library.creature.get(typeId);
-                if (creatureType == null) {
-                    throw new IllegalArgumentException("Creature type not found in library: " + typeId);
-                }
+        // Resolve creature type from session library
+        CreatureBasis creatureType = null;
+        if (typeId != null && !typeId.isEmpty()) {
+            creatureType = session.library.creature.get(typeId);
+            if (creatureType == null) {
+                throw new IllegalArgumentException("Creature type not found in library: " + typeId);
             }
-
-            Creature creature = new Creature(statContext, creatureId, name, creatureType);
-
-            // Restore base stat overrides
-            JsonNode baseStatsNode = obj.path("baseStatOverrides");
-            if (baseStatsNode.isObject()) {
-                baseStatsNode.fields().forEachRemaining(entry -> {
-                    String statId = entry.getKey();
-                    int value = entry.getValue().asInt();
-                    Stat stat = statContext.getStat(statId);
-                    if (stat != null) {
-                        creature.getStatSet().setBaseValue(stat, value);
-                    }
-                });
-            }
-
-            // TODO: restore features
-
-            return creature;
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("Invalid creature JSON", e);
         }
+
+        Creature creature = new Creature(statContext, creatureId, name, creatureType);
+
+        // Restore base stat overrides
+        JsonNode baseStatsNode = json.path("baseStatOverrides");
+        if (baseStatsNode.isObject()) {
+            baseStatsNode.fields().forEachRemaining(entry -> {
+                String statId = entry.getKey();
+                int value = entry.getValue().asInt();
+                Stat stat = statContext.getStat(statId);
+                if (stat != null) {
+                    creature.getStatSet().setBaseValue(stat, value);
+                }
+            });
+        }
+
+        // TODO: restore features
+
+        return creature;
     }
 }

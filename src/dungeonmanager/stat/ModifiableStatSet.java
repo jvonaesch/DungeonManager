@@ -1,7 +1,10 @@
 package dungeonmanager.stat;
 
+import com.fasterxml.jackson.databind.JsonNode;
+import dungeonmanager.session.Session;
 import org.jetbrains.annotations.NotNull;
 
+import java.io.IOException;
 import java.util.*;
 
 /**
@@ -163,5 +166,12 @@ public class ModifiableStatSet implements WriteableStatSet {
             string.append("\n > ").append(statId).append(": ").append(getValue(statId));
         }
         return string.toString();
+    }
+
+    public static ModifiableStatSet fromJson(String id, JsonNode json, Session session) {
+        if (!json.isObject()) throw new RuntimeException("ModifiableStatSet json must be an ObjectNode");
+        ModifiableStatSet statSet = new ModifiableStatSet(session.getStatContext());
+        json.fieldNames().forEachRemaining((String statId) -> statSet.setBaseValue(statId, json.get(statId).intValue()));
+        return statSet;
     }
 }

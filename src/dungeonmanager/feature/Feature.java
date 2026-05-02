@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dungeonmanager.contentpack.JsonSerializable;
+import dungeonmanager.session.Session;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -58,59 +59,44 @@ public class Feature implements JsonSerializable {
     }
 
     @Override
-    public String toJson() {
-        ObjectNode obj = MAPPER.createObjectNode();
-        // obj.put("id", id);
-        obj.put("name", name);
-        obj.put("description", description);
+    public JsonNode toJson() {
+        ObjectNode json = MAPPER.createObjectNode();
+        json.put("name", name);
+        json.put("description", description);
 
         ArrayNode sectionsArray = MAPPER.createArrayNode();
         for (FeatureSection section : sections) {
-            String sectionJson = section.toJson(); //serializeSection(section);
+            JsonNode sectionJson = section.toJson();
             if (sectionJson == null) {
                 continue;
             }
-            try {
-                sectionsArray.add(MAPPER.readTree(sectionJson));
-            } catch (JsonProcessingException e) {
-                throw new IllegalStateException("Failed to serialize section '" + section.getID() + "'", e);
-            }
+            sectionsArray.add(sectionJson);
         }
-        obj.set("sections", sectionsArray);
-
-        try {
-            return MAPPER.writeValueAsString(obj);
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Failed to serialize feature '" + id + "'", e);
-        }
+        json.set("sections", sectionsArray);
+        return json;
     }
 
-    public static Feature fromJson(String featureId, String json) {
-        try {
-            JsonNode obj = MAPPER.readTree(json);
-            String featureName = obj.path("name").asText();
-            String featureDesc = obj.path("description").asText();
+    public static Feature fromJson(String featureId, JsonNode json, Session session) {
+        String featureName = json.path("name").asText();
+        String featureDesc = json.path("description").asText();
 
-            Feature feature = new Feature(featureId, featureName, featureDesc);
+        Feature feature = new Feature(featureId, featureName, featureDesc);
 
-            JsonNode sectionsArray = obj.path("sections");
-            if (sectionsArray.isArray()) {
-                sectionsArray.forEach(element -> {
-                    try {
-                        String sectionJson = MAPPER.writeValueAsString(element);
-                        FeatureSection deserialized = FeatureSerializer.loadSection(sectionJson);
-                        if (deserialized != null) {
-                            feature.addSection(deserialized);
-                        }
-                    } catch (JsonProcessingException e) {
-                        throw new IllegalStateException("Failed to deserialize feature section", e);
+        JsonNode sectionsArray = json.path("sections");
+        if (sectionsArray.isArray()) {
+            sectionsArray.forEach(element -> {
+                try {
+                    String sectionJson = MAPPER.writeValueAsString(element);
+                    FeatureSection deserialized = FeatureSerializer.loadSection(sectionJson);
+                    if (deserialized != null) {
+                        feature.addSection(deserialized);
                     }
-                });
-            }
-
-            return feature;
-        } catch (JsonProcessingException e) {
-            throw new IllegalArgumentException("Invalid feature JSON", e);
+                } catch (JsonProcessingException e) {
+                    throw new IllegalStateException("Failed to deserialize feature section", e);
+                }
+            });
         }
+
+        return feature;
     }
 }

@@ -1,5 +1,6 @@
 package dungeonmanager.session;
 
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import dungeonmanager.contentpack.JsonSerializable;
@@ -56,7 +57,7 @@ public class SessionSnapshot implements JsonSerializable {
     }
 
     public void save(Path workspacePath) throws IOException {
-        writeToFile(getSessionPath(workspacePath), toJson());
+        writeToFile(getSessionPath(workspacePath), MAPPER.writeValueAsString(toJson()));
     }
 
     public static Optional<SessionSnapshot> loadIfPresent(Path workspacePath) throws IOException {
@@ -76,9 +77,9 @@ public class SessionSnapshot implements JsonSerializable {
     }
 
     @Override
-    public String toJson() {
+    public JsonNode toJson() {
         try {
-            return MAPPER.writeValueAsString(PersistedSession.fromSnapshot(this));
+            return MAPPER.readTree(MAPPER.writeValueAsString(PersistedSession.fromSnapshot(this)));
         } catch (IOException e) {
             throw new IllegalStateException("Failed to serialize session snapshot", e);
         }

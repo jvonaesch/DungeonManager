@@ -1,6 +1,7 @@
 package dungeonmanager.stat;
 
 import dungeonmanager.contentpack.JsonLoadable;
+import dungeonmanager.contentpack.JsonSerializable;
 
 import java.util.Map;
 import java.util.Set;
@@ -9,7 +10,7 @@ import java.util.TreeMap;
 /**
  * Interface for read-only access to a set of defined stat and their values.
  */
-public interface StatSet extends JsonLoadable<StatSet> {
+public interface StatSet extends JsonSerializable {
 
     /**
      * Get the value of a stat by its ID. Returns null if the stat is not defined in this set.

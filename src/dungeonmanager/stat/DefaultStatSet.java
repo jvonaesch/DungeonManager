@@ -1,6 +1,7 @@
 package dungeonmanager.stat;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import dungeonmanager.session.Session;
 import org.jetbrains.annotations.NotNull;
 
@@ -33,16 +34,11 @@ public class DefaultStatSet implements StatSet {
     }
 
     @Override
-    public StatSet jsonPopulate(String json, Session session) {
-        return this;
+    public JsonNode toJson() {
+       return MAPPER.createObjectNode();
     }
 
-    @Override
-    public String toJson() {
-        try {
-            return MAPPER.writeValueAsString(context.getDefaults());
-        } catch (JsonProcessingException e) {
-            throw new IllegalStateException("Failed to serialize default stat set", e);
-        }
+    public static DefaultStatSet fromJson(String id, JsonNode json, Session session) {
+        return new DefaultStatSet(session.getStatContext());
     }
 }
