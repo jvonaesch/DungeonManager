@@ -1,7 +1,9 @@
 package dungeonmanager.feature;
 
 import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import dungeonmanager.contentpack.JsonSerializable;
+import dungeonmanager.creature.Creature;
 import dungeonmanager.session.Session;
 import dungeonmanager.stat.StatModifier;
 import dungeonmanager.stat.ModifiableStatSet;
@@ -26,27 +28,26 @@ import static dungeonmanager.contentpack.PackLoader.MAPPER;
  */
 public class FeatureInstance implements JsonSerializable {
 
-    private final Feature feature;
-    public final String ID;
+    private Feature feature;
+    public final String id;
     protected boolean active;
     private final List<FeatureSection> sections;
     private final ModifiableStatSet stat_context;
     private final Map<String, Object> config;
     private final Set<StatModifier> modifiers = new HashSet<>();
     
-    protected FeatureInstance(String ID, Feature feature, ModifiableStatSet stat_context) {
+    protected FeatureInstance(String ID, Feature feature, ModifiableStatSet statSet) {
         this.feature = feature;
-        this.ID = ID;
+        this.id = ID;
         this.active = false;
         this.sections = new ArrayList<>();
-        this.stat_context = stat_context;
+        this.stat_context = statSet;
         this.config = new HashMap<>();
         this.reload();
     }
 
-    @Override
-    public int hashCode() {
-        return this.ID.hashCode();
+    public String getId() {
+        return this.id;
     }
 
     public String getName() {
@@ -65,7 +66,14 @@ public class FeatureInstance implements JsonSerializable {
         return new HashSet<>(modifiers);
     }
 
+    public void checkPlaceholder() {
+        if (feature instanceof PlaceholderFeature && ((PlaceholderFeature) feature).isResolved()) {
+            this.feature = ((PlaceholderFeature) feature).resolveFeature();
+        }
+    }
+
     public void reload() {
+        this.checkPlaceholder();
         for (StatModifier modifier: modifiers) {
             stat_context.removeModifier(modifier);
         }
@@ -151,21 +159,33 @@ public class FeatureInstance implements JsonSerializable {
     @Override
     public String toString() {
         return "feature instance %s (feat: %s)\n\t'%s'\n\t%s\n".formatted(
-                this.ID,
+                this.id,
                 this.feature.getId(),
                 this.feature.getDescription(),
                 this.getStatModifiers()
         );
     }
 
-    @Override
-    public JsonNode toJson() {
-        return MAPPER.createObjectNode();
-        // TODO: feature instance serialization
+    private void jsonPopulate(Session session, JsonNode instanceJson) {
+        // TODO: read config from json and populate config map
     }
 
-    public static FeatureInstance fromJson(String instanceId, JsonNode json, Session session) {
-        return null;
-        // TODO: feature instance deserialization
+    @Override
+    public JsonNode toJson() {
+        ObjectNode json = MAPPER.createObjectNode();
+        json.put("feature", feature.getId());
+        return json;
+    }
+
+    public static FeatureInstance fromJson(String instanceId, JsonNode json, Session session, Creature creature) {
+        String featureId = json.get("feature").asText();
+        Feature feature = session.getFeature(featureId);
+        if (feature == null) {
+            LOG.warn("feature {} was not found while loading to creature {}", featureId, creature.getId());
+            feature = new PlaceholderFeature(featureId, session, json);
+        }
+        FeatureInstance instance = new FeatureInstance(instanceId, feature, creature.getStatSet());
+        instance.jsonPopulate(session, json);
+        return instance;
     }
 }

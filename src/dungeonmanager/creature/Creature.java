@@ -83,24 +83,24 @@ public class Creature implements CreatureBasis, JsonSerializable {
 
     @Override
     public JsonNode toJson() {
-        ObjectNode obj = MAPPER.createObjectNode();
-        obj.put("name", name);
-        obj.put("typeId", type != null ? type.getId() : null);
+        ObjectNode json = MAPPER.createObjectNode();
+        json.put("name", name);
+        json.put("typeId", type != null ? type.getId() : null);
 
         // Serialize base stat overrides
         ObjectNode baseStatsNode = MAPPER.createObjectNode();
         Map<String, Integer> baseValues = statSet.getBaseValues();
         baseValues.forEach(baseStatsNode::put);
-        obj.set("baseStatOverrides", baseStatsNode);
+        json.set("baseStatOverrides", baseStatsNode);
 
-        ArrayNode featureNode = MAPPER.createArrayNode();
+        ObjectNode featureNode = MAPPER.createObjectNode();
         Collection<FeatureInstance> features = feature.getAllFeatures();
-        for (FeatureInstance feature: features) {
-            featureNode.add(feature.toJson());
+        for (FeatureInstance instance: features) {
+            featureNode.set(instance.getId(), instance.toJson());
         }
-        // TODO: serialize features
+        json.set("features", featureNode);
 
-        return obj;
+        return json;
     }
 
     public static Creature fromJson(String creatureId, JsonNode json, Session session) {
@@ -132,7 +132,16 @@ public class Creature implements CreatureBasis, JsonSerializable {
             });
         }
 
-        // TODO: restore features
+        JsonNode featuresNode = json.path("features");
+        if (featuresNode.isObject()) {
+            featuresNode.fields().forEachRemaining(entry -> {
+                String instanceId = entry.getKey();
+                FeatureInstance instance = FeatureInstance.fromJson(
+                        instanceId, entry.getValue(), session, creature);
+                if (!creature.getFeatureSet().addFeature(instance))
+                    LOG.warn("Feature instance {} already found on creature {}", instanceId, creatureId);
+            });
+        }
 
         return creature;
     }

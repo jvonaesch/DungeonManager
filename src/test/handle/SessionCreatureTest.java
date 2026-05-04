@@ -91,7 +91,7 @@ public class SessionCreatureTest extends Test {
         assertNotNull(changed.getStats(), "Expected stat map to exist");
         for (StandardStat stat : StandardStat.values()) {
             int expectedStat = dwarf_stats.getOrDefault(stat.getId(), stat.getDefaultValue());
-            int actualStat = changed.getStat(stat.getId(), handle.getStatDefaults());
+            int actualStat = changed.getStat(stat.getId());
             assertEquals(expectedStat, actualStat, "Expected " + stat.getId() + " to match DWARF type: " + expectedStat);
         }
     }

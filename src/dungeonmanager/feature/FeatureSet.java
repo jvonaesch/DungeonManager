@@ -15,13 +15,21 @@ public class FeatureSet {
         this.stat_context = stat_context;
     }
 
-    public FeatureInstance addFeature(String ID, Feature feature) {
-        if (!features.containsKey(ID)) {
-            FeatureInstance instance = new FeatureInstance(ID, feature, stat_context);
-            features.put(instance.ID, instance);
+    public FeatureInstance addFeature(String instanceId, Feature feature) {
+        if (!features.containsKey(instanceId)) {
+            FeatureInstance instance = new FeatureInstance(instanceId, feature, stat_context);
+            features.put(instance.id, instance);
             return instance;
         }
         return null;
+    }
+
+    public boolean addFeature(FeatureInstance instance) {
+        if (!features.containsKey(instance.id)) {
+            features.put(instance.id, instance);
+            return true;
+        }
+        return false;
     }
 
     public FeatureInstance addFeature(Feature feature) {
@@ -48,12 +56,12 @@ public class FeatureSet {
     }
 
     public boolean removeFeature(FeatureInstance instance) {
-        String ID = instance.ID;
+        String ID = instance.id;
         if (!features.containsKey(ID) || features.get(ID) != instance) return false;
         for (StatModifier modifier: instance.getStatModifiers()) {
             stat_context.removeModifier(modifier);
         }
-        return features.remove(instance.ID, instance);
+        return features.remove(instance.id, instance);
     }
 
     public Collection<FeatureInstance> getAllFeatures() {

@@ -48,7 +48,7 @@ public class FeatureInstanceSnapshot {
             modifierTotals.put(statId, modifierTotals.getOrDefault(statId, 0) + modifier.getBaseValue());
         }
         return new FeatureInstanceSnapshot(
-                instance.ID,
+                instance.id,
                 instance.getFeatureId(),
                 instance.getName(),
                 instance.getDescription(),

@@ -43,12 +43,12 @@ public class Session {
         LOG.debug("Loading additional content packs from {}", contentOrigin);
         packLoader.loadPacks(contentOrigin);
         LOG.debug("Additional content pack loading complete");
-        LOG.debug("library creatures: {}", library.creature.getAllKeys());
-        LOG.debug("owned creatures: {}", library.feature.getOwnedKeys());
-        LOG.debug("library features: {}", library.feature.getAllKeys());
-        LOG.debug("owned features: {}", library.creature.getOwnedKeys());
-        LOG.debug("library stats: {}", library.stat.getAllKeys());
-        LOG.debug("owned stats: {}", library.stat.getOwnedKeys());
+        LOG.debug("library-owned creatures: {}", library.creature.getAllKeys());
+        LOG.debug("session-owned creatures: {}", library.feature.getOwnedKeys());
+        LOG.debug("library-owned features: {}", library.feature.getAllKeys());
+        LOG.debug("session-owned features: {}", library.creature.getOwnedKeys());
+        LOG.debug("library-owned stats: {}", library.stat.getAllKeys());
+        LOG.debug("session-owned stats: {}", library.stat.getOwnedKeys());
     }
 
     public Session(DungeonManagerApp app) {

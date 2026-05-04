@@ -31,6 +31,7 @@ public class CreatureSnapshot {
     }
 
     static CreatureSnapshot fromCreature(Creature creature) {
+        creature.getFeatureSet().reload();
         String id = creature.getId();
         Map<String, Integer> statValues = new LinkedHashMap<>();
         List<String> statIds = new ArrayList<>(creature.getStatSet().getSpecifiedStats());
@@ -87,14 +88,6 @@ public class CreatureSnapshot {
     }
 
     public Integer getStat(String statId) {
-        return stats.get(statId);
-    }
-
-    public int getStat(String statId, Map<String, Integer> defaults) {
-        if (!stats.containsKey(statId) || stats.get(statId) == null) {
-            Integer value = defaults.get(statId);
-            return value == null ? 0 : value;
-        }
         return stats.get(statId);
     }
 

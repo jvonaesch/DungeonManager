@@ -1,7 +1,6 @@
 package test.handle;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dungeonmanager.DungeonManagerApp;
 import dungeonmanager.contentpack.PackLoader;
@@ -26,12 +25,7 @@ import java.util.Map;
 import java.util.Set;
 
 import static dungeonmanager.contentpack.JsonSerializable.LOG;
-import static dungeonmanager.contentpack.PackLoader.MAPPER;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.junit.jupiter.api.Assertions.assertNull;
-import static org.junit.jupiter.api.Assertions.assertThrows;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 @DisplayName("Session Persistence Tests")
 public class SessionPersistenceTest {
@@ -94,38 +88,62 @@ public class SessionPersistenceTest {
     }
 
     @Test
-    @DisplayName("Fails to load a session snapshot when a required feature is missing")
-    void fails_to_load_snapshot_when_feature_is_missing() throws IOException {
+    @DisplayName("Loads placeholder feature if feature not found")
+    void loads_placeholder_if_feature_not_found() throws IOException {
         Path workspace = tempDir.resolve("missing-feature-workspace");
         preparePacks(packDir);
 
         SessionHandle handle = getHandle(workspace);
 
         CreatureSnapshot hero = handle.createCreature("Hero", Map.of("STR", 15));
-        handle.addFeature(hero.getId(), "test_feature_1");
+        hero = handle.addFeature(hero.getId(), "test_feature_1");
+        String actualName = hero.getFeature("test_feature_1").getName();
         handle.saveWorkspaceSnapshot();
 
         boolean deleted = Files.deleteIfExists(packDir.resolve("test_pack_1/features/test_feature_1.json"));
         System.out.println("\n\t=== RELOADING ===\n");
+        SessionHandle new_handle = getHandle(workspace);
+        CreatureSnapshot new_hero = new_handle.getCreatureSnapshot(hero.getId());
 
-        assertThrows(IllegalArgumentException.class, () -> getHandle(workspace),
-                "Expected missing feature to fail workspace restore");
+        LOG.debug("Expecting placeholder: '{}' - {}",
+                new_hero.getFeature("test_feature_1").getName(),
+                new_hero.getFeature("test_feature_1").getDescription());
+        assertNotEquals(actualName, new_hero.getFeature("test_feature_1").getName(),
+                "Expected missing feature to be filled in with a placeholder");
+        assertEquals(15, new_hero.getStat("STR"),
+                "Expected stat modifiers from the missing feature to not be applied to the creature");
+
+        new_handle.addFeature(getTestFeature());
+        assertTrue(handle.hasFeature("test_feature_1"),
+                "Expected session to now have the missing feature available");
+        new_hero = new_handle.getCreatureSnapshot(hero.getId());
+        LOG.debug("Expecting feature: '{}' - {}",
+                new_hero.getFeature("test_feature_1").getName(),
+                new_hero.getFeature("test_feature_1").getDescription());
+        assertEquals(actualName, new_hero.getFeature("test_feature_1").getName(),
+                "Expected placeholder to be replaced with real feature when it becomes available");
+        assertEquals(17, new_hero.getStat("STR"),
+                "Expected stat modifiers from the newly added feature to be applied to the creature");
+
     }
 
     @Test
-    @DisplayName("Fails to load a session snapshot when a required stat is missing")
-    void fails_to_load_snapshot_when_stat_is_missing() throws IOException {
+    @DisplayName("Missing stats are null")
+    void missing_stats_fall_back_to_zero() throws IOException {
         Path workspace = tempDir.resolve("missing-stat-workspace");
         preparePacks(packDir);
 
         SessionHandle handle = getHandle(workspace);
-        handle.createCreature("Hero", Map.of("STR", 15));
+        CreatureSnapshot hero = handle.createCreature("Hero", Map.of("STR", 15));
         handle.saveWorkspaceSnapshot();
 
-        Files.deleteIfExists(workspace.resolve("test_pack_1/stats.json"));
+        System.out.println("\n=== RELOAD ===\n");
+        Files.deleteIfExists(packDir.resolve("test_pack_1/stats.json"));
+        SessionHandle reloaded = new DungeonManagerApp().getSessionHandle(workspace, packDir);
 
-        assertThrows(IllegalArgumentException.class, () -> new DungeonManagerApp().getSessionHandle(workspace),
-                "Expected missing stat to fail workspace restore");
+        CreatureSnapshot hero_rebooted = reloaded.getCreatureSnapshot(hero.getId());
+        assertEquals(null, hero_rebooted.getStat("STR"));
+        assertEquals(null, hero_rebooted.getStat("INT"));
     }
 
     @Test
@@ -153,14 +171,18 @@ public class SessionPersistenceTest {
                 Stat.toJson(Set.of(StandardStat.values()))
         );
 
-        Feature feature = new Feature("test_feature_1", "Test Feature", "A feature for testing purposes.")
+        Feature feature = getTestFeature();
+        feature.storeTo(featuresDir.resolve("test_feature_1.json"));
+    }
+
+    Feature getTestFeature() {
+        return new Feature("test_feature_1", "Test Feature", "A feature for testing purposes.")
                 .addSection(new StatModifierSection(
                         "test_modifier",
                         "Test Modifier",
                         "A stat modifier for testing.",
                         new StatModifier("STR").setBaseValue(2)
                 ));
-        feature.storeTo(featuresDir.resolve("test_feature_1.json"));
     }
 
     private SessionHandle getHandle(Path workspaceDir) {

@@ -188,7 +188,7 @@ public class SessionHandle {
         if (removed == null) {
             LOG.debug("Feature {} not found on creature {}", featureInstanceId, creature.getId());
         } else {
-            LOG.debug("Removed feature {} from creature {}", removed.ID, creature.getId());
+            LOG.debug("Removed feature {} from creature {}", removed.id, creature.getId());
         }
         return removed == null ? null : snapshotCreature(creature.getId());
     }
@@ -335,7 +335,13 @@ public class SessionHandle {
 
     public synchronized void registerFeature(Feature feat) {
         library.feature.putLocked(feat.getId(), feat);
-        LOG.debug("Added feature {} in session library", feat.getId());
+        LOG.debug("Added library-owned feature {} in session library", feat.getId());
+    }
+
+    public synchronized void addFeature(Feature feat) {
+        library.feature.putOwned(feat.getId(), feat);
+        LOG.debug("Added session-owned feature {} in session library, library size: {}",
+                feat.getId(), library.feature.getAllKeys().size());
     }
 
     public synchronized void createStat(String id, String name, String description, int defaultValue) {
