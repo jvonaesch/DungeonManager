@@ -1,6 +1,6 @@
 package test.handle;
 
-import dungeonmanager.feature.Feature;
+import dungeonmanager.feature.ModifyingFeature;
 import dungeonmanager.feature.SelectionSection;
 import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.session.CreatureSnapshot;
@@ -23,7 +23,7 @@ public class SessionFeatureTest extends Test {
     @org.junit.jupiter.api.Test
     @DisplayName("Registers a feature")
     void registers_feature() {
-        Feature feat = buildCharismaBoostFeature();
+        ModifyingFeature feat = buildCharismaBoostFeature();
 
         handle.registerFeature(feat);
 
@@ -35,7 +35,7 @@ public class SessionFeatureTest extends Test {
     void applies_and_removes_stat_modifier_feature() {
         CreatureSnapshot created = createHero();
 
-        Feature feat = buildCharismaBoostFeature();
+        ModifyingFeature feat = buildCharismaBoostFeature();
         handle.registerFeature(feat);
         assertTrue(handle.hasFeature(feat.getId()), "Expected feature to be registered in handle catalog");
 
@@ -58,7 +58,7 @@ public class SessionFeatureTest extends Test {
     void initializes_selection_section_config() {
         CreatureSnapshot created = createHero();
 
-        Feature selectableFeat = buildElementalAffinityFeature();
+        ModifyingFeature selectableFeat = buildElementalAffinityFeature();
         handle.registerFeature(selectableFeat);
 
         CreatureSnapshot afterSelectableFeat = handle.addFeature(created.getId(), selectableFeat.getId());
@@ -77,8 +77,8 @@ public class SessionFeatureTest extends Test {
     void applies_multiple_features() {
         CreatureSnapshot created = createHero();
 
-        Feature feat1 = buildCharismaBoostFeature();
-        Feature feat2 = buildElementalAffinityFeature();
+        ModifyingFeature feat1 = buildCharismaBoostFeature();
+        ModifyingFeature feat2 = buildElementalAffinityFeature();
         handle.registerFeature(feat1);
         handle.registerFeature(feat2);
 
@@ -96,8 +96,8 @@ public class SessionFeatureTest extends Test {
         return handle.createCreature("Hero", "default", baseStats);
     }
 
-    private Feature buildCharismaBoostFeature() {
-        return new Feature("feat:charisma_boost", "Charisma Boost", "Gain charisma")
+    private ModifyingFeature buildCharismaBoostFeature() {
+        return new ModifyingFeature("feat:charisma_boost", "Charisma Boost", "Gain charisma")
                 .addSection(new StatModifierSection(
                         "cha_bonus",
                         "CHA Bonus",
@@ -107,8 +107,8 @@ public class SessionFeatureTest extends Test {
                 ));
     }
 
-    private Feature buildElementalAffinityFeature() {
-        return new Feature("feat:elemental_affinity", "Elemental Affinity", "Choose an element")
+    private ModifyingFeature buildElementalAffinityFeature() {
+        return new ModifyingFeature("feat:elemental_affinity", "Elemental Affinity", "Choose an element")
                 .addSection(new SelectionSection("elemental_affinity_selection", "Affinity", "Choose an affinity", 1)
                         .addOption(new StatModifierSection(
                                 "fire_affinity",

@@ -2,7 +2,7 @@ package dungeonmanager.session;
 
 import dungeonmanager.creature.Creature;
 import dungeonmanager.creature.CreatureBasis;
-import dungeonmanager.feature.Feature;
+import dungeonmanager.feature.ModifyingFeature;
 import dungeonmanager.feature.FeatureInstance;
 import dungeonmanager.library.SessionLibrary;
 import dungeonmanager.stat.DynamicStat;
@@ -245,7 +245,7 @@ public class SessionHandle {
      */
     private void loadFeatureIntoCreature(@NotNull Creature creature, @NotNull FeatureInstanceSnapshot featureSnapshot) {
         // Look up feature from library
-        Feature feature = library.feature.get(normalizeId(featureSnapshot.getFeatureId()));
+        ModifyingFeature feature = library.feature.get(normalizeId(featureSnapshot.getFeatureId()));
         if (feature == null) {
             throw new IllegalArgumentException("Feature not registered: " + featureSnapshot.getFeatureId());
         }
@@ -287,7 +287,7 @@ public class SessionHandle {
     }
 
     private FeatureInstance addFeatureInstance(String creatureId, String featureInstanceId) {
-        Feature feature = requireFeature(featureInstanceId);
+        ModifyingFeature feature = requireFeature(featureInstanceId);
         Creature creature = requireCreature(creatureId);
         String normalizedFeatureId = normalizeId(featureInstanceId == null ? feature.getId() : featureInstanceId);
         return creature.getFeatureSet().addFeature(normalizedFeatureId, feature);
@@ -324,21 +324,21 @@ public class SessionHandle {
         return creature;
     }
 
-    private Feature requireFeature(String featureId) {
+    private ModifyingFeature requireFeature(String featureId) {
         String normalized = normalizeId(featureId);
-        Feature feature = library.feature.get(normalized);
+        ModifyingFeature feature = library.feature.get(normalized);
         if (feature == null) {
             throw new IllegalArgumentException("Feature not found: " + normalized);
         }
         return feature;
     }
 
-    public synchronized void registerFeature(Feature feat) {
+    public synchronized void registerFeature(ModifyingFeature feat) {
         library.feature.putLocked(feat.getId(), feat);
         LOG.debug("Added library-owned feature {} in session library", feat.getId());
     }
 
-    public synchronized void addFeature(Feature feat) {
+    public synchronized void addFeature(ModifyingFeature feat) {
         library.feature.putOwned(feat.getId(), feat);
         LOG.debug("Added session-owned feature {} in session library, library size: {}",
                 feat.getId(), library.feature.getAllKeys().size());

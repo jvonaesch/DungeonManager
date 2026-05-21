@@ -1,7 +1,7 @@
 package test;
 
 import dungeonmanager.DungeonManagerApp;
-import dungeonmanager.feature.Feature;
+import dungeonmanager.feature.ModifyingFeature;
 import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.session.CreatureSnapshot;
 import dungeonmanager.session.Session;
@@ -57,7 +57,7 @@ public abstract class Test {
         for (StandardStat stat : StandardStat.values()) {
             setupSession.registerStat(stat);
         }
-        Feature testFeature = new Feature(
+        ModifyingFeature testFeature = new ModifyingFeature(
                 "test_feature_1",
                 "Test Feature",
                 "A feature for testing purposes."

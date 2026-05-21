@@ -3,7 +3,7 @@ package dungeonmanager.session;
 import dungeonmanager.DungeonManagerApp;
 import dungeonmanager.contentpack.PackLoader;
 import dungeonmanager.creature.Creature;
-import dungeonmanager.feature.Feature;
+import dungeonmanager.feature.ModifyingFeature;
 import dungeonmanager.library.SessionLibrary;
 import dungeonmanager.stat.Stat;
 import dungeonmanager.stat.StatContext;
@@ -81,7 +81,7 @@ public class Session {
         return library.creature.get(creatureId);
     }
 
-    public Feature getFeature(String featureId) {
+    public ModifyingFeature getFeature(String featureId) {
         return library.feature.get(normalizeId(featureId));
     }
 
@@ -124,7 +124,7 @@ public class Session {
                 LOG.info("Finished saving {} local creatures to workspace pack", creatures.size());
             } else LOG.debug("Saved no local creatures");
 
-            Map<String, Feature> features = library.feature.getOwned();
+            Map<String, ModifyingFeature> features = library.feature.getOwned();
             if (!features.isEmpty()) {
                 PackLoader.saveFeaturesToPack(workingDirectory, features);
                 LOG.info("Finished saving {} local features to workspace pack", features.size());

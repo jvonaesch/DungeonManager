@@ -1,6 +1,6 @@
 package test.handle;
 
-import dungeonmanager.feature.Feature;
+import dungeonmanager.feature.ModifyingFeature;
 import dungeonmanager.feature.SelectionSection;
 import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.session.*;
@@ -60,7 +60,7 @@ public class SessionSnapshotTest extends Test {
     void feature_instance_snapshot_config_immutable() {
         CreatureSnapshot created = createHero(handle);
 
-        Feature selectableFeat = buildElementalAffinityFeature();
+        ModifyingFeature selectableFeat = buildElementalAffinityFeature();
         handle.registerFeature(selectableFeat);
         CreatureSnapshot withFeature = handle.addFeature(created.getId(), selectableFeat.getId());
 
@@ -85,7 +85,7 @@ public class SessionSnapshotTest extends Test {
     void feature_snapshot_selection_lists_immutable() {
         CreatureSnapshot created = createHero(handle);
 
-        Feature selectableFeat = buildElementalAffinityFeature();
+        ModifyingFeature selectableFeat = buildElementalAffinityFeature();
         handle.registerFeature(selectableFeat);
         CreatureSnapshot withFeature = handle.addFeature(created.getId(), selectableFeat.getId());
 
@@ -109,8 +109,8 @@ public class SessionSnapshotTest extends Test {
         return handle.createCreature("Hero", baseStats);
     }
 
-    private Feature buildElementalAffinityFeature() {
-        return new Feature("feat:elemental_affinity", "Elemental Affinity", "Choose an element")
+    private ModifyingFeature buildElementalAffinityFeature() {
+        return new ModifyingFeature("feat:elemental_affinity", "Elemental Affinity", "Choose an element")
                 .addSection(new SelectionSection("elemental_affinity_selection", "Affinity", "Choose an affinity", 1)
                         .addOption(new StatModifierSection(
                                 "fire_affinity",

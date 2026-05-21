@@ -15,7 +15,7 @@ public class FeatureSet {
         this.stat_context = stat_context;
     }
 
-    public FeatureInstance addFeature(String instanceId, Feature feature) {
+    public FeatureInstance addFeature(String instanceId, ModifyingFeature feature) {
         if (!features.containsKey(instanceId)) {
             FeatureInstance instance = new FeatureInstance(instanceId, feature, stat_context);
             features.put(instance.id, instance);
@@ -32,7 +32,7 @@ public class FeatureSet {
         return false;
     }
 
-    public FeatureInstance addFeature(Feature feature) {
+    public FeatureInstance addFeature(ModifyingFeature feature) {
         return addFeature(feature.getId(), feature);
     }
 

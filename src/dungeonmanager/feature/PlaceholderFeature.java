@@ -3,11 +3,11 @@ package dungeonmanager.feature;
 import com.fasterxml.jackson.databind.JsonNode;
 import dungeonmanager.session.Session;
 
-public class PlaceholderFeature extends Feature {
+public class PlaceholderFeature extends ModifyingFeature {
 
     Session session;
     JsonNode instanceJson;
-    Feature feature;
+    ModifyingFeature feature;
 
     public PlaceholderFeature(String featureId, Session session, JsonNode instanceJson) {
         super(featureId, "placeholder feature %s".formatted(featureId),
@@ -47,7 +47,7 @@ public class PlaceholderFeature extends Feature {
         return false;
     }
 
-    Feature resolveFeature() {
+    ModifyingFeature resolveFeature() {
         if (isResolved()) return feature;
         return null;
     }

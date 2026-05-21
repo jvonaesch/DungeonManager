@@ -3,7 +3,7 @@ package dungeonmanager.contentpack;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import dungeonmanager.creature.Creature;
-import dungeonmanager.feature.Feature;
+import dungeonmanager.feature.ModifyingFeature;
 import dungeonmanager.session.Session;
 import dungeonmanager.stat.Stat;
 import org.slf4j.Logger;
@@ -116,7 +116,7 @@ public class PackLoader {
                 (String creatureId, JsonNode json) -> session.library.creature.putLocked(creatureId,
                         () -> Creature.fromJson(creatureId, json, session)),
                 (String featureId, JsonNode json) -> session.library.feature.putLocked(featureId,
-                        () -> Feature.fromJson(featureId, json, session)),
+                        () -> ModifyingFeature.fromJson(featureId, json, session)),
                 session::registerStat);
     }
 
@@ -127,7 +127,7 @@ public class PackLoader {
                 (String creatureId, JsonNode json) -> session.library.creature.putOwned(creatureId,
                         () -> Creature.fromJson(creatureId, json, session)),
                 (String featureId, JsonNode json) -> session.library.feature.putOwned(featureId,
-                        () -> Feature.fromJson(featureId, json, session)),
+                        () -> ModifyingFeature.fromJson(featureId, json, session)),
                 session::addStat);
     }
 
@@ -176,13 +176,13 @@ public class PackLoader {
     /**
      * Save feature templates into the pack under the "features" directory.
      */
-    public static void saveFeaturesToPack(Path packDir, Map<String, Feature> features) throws IOException {
+    public static void saveFeaturesToPack(Path packDir, Map<String, ModifyingFeature> features) throws IOException {
         Path featuresDir = packDir.resolve("features");
         checkOrMakeDir(featuresDir);
 
-        for (Map.Entry<String, Feature> entry : features.entrySet()) {
+        for (Map.Entry<String, ModifyingFeature> entry : features.entrySet()) {
             String featureId = entry.getKey();
-            Feature feature = entry.getValue();
+            ModifyingFeature feature = entry.getValue();
             Path featurePath = featuresDir.resolve(featureId + ".json");
             writeToFile(featurePath, MAPPER.writeValueAsString(feature.toJson()));
             LOG.debug("Saved feature '{}' to {}", featureId, featurePath);

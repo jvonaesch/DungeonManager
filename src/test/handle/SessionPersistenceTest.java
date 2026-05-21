@@ -4,7 +4,7 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import dungeonmanager.DungeonManagerApp;
 import dungeonmanager.contentpack.PackLoader;
-import dungeonmanager.feature.Feature;
+import dungeonmanager.feature.ModifyingFeature;
 import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.session.CreatureSnapshot;
 import dungeonmanager.session.SessionHandle;
@@ -124,7 +124,6 @@ public class SessionPersistenceTest {
                 "Expected placeholder to be replaced with real feature when it becomes available");
         assertEquals(17, new_hero.getStat("STR"),
                 "Expected stat modifiers from the newly added feature to be applied to the creature");
-
     }
 
     @Test
@@ -171,12 +170,12 @@ public class SessionPersistenceTest {
                 Stat.toJson(Set.of(StandardStat.values()))
         );
 
-        Feature feature = getTestFeature();
+        ModifyingFeature feature = getTestFeature();
         feature.storeTo(featuresDir.resolve("test_feature_1.json"));
     }
 
-    Feature getTestFeature() {
-        return new Feature("test_feature_1", "Test Feature", "A feature for testing purposes.")
+    ModifyingFeature getTestFeature() {
+        return new ModifyingFeature("test_feature_1", "Test Feature", "A feature for testing purposes.")
                 .addSection(new StatModifierSection(
                         "test_modifier",
                         "Test Modifier",

@@ -1,6 +1,6 @@
 package test.app;
 
-import dungeonmanager.feature.Feature;
+import dungeonmanager.feature.ModifyingFeature;
 import dungeonmanager.feature.StatModifierSection;
 import dungeonmanager.stat.StandardStat;
 import dungeonmanager.stat.Stat;
@@ -26,7 +26,7 @@ public class ContentPackTest extends AppTest {
     void testLoadDummyFeature() {
         Set<String> allKeys = session.library.feature.getAllKeys();
         assertTrue(allKeys.contains("test_feature_1"), "Expected 'test_feature_1' to be registered");
-        Feature feature = session.getFeature("test_feature_1");
+        ModifyingFeature feature = session.getFeature("test_feature_1");
 
         assertEquals(1, feature.getSections().size(), "Expected 'test_feature_1' to have 1 section");
         assertInstanceOf(StatModifierSection.class, feature.getSections().getFirst(), "Expected section to be a StatModifierSection");

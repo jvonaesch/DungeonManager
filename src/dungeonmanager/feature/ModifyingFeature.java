@@ -1,6 +1,5 @@
 package dungeonmanager.feature;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
@@ -8,11 +7,10 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import dungeonmanager.contentpack.JsonSerializable;
 import dungeonmanager.session.Session;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Feature implements JsonSerializable {
+public class ModifyingFeature implements JsonSerializable {
 
     static final ObjectMapper MAPPER = new ObjectMapper();
 
@@ -21,7 +19,7 @@ public class Feature implements JsonSerializable {
     private String description;
     private List<FeatureSection> sections;
 
-    public Feature(String id, String name, String description) {
+    public ModifyingFeature(String id, String name, String description) {
         this.id = id;
         this.description = description;
         this.name = name;
@@ -40,7 +38,7 @@ public class Feature implements JsonSerializable {
         return description;
     }
 
-    public Feature addSection(FeatureSection section) {
+    public ModifyingFeature addSection(FeatureSection section) {
         if (section != null) {
             sections.add(section);
         }
@@ -77,11 +75,11 @@ public class Feature implements JsonSerializable {
         return json;
     }
 
-    public static Feature fromJson(String featureId, JsonNode json, Session session) {
+    public static ModifyingFeature fromJson(String featureId, JsonNode json, Session session) {
         String featureName = json.path("name").asText();
         String featureDesc = json.path("description").asText();
 
-        Feature feature = new Feature(featureId, featureName, featureDesc);
+        ModifyingFeature feature = new ModifyingFeature(featureId, featureName, featureDesc);
 
         JsonNode sectionsArray = json.path("sections");
         if (!sectionsArray.isArray()) throw new IllegalArgumentException("sections field in json must be an ArrayNode");

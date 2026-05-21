@@ -3,7 +3,7 @@ package dungeonmanager.library;
 import dungeonmanager.creature.Creature;
 import dungeonmanager.command.Command;
 import dungeonmanager.creature.CreatureBasis;
-import dungeonmanager.feature.Feature;
+import dungeonmanager.feature.ModifyingFeature;
 
 public class SessionLibrary {
 
@@ -13,7 +13,7 @@ public class SessionLibrary {
     public final StatLibrary stat;
     public final Library<Command<?>> command;
     public final Library<CreatureBasis> entityType;
-    public final Library<Feature> feature;
+    public final Library<ModifyingFeature> feature;
     public final Library<Creature> creature;
 
     public SessionLibrary() {

@@ -21,14 +21,14 @@ import java.util.TreeSet;
 import static dungeonmanager.contentpack.PackLoader.MAPPER;
 
 /**
- * An instance of a {@link Feature} specific to a {@link dungeonmanager.creature.Creature}. It stores creature-specific
+ * An instance of a {@link ModifyingFeature} specific to a {@link dungeonmanager.creature.Creature}. It stores creature-specific
  * choices made for the feature.
  * It also provides the name and description of the feature shown in the creature's UI summary, as well as stat
  * modifiers that the feature applies to the creature <i>if active</i>.
  */
 public class FeatureInstance implements JsonSerializable {
 
-    private Feature feature;
+    private ModifyingFeature feature;
     public final String id;
     protected boolean active;
     private final List<FeatureSection> sections;
@@ -36,7 +36,7 @@ public class FeatureInstance implements JsonSerializable {
     private final Map<String, Object> config;
     private final Set<StatModifier> modifiers = new HashSet<>();
     
-    protected FeatureInstance(String ID, Feature feature, ModifiableStatSet statSet) {
+    protected FeatureInstance(String ID, ModifyingFeature feature, ModifiableStatSet statSet) {
         this.feature = feature;
         this.id = ID;
         this.active = false;
@@ -179,7 +179,7 @@ public class FeatureInstance implements JsonSerializable {
 
     public static FeatureInstance fromJson(String instanceId, JsonNode json, Session session, Creature creature) {
         String featureId = json.get("feature").asText();
-        Feature feature = session.getFeature(featureId);
+        ModifyingFeature feature = session.getFeature(featureId);
         if (feature == null) {
             LOG.warn("feature {} was not found while loading to creature {}", featureId, creature.getId());
             feature = new PlaceholderFeature(featureId, session, json);
