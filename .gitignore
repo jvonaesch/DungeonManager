@@ -30,4 +30,5 @@ bin/
 
 ### Additional ###
 /**.md
+!README.md
 !Next_Goals.md
